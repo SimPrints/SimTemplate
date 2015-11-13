@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using TemplateBuilderMVVM.Helpers;
 using TemplateBuilderMVVM.Model;
 
 namespace TemplateBuilderMVVM.ViewModel.States
@@ -41,15 +42,15 @@ namespace TemplateBuilderMVVM.ViewModel.States
 
         public override void SaveTemplate()
         {
-            // TODO: Integrity check that m_Outer.Filename is set
+            IntegrityCheck.IsNotNullOrEmpty(m_Outer.ImageFileName);
 
             // We are not partway through inputting a point
             // Construct a file name from the original image file name
             string filename = String.Format(
                 "{0}_template.txt",
-                System.IO.Path.GetFileNameWithoutExtension(m_Outer.ImageFile));
+                System.IO.Path.GetFileNameWithoutExtension(m_Outer.ImageFileName));
             string filepath = System.IO.Path.Combine(
-                System.IO.Path.GetDirectoryName(m_Outer.ImageFile),
+                System.IO.Path.GetDirectoryName(m_Outer.ImageFileName),
                 filename);
 
             // Write the Minutia details out to a new file
@@ -58,9 +59,15 @@ namespace TemplateBuilderMVVM.ViewModel.States
             {
                 foreach (MinutiaRecord minutia in m_Outer.Minutae)
                 {
-                    file.WriteLine(minutia.ToText());
+                    file.WriteLine(ToRecord(minutia));
                 }
             }
+        }
+
+        private string ToRecord(MinutiaRecord labels)
+        {
+            double direction = Math.Atan2(labels.Direction.Y, labels.Direction.X);
+            return String.Format("{0}, {1}, {3}", labels.Location.X, labels.Location.Y, direction)
         }
     }
 }

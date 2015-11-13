@@ -22,7 +22,8 @@ namespace TemplateBuilderMVVM.ViewModel.States
             m_Outer = outer;
             m_StateMgr = stateMgr;
         }
-
+        
+        // TODO: move this off State and onto 'Initialised'? abstract state.
         public void LoadFile()
         {
             OpenFileDialog od = new OpenFileDialog();
@@ -32,8 +33,9 @@ namespace TemplateBuilderMVVM.ViewModel.States
             {
                 // TODO: only pass valid file types.
 
-                // Record image filename
-                m_Outer.ImageFile = od.FileName;
+                // Record image and filename
+                m_Outer.ImageFileName = od.FileName;
+                m_Outer.Image = new BitmapImage(new Uri(od.FileName));
 
                 // Transition state to 'Templating'
                 m_StateMgr.TransitionTo(typeof(WaitLocation));

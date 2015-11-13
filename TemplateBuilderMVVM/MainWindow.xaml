@@ -8,7 +8,7 @@
         xmlns:conv="clr-namespace:TemplateBuilderMVVM.ViewModel.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="525" Width="525"
-        ResizeMode="NoResize">
+        ResizeMode="CanMinimize">
 
     <Grid>
         <ToolBarTray HorizontalAlignment="Left" Height="36" Margin="10,10,0,0" VerticalAlignment="Top" Width="497">
@@ -20,20 +20,23 @@
         </ToolBarTray>
 
         <Grid Margin="0,51,0,0">
-            <ItemsControl x:Name="itemsControl" MouseMove="itemsControl_MouseMove" MouseUp="itemsControl_MouseUp"
-                          ItemsSource="{Binding Minutae}">
+            <!--The image being annotated-->
+            <Image x:Name="image"
+                   Source="{Binding Image}" Stretch="Uniform"
+                   MouseMove="itemsControl_MouseMove" MouseUp="itemsControl_MouseUp"/>
+            <!--The control on which to display the annotations-->
+            <ItemsControl x:Name="itemsControl"
+                          ItemsSource="{Binding Minutae}" BorderBrush="Black" BorderThickness="5"
+                          Width="{Binding ElementName=image, Path=ActualWidth}"
+                          Height="{Binding ElementName=image, Path=ActualHeight}">
+                <!-- Set the 'panel' to be a Canvas for displaying our items -->
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <!-- Set the 'panel' to be a Canvas for displaying our items -->
-                        <Canvas Width="500" Height="500">
-                            <Canvas.Background>
-                                <!-- Bind the background image to the ViewModel field -->
-                                <ImageBrush ImageSource="{Binding ImageFile}"/>
-                            </Canvas.Background>
-                        </Canvas>
+                        <Canvas x:Name="itemsControlCanvas" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate> <!-- Set Items to be interpreted as Ellipse shapes -->
+                <!-- Set Items to be interpreted as Ellipse and Line shapes -->
+                <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Canvas>
                             <Ellipse Fill="Green" Width="25" Height="25"
@@ -47,6 +50,7 @@
                         </Canvas>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
+                <!--Style the container for an item (Ellipse) to fit it in the panel-->
                 <ItemsControl.ItemContainerStyle>
                     <Style>
                         <Setter Property="Canvas.Top" Value="{Binding Location.Y, Converter={conv:OffsetConverter}, ConverterParameter=-12.5}" />

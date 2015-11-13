@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using TemplateBuilderMVVM.Helpers;
 using TemplateBuilderMVVM.Model;
 using TemplateBuilderMVVM.ViewModel.Commands;
@@ -22,7 +24,7 @@ namespace TemplateBuilderMVVM.ViewModel
         #endregion
 
         private StateManager m_StateMgr;
-        private string m_ImageFilePath;
+        private BitmapImage m_Image;
         private ICommand m_LoadFileCommand;
         private ICommand m_SaveTemplateCommand;
 
@@ -41,24 +43,26 @@ namespace TemplateBuilderMVVM.ViewModel
         /// </value>
         public ICommand LoadFileCommand { get { return m_LoadFileCommand; } }
         public ICommand SaveTemplateCommand { get { return m_SaveTemplateCommand; } }
+
         /// <summary>
         /// Gets or sets the image file. Bound to the canvas background.
         /// </summary>
         /// <value>
         /// The image file.
         /// </value>
-        public string ImageFile
+        public BitmapImage Image
         {
-            get { return m_ImageFilePath; }
+            get { return m_Image; }
             set
             {
-                if (value != this.m_ImageFilePath)
+                if (value != this.m_Image)
                 {
-                    this.m_ImageFilePath = value;
+                    this.m_Image = value;
                     NotifyPropertyChanged();
                 }
             }
         }
+        public string ImageFileName { get; set; }
 
         public TemplateBuilderViewModel()
         {

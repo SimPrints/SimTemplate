@@ -13,6 +13,16 @@ namespace TemplateBuilderMVVM.Helpers
             return new TemplateBuilderException(message);
         }
 
+        #region IsTrue
+
+        public static void IsTrue(bool condition)
+        {
+            if (!condition)
+            {
+                throw Fail("Not true.");
+            }
+        }
+
         public static void IsTrue(bool condition, string message)
         {
             if (!condition)
@@ -26,6 +36,18 @@ namespace TemplateBuilderMVVM.Helpers
             if (!condition)
             {
                 throw Fail(String.Format("Not true: {0}", String.Format(format, args)));
+            }
+        }
+
+        #endregion
+
+        #region AreEqual
+
+        public static void AreEqual<T>(T expected, T actual)
+        {
+            if (!expected.Equals(actual))
+            {
+                throw Fail("Not equal.");
             }
         }
 
@@ -46,5 +68,91 @@ namespace TemplateBuilderMVVM.Helpers
                     actual, expected, String.Format(format, args)));
             }
         }
+
+        #endregion
+
+        #region IsNull
+
+        public static void IsNull(object value)
+        {
+            if (value != null)
+            {
+                throw Fail("Is not null.");
+            }
+        }
+
+        public static void IsNull(object value, string message)
+        {
+            if (value != null)
+            {
+                throw Fail(String.Format("Is not null: {0}", message));
+            }
+        }
+
+        public static void IsNull(object value, string format, params object[] args)
+        {
+            if (value != null)
+            {
+                throw Fail(String.Format("Is not null: {0}", String.Format(format, args)));
+            }
+        }
+
+        #endregion
+
+        #region IsNotNull
+
+        public static void IsNotNull(object value)
+        {
+            if (value == null)
+            {
+                throw Fail("Is not null.");
+            }
+        }
+
+        public static void IsNotNull(object value, string message)
+        {
+            if (value == null)
+            {
+                throw Fail(String.Format("Is not null: {0}", message));
+            }
+        }
+
+        public static void IsNotNull(object value, string format, params object[] args)
+        {
+            if (value == null)
+            {
+                throw Fail(String.Format("Is not null: {0}", String.Format(format, args)));
+            }
+        }
+
+        #endregion
+
+        #region IsNull
+
+        public static void IsNotNullOrEmpty(string value)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                throw Fail("Is null or empty.");
+            }
+        }
+
+        public static void IsNotNullOrEmpty(string value, string message)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                throw Fail(String.Format("Is not null: {0}", message));
+            }
+        }
+
+        public static void IsNotNullOrEmpty(string value, string format, params object[] args)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                throw Fail(String.Format("Is not null: {0}", String.Format(format, args)));
+            }
+        }
+
+        #endregion
     }
 }
