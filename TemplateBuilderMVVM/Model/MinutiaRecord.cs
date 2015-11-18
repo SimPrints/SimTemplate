@@ -14,6 +14,7 @@ namespace TemplateBuilderMVVM.Model
     {
         private Point m_Location;
         private Vector m_Direction;
+        private MinutiaType m_Type;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -35,12 +36,22 @@ namespace TemplateBuilderMVVM.Model
                 NotifyPropertyChanged();
             }
         }
+        public MinutiaType Type
+        {
+            get { return m_Type; }
+            set
+            {
+                m_Type = value;
+                NotifyPropertyChanged();
+            }
+        }
         public MinutiaRecord() { }
 
-        public MinutiaRecord(Point location, Vector direction)
+        public MinutiaRecord(Point location, Vector direction, MinutiaType type)
         {
             m_Location = location;
             m_Direction = direction;
+            m_Type = type;
         }
 
         // This method is called by the Set accessor of each property.
@@ -52,13 +63,6 @@ namespace TemplateBuilderMVVM.Model
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
-        }
-
-        public string ToText()
-        {
-            return String.Format("{0}, {1}, {2}, {3}",
-                Location.X, Location.Y,
-                Direction.X, Direction.Y);
         }
     }
 }

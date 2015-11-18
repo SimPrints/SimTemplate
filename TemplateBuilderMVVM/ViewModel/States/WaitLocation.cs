@@ -64,10 +64,18 @@ namespace TemplateBuilderMVVM.ViewModel.States
             }
         }
 
+        public override void SetMinutiaType(MinutiaType type)
+        {
+            // Cannot set minutia type while no minutia record is being made.
+        }
+
         private string ToRecord(MinutiaRecord labels)
         {
             double direction = Math.Atan2(labels.Direction.Y, labels.Direction.X);
-            return String.Format("{0}, {1}, {3}", labels.Location.X, labels.Location.Y, direction)
+            double locationX = labels.Location.X / m_Outer.Scale;
+            double locationY = labels.Location.Y / m_Outer.Scale;
+            return String.Format("{0}, {1}, {2}, {3}",
+                locationX, locationY, direction, labels.Type);
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using TemplateBuilderMVVM.Model;
 
 namespace TemplateBuilderMVVM.ViewModel.States
 {
@@ -22,7 +23,7 @@ namespace TemplateBuilderMVVM.ViewModel.States
             m_Outer = outer;
             m_StateMgr = stateMgr;
         }
-        
+
         // TODO: move this off State and onto 'Initialised'? abstract state.
         public void LoadFile()
         {
@@ -46,13 +47,17 @@ namespace TemplateBuilderMVVM.ViewModel.States
 
         virtual public void OnLeavingState() { }
 
-        abstract public void PositionInput(Point e);
+        abstract public void PositionInput(Point point);
 
-        abstract public void PositionMove(Point e);
+        abstract public void SetMinutiaType(MinutiaType type);
+
+        abstract public void PositionMove(Point point);
 
         abstract public void RemoveItem(int index);
 
         abstract public void SaveTemplate();
+
+        virtual public bool IsMinutiaTypeButtonsEnabled { get { return false; } }
 
         public string Name { get { return GetType().Name; } }
     }

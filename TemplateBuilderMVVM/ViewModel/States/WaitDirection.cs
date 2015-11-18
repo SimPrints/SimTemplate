@@ -4,28 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using TemplateBuilderMVVM.Helpers;
 using TemplateBuilderMVVM.Model;
 
 namespace TemplateBuilderMVVM.ViewModel.States
 {
     public class WaitDirection : Templating
     {
+        private MinutiaRecord m_Record;
+
         public WaitDirection(TemplateBuilderViewModel outer, StateManager stateMgr) : base(outer, stateMgr)
         { }
 
-        public override void PositionMove(Point pos)
+        public override bool IsMinutiaTypeButtonsEnabled { get { return true; } }
+
+        #region Overriden Public Methods
+
+        public override void OnEnteringState()
         {
-            // Get the relevant record
-            MinutiaRecord record = m_Outer.Minutae.Last();
-            Vector direction = pos - record.Location;
-            direction.Normalize();
-            // Save the new direction
-            record.Direction = direction;
+            base.OnEnteringState();
+            m_Record = m_Outer.Minutae.Last();
+            IntegrityCheck.IsNotNull(m_Record.Location);
         }
 
-        public override void PositionInput(Point pos)
+        public override void PositionMove(Point p)
         {
-            // The user has just finalised the direction of the minutia
+            // Update the direction whenever the mouse moves.
+            SetDirection(p);
+        }
+
+        public override void PositionInput(Point p)
+        {
+            // The user has just finalised the direction of the minutia.
+            SetDirection(p);
             m_StateMgr.TransitionTo(typeof(WaitLocation));
         }
 
@@ -38,5 +49,25 @@ namespace TemplateBuilderMVVM.ViewModel.States
         {
             Console.WriteLine("Cannot save template when waiting on direction.");
         }
+
+        public override void SetMinutiaType(MinutiaType type)
+        {
+            m_Record.Type = type;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void SetDirection(Point p)
+        {
+            // Get the relevant record
+            Vector direction = p - m_Record.Location;
+            direction.Normalize();
+            // Save the new direction
+            m_Record.Direction = direction;
+        }
+
+        #endregion
     }
 }

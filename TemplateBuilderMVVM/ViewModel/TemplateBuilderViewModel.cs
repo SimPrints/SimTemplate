@@ -23,10 +23,14 @@ namespace TemplateBuilderMVVM.ViewModel
 
         #endregion
 
+        // ViewModel-driven properties
         private StateManager m_StateMgr;
         private BitmapImage m_Image;
+        // Commands
         private ICommand m_LoadFileCommand;
         private ICommand m_SaveTemplateCommand;
+        private ICommand m_TerminationCommand;
+        private ICommand m_BifuricationCommand;
 
         /// <summary>
         /// Gets the minutae. Bound to the canvas.
@@ -38,11 +42,23 @@ namespace TemplateBuilderMVVM.ViewModel
         /// <summary>
         /// Gets the 'load file' command for binding to the 'Open' button.
         /// </summary>
-        /// <value>
-        /// The load file command.
-        /// </value>
         public ICommand LoadFileCommand { get { return m_LoadFileCommand; } }
+        /// <summary>
+        /// Gets the 'save template' command for binding to the 'Save' button.
+        /// </summary>
         public ICommand SaveTemplateCommand { get { return m_SaveTemplateCommand; } }
+        /// <summary>
+        /// Gets the 'termination' command for binding to the 'termination' radio button.
+        /// </summary>
+        public ICommand TerminationCommand { get { return m_TerminationCommand; } }
+        /// <summary>
+        /// Gets the 'bifurication' command for binding to the 'bifurication' radio button.
+        /// </summary>
+        public ICommand BifuricationCommand { get { return m_BifuricationCommand; } }
+        /// <summary>
+        /// Gets or sets the scaling applied to the image.
+        /// </summary>
+        public double Scale { get; set; }
 
         /// <summary>
         /// Gets or sets the image file. Bound to the canvas background.
@@ -69,7 +85,13 @@ namespace TemplateBuilderMVVM.ViewModel
             Minutae = new TrulyObservableCollection<MinutiaRecord>();
             m_StateMgr = new StateManager(this);
             m_LoadFileCommand = new RelayCommand(x => LoadFile());
-            m_SaveTemplateCommand = new RelayCommand(x => SaveTemplate()); // Ugly.
+            m_SaveTemplateCommand = new RelayCommand(x => SaveTemplate());
+            m_TerminationCommand = new RelayCommand(
+                x => SetMinutiaType(MinutiaType.Termination),
+                x => m_StateMgr.State.IsMinutiaTypeButtonsEnabled);
+            m_BifuricationCommand = new RelayCommand(
+                x => SetMinutiaType(MinutiaType.Bifurication),
+                x => m_StateMgr.State.IsMinutiaTypeButtonsEnabled);
         }
 
         #region Command Callbacks
@@ -82,6 +104,11 @@ namespace TemplateBuilderMVVM.ViewModel
         private void SaveTemplate()
         {
             m_StateMgr.State.SaveTemplate();
+        }
+
+        private void SetMinutiaType(MinutiaType type)
+        {
+            m_StateMgr.State.SetMinutiaType(type);
         }
 
         #endregion

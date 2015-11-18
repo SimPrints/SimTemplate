@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TemplateBuilderMVVM.Model;
 
 namespace TemplateBuilderMVVM.ViewModel.States
 {
@@ -33,6 +34,11 @@ namespace TemplateBuilderMVVM.ViewModel.States
         }
 
         public override void SaveTemplate()
+        {
+            // Do nothing when no image has been loaded
+        }
+
+        public override void SetMinutiaType(MinutiaType type)
         {
             // Do nothing when no image has been loaded
         }

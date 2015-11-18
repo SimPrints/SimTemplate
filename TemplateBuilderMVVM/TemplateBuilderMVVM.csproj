@@ -64,10 +64,12 @@
     <Compile Include="Helpers\TrulyObservableCollection.cs" />
     <Compile Include="Helpers\TemplateBuilderException.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
+    <Compile Include="Model\Type.cs" />
     <Compile Include="ViewModel\Commands\RelayCommand.cs" />
     <Compile Include="ViewModel\Converters\BaseConverter.cs" />
     <Compile Include="ViewModel\Converters\MultiplyConverter.cs" />
     <Compile Include="ViewModel\Converters\OffsetConverter.cs" />
+    <Compile Include="ViewModel\States\Deleting.cs" />
     <Compile Include="ViewModel\States\Uninitialised.cs" />
     <Compile Include="ViewModel\States\State.cs" />
     <Compile Include="ViewModel\States\StateManager.cs" />
