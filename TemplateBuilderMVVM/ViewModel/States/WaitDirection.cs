@@ -63,9 +63,9 @@ namespace TemplateBuilderMVVM.ViewModel.States
         {
             // Get the relevant record
             Vector direction = p - m_Record.Location;
-            direction.Normalize();
+            double angle = Math.Atan2(direction.Y, direction.X);
             // Save the new direction
-            m_Record.Direction = direction;
+            m_Record.Direction = angle;
         }
 
         #endregion

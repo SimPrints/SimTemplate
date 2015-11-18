@@ -69,7 +69,7 @@
     <Compile Include="ViewModel\Converters\BaseConverter.cs" />
     <Compile Include="ViewModel\Converters\MultiplyConverter.cs" />
     <Compile Include="ViewModel\Converters\OffsetConverter.cs" />
-    <Compile Include="ViewModel\States\Deleting.cs" />
+    <Compile Include="ViewModel\Converters\RadToDeg.cs" />
     <Compile Include="ViewModel\States\Uninitialised.cs" />
     <Compile Include="ViewModel\States\State.cs" />
     <Compile Include="ViewModel\States\StateManager.cs" />

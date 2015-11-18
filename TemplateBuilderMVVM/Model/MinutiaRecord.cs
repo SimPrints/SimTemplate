@@ -13,7 +13,7 @@ namespace TemplateBuilderMVVM.Model
     public class MinutiaRecord : INotifyPropertyChanged
     {
         private Point m_Location;
-        private Vector m_Direction;
+        private double m_Direction;
         private MinutiaType m_Type;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -27,7 +27,7 @@ namespace TemplateBuilderMVVM.Model
                 NotifyPropertyChanged();
             }
         }
-        public Vector Direction
+        public double Direction
         {
             get { return m_Direction; }
             set
@@ -47,7 +47,7 @@ namespace TemplateBuilderMVVM.Model
         }
         public MinutiaRecord() { }
 
-        public MinutiaRecord(Point location, Vector direction, MinutiaType type)
+        public MinutiaRecord(Point location, double direction, MinutiaType type)
         {
             m_Location = location;
             m_Direction = direction;

@@ -55,7 +55,7 @@ namespace TemplateBuilderMVVM
             m_ViewModel.PositionInput(pos);
         }
 
-        private void Ellipse_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void Ellipse_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             object item = (sender as FrameworkElement).DataContext;
             int index = itemsControl.Items.IndexOf(item);
@@ -63,15 +63,16 @@ namespace TemplateBuilderMVVM
             m_ViewModel.RemoveItem(index);
         }
 
-        private Point ScalePosition(Point pos)
+        private void image_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            // TODO: See if possible to get original size from itemsControl
-            //double originalX = m_ViewModel.Image.Width;
-            //double originalY = m_ViewModel.Image.Height;
-
-            //Vector scaling = new Vector(
-            //    ((Canvas)itemsControl.ItemsPanel.Template).Background.
-            return new Point(0, 0);
+            // Get scaling in each dimension.
+            double scaleX = e.NewSize.Width / m_ViewModel.Image.Width;
+            double scaleY = e.NewSize.Height / m_ViewModel.Image.Height;
+            // Check that scaling factor is equal for each dimension.
+            IntegrityCheck.AreEqual(scaleX, scaleY);
+            double scale = (scaleX + scaleY) / 2;
+            // Update ViewModel scale
+            m_ViewModel.Scale = scale;
         }
     }
 }

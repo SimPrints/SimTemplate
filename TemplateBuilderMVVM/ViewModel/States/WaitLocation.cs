@@ -71,11 +71,10 @@ namespace TemplateBuilderMVVM.ViewModel.States
 
         private string ToRecord(MinutiaRecord labels)
         {
-            double direction = Math.Atan2(labels.Direction.Y, labels.Direction.X);
             double locationX = labels.Location.X / m_Outer.Scale;
             double locationY = labels.Location.Y / m_Outer.Scale;
             return String.Format("{0}, {1}, {2}, {3}",
-                locationX, locationY, direction, labels.Type);
+                locationX, locationY, labels.Location, labels.Type);
         }
     }
 }
