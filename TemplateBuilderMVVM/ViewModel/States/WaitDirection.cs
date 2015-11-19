@@ -37,6 +37,7 @@ namespace TemplateBuilderMVVM.ViewModel.States
         {
             // The user has just finalised the direction of the minutia.
             SetDirection(p);
+            m_Record.Type = m_Outer.InputMinutiaType;
             m_StateMgr.TransitionTo(typeof(WaitLocation));
         }
 

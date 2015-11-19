@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TemplateBuilderMVVM.ViewModel.Converters
 {
-    public class RadToDeg : BaseConverter
+    public class RadToDegConverter : BaseConverter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

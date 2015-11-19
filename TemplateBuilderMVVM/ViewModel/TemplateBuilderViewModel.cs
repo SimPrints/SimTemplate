@@ -26,11 +26,33 @@ namespace TemplateBuilderMVVM.ViewModel
         // ViewModel-driven properties
         private StateManager m_StateMgr;
         private BitmapImage m_Image;
+        // View and ViewModel-driven properties
+        private MinutiaType m_InputMinutiaType;
         // Commands
         private ICommand m_LoadFileCommand;
         private ICommand m_SaveTemplateCommand;
-        private ICommand m_TerminationCommand;
-        private ICommand m_BifuricationCommand;
+        private ICommand m_TerminationButtonPressCommand;
+        private ICommand m_BifuricationButtonPressCommand;
+
+        #region Constructor
+
+        public TemplateBuilderViewModel()
+        {
+            Minutae = new TrulyObservableCollection<MinutiaRecord>();
+            m_StateMgr = new StateManager(this);
+
+            // Commands
+            m_LoadFileCommand = new RelayCommand(x => LoadFile());
+            m_SaveTemplateCommand = new RelayCommand(x => SaveTemplate());
+            m_TerminationButtonPressCommand = new RelayCommand(
+                x => InputMinutiaType = MinutiaType.Termination);
+            m_BifuricationButtonPressCommand = new RelayCommand(
+                x => InputMinutiaType = MinutiaType.Bifurication);
+        }
+
+        #endregion
+
+        #region Bound Properties
 
         /// <summary>
         /// Gets the minutae. Bound to the canvas.
@@ -48,51 +70,52 @@ namespace TemplateBuilderMVVM.ViewModel
         /// </summary>
         public ICommand SaveTemplateCommand { get { return m_SaveTemplateCommand; } }
         /// <summary>
-        /// Gets the 'termination' command for binding to the 'termination' radio button.
+        /// Gets the termination button press command.
         /// </summary>
-        public ICommand TerminationCommand { get { return m_TerminationCommand; } }
+        public ICommand TerminationButtonPressCommand { get { return m_TerminationButtonPressCommand; } }
         /// <summary>
-        /// Gets the 'bifurication' command for binding to the 'bifurication' radio button.
+        /// Gets the bifurication button press command.
         /// </summary>
-        public ICommand BifuricationCommand { get { return m_BifuricationCommand; } }
+        public ICommand BifuricationButtonPressCommand { get { return m_BifuricationButtonPressCommand; } }
         /// <summary>
         /// Gets or sets the scaling applied to the image.
         /// </summary>
         public double Scale { get; set; }
-
+        /// <summary>
+        /// Gets the type of minutia being input.
+        /// </summary>
+        public MinutiaType InputMinutiaType
+        {
+            get { return m_InputMinutiaType; }
+            set
+            {
+                if (value != m_InputMinutiaType)
+                {
+                    m_InputMinutiaType = value;
+                    NotifyPropertyChanged();
+                    Console.WriteLine("InputMinutiaType st to {0}", m_InputMinutiaType);
+                }
+            }
+        }
         /// <summary>
         /// Gets or sets the image file. Bound to the canvas background.
         /// </summary>
-        /// <value>
-        /// The image file.
-        /// </value>
         public BitmapImage Image
         {
             get { return m_Image; }
             set
             {
-                if (value != this.m_Image)
+                if (value != m_Image)
                 {
-                    this.m_Image = value;
+                    m_Image = value;
                     NotifyPropertyChanged();
                 }
             }
         }
-        public string ImageFileName { get; set; }
 
-        public TemplateBuilderViewModel()
-        {
-            Minutae = new TrulyObservableCollection<MinutiaRecord>();
-            m_StateMgr = new StateManager(this);
-            m_LoadFileCommand = new RelayCommand(x => LoadFile());
-            m_SaveTemplateCommand = new RelayCommand(x => SaveTemplate());
-            m_TerminationCommand = new RelayCommand(
-                x => SetMinutiaType(MinutiaType.Termination),
-                x => m_StateMgr.State.IsMinutiaTypeButtonsEnabled);
-            m_BifuricationCommand = new RelayCommand(
-                x => SetMinutiaType(MinutiaType.Bifurication),
-                x => m_StateMgr.State.IsMinutiaTypeButtonsEnabled);
-        }
+        #endregion
+
+        public string ImageFileName { get; set; }
 
         #region Command Callbacks
 
@@ -115,20 +138,25 @@ namespace TemplateBuilderMVVM.ViewModel
 
         #region Event Callbacks
 
-        public void PositionInput(Point e)
+        public void itemsControl_MouseUp(Point p)
         {
-            m_StateMgr.State.PositionInput(e);
+            m_StateMgr.State.PositionInput(p);
         }
 
-        public void PositionMove(Point e)
+        public void itemsControl_MouseMove(Point p)
         {
-            m_StateMgr.State.PositionMove(e);
+            m_StateMgr.State.PositionMove(p);
         }
 
-        public void RemoveItem(int index)
+        public void Ellipse_MouseRightButtonUp(int index)
         {
             m_StateMgr.State.RemoveItem(index);
         }
+
+        public void image_SizeChanged(Size newSize)
+            {
+            m_StateMgr.State.image_SizeChanged(newSize);
+            }
 
         #endregion
     }

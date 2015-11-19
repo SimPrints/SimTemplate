@@ -25,27 +25,12 @@ namespace TemplateBuilderMVVM.ViewModel.States
         }
 
         // TODO: move this off State and onto 'Initialised'? abstract state.
-        public void LoadFile()
-        {
-            OpenFileDialog od = new OpenFileDialog();
-            //od.Filter = "XLS files|*.xls";
-            //od.Multiselect = true;
-            if (od.ShowDialog() == true)
-            {
-                // TODO: only pass valid file types.
-
-                // Record image and filename
-                m_Outer.ImageFileName = od.FileName;
-                m_Outer.Image = new BitmapImage(new Uri(od.FileName));
-
-                // Transition state to 'Templating'
-                m_StateMgr.TransitionTo(typeof(WaitLocation));
-            }
-        }
 
         virtual public void OnEnteringState() { }
 
         virtual public void OnLeavingState() { }
+
+        abstract public void LoadFile();
 
         abstract public void PositionInput(Point point);
 
@@ -56,6 +41,8 @@ namespace TemplateBuilderMVVM.ViewModel.States
         abstract public void RemoveItem(int index);
 
         abstract public void SaveTemplate();
+
+        abstract public void image_SizeChanged(Size newSize);
 
         virtual public bool IsMinutiaTypeButtonsEnabled { get { return false; } }
 

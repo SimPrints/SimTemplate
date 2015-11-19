@@ -4,11 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:root="clr-namespace:TemplateBuilderMVVM"
         xmlns:local="clr-namespace:TemplateBuilderMVVM.ViewModel"
         xmlns:conv="clr-namespace:TemplateBuilderMVVM.ViewModel.Converters"
         mc:Ignorable="d"
+        x:Name="mainWindow"
         Title="MainWindow" Height="525" Width="525"
         ResizeMode="NoResize">
+    
+    <Window.InputBindings>
+        <KeyBinding Key="t" Command="{Binding TerminationButtonPressCommand}"/>
+        <KeyBinding Key="b" Command="{Binding BifuricationButtonPressCommand}"/>
+    </Window.InputBindings>
 
     <Grid>
         <ToolBarTray HorizontalAlignment="Left" Height="66" Margin="10,10,0,0" VerticalAlignment="Top" Width="497">
@@ -19,8 +26,12 @@
                         Command ="{Binding Path=SaveTemplateCommand}"/>
             </ToolBar>
             <ToolBar x:Name="imageTools" Height="36" VerticalAlignment="Bottom">
-                <RadioButton Command="{Binding Path=TerminationCommand}">Termination</RadioButton>
-                <RadioButton Command="{Binding Path=BifuricationCommand}">Bifurication</RadioButton>
+                <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={conv:EnumToBooleanConverter}, ConverterParameter={x:Static local:MinutiaType.Termination}}">
+                    Termination
+                </RadioButton>
+                <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={conv:EnumToBooleanConverter}, ConverterParameter={x:Static local:MinutiaType.Bifurication}}">
+                    Bifurication
+                </RadioButton>
             </ToolBar>
         </ToolBarTray>
         <Grid Margin="0,51,0,0">
@@ -63,7 +74,7 @@
                         <Setter Property="Canvas.Left" Value="{Binding Location.X, Converter={conv:OffsetConverter}, ConverterParameter=-12.5}" />
                         <Setter Property="Canvas.RenderTransform">
                             <Setter.Value>
-                                <RotateTransform Angle="{Binding Direction, Converter={conv:RadToDeg}}" CenterX="12.5" CenterY="12.5"/>
+                                <RotateTransform Angle="{Binding Direction, Converter={conv:RadToDegConverter}}" CenterX="12.5" CenterY="12.5"/>
                             </Setter.Value>
                         </Setter>
                     </Style>
