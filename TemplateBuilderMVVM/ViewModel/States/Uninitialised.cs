@@ -19,6 +19,12 @@ namespace TemplateBuilderMVVM.ViewModel.States
             // TODO: grey out 'save template button'?
         }
 
+        public override void OnLeavingState()
+        {
+            base.OnLeavingState();
+            m_Outer.InputMinutiaType = MinutiaType.Termination;
+        }
+
         public override void PositionInput(Point e)
         {
             // Do nothing when no image has been loaded.
