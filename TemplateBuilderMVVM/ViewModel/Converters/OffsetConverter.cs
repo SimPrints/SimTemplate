@@ -8,20 +8,19 @@ using System.Windows.Data;
 
 namespace TemplateBuilderMVVM.ViewModel.Converters
 {
-    public class OffsetConverter : BaseConverter
+    public class OffsetConverter : BaseConverter, IMultiValueConverter
     {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             double offset = double.Parse((string)parameter);
-            double val = (double)value;
-            return val + offset;
+            double val = (double)values[0];
+            double scale = (double)values[1];
+            return val * scale + offset;
         }
 
-        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            double offset = double.Parse((string)parameter);
-            double val = (double)value;
-            return val - offset;
+            return null;
         }
     }
 }

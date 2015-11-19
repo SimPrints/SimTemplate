@@ -9,9 +9,8 @@
         xmlns:conv="clr-namespace:TemplateBuilderMVVM.ViewModel.Converters"
         mc:Ignorable="d"
         x:Name="mainWindow"
-        Title="MainWindow" Height="525" Width="525"
-        ResizeMode="NoResize">
-    
+        Title="MainWindow" Height="525" Width="525">
+
     <Window.InputBindings>
         <KeyBinding Key="t" Command="{Binding TerminationButtonPressCommand}"/>
         <KeyBinding Key="b" Command="{Binding BifuricationButtonPressCommand}"/>
@@ -70,8 +69,28 @@
                 <ItemsControl.ItemContainerStyle>
                     <!--It is necessary to set the TargetType so that XAML compiler knows RenderTransform is a viable setting-->
                     <Style>
-                        <Setter Property="Canvas.Top" Value="{Binding Location.Y, Converter={conv:OffsetConverter}, ConverterParameter=-12.5}" />
-                        <Setter Property="Canvas.Left" Value="{Binding Location.X, Converter={conv:OffsetConverter}, ConverterParameter=-12.5}" />
+                        <Setter Property="Canvas.Top">
+                            <Setter.Value>
+                                <MultiBinding Converter="{conv:OffsetConverter}"
+                                              ConverterParameter="-12.5"
+                                              Mode="OneWay">
+                                    <Binding Path="Location.Y"/>
+                                    <Binding Path="DataContext.Scale"
+                                             RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Canvas.Left">
+                            <Setter.Value>
+                                <MultiBinding Converter="{conv:OffsetConverter}"
+                                              ConverterParameter="-12.5"
+                                              Mode="OneWay">
+                                    <Binding Path="Location.X"/>
+                                    <Binding Path="DataContext.Scale"
+                                             RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
                         <Setter Property="Canvas.RenderTransform">
                             <Setter.Value>
                                 <RotateTransform Angle="{Binding Direction, Converter={conv:RadToDegConverter}}" CenterX="12.5" CenterY="12.5"/>

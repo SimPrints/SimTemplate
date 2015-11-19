@@ -61,6 +61,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\IntegrityCheck.cs" />
+    <Compile Include="Helpers\PointExtensions.cs" />
     <Compile Include="Helpers\TrulyObservableCollection.cs" />
     <Compile Include="Helpers\TemplateBuilderException.cs" />
     <Compile Include="Helpers\UIHelper.cs" />

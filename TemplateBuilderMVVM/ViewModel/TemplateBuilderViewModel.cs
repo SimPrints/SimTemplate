@@ -28,6 +28,8 @@ namespace TemplateBuilderMVVM.ViewModel
         private BitmapImage m_Image;
         // View and ViewModel-driven properties
         private MinutiaType m_InputMinutiaType;
+        // View-driven properties
+        private double m_Scale;
         // Commands
         private ICommand m_LoadFileCommand;
         private ICommand m_SaveTemplateCommand;
@@ -53,13 +55,9 @@ namespace TemplateBuilderMVVM.ViewModel
         #endregion
 
         #region Bound Properties
-
         /// <summary>
         /// Gets the minutae. Bound to the canvas.
         /// </summary>
-        /// <value>
-        /// The minutae.
-        /// </value>
         public TrulyObservableCollection<MinutiaRecord> Minutae { get; set; }
         /// <summary>
         /// Gets the 'load file' command for binding to the 'Open' button.
@@ -80,7 +78,18 @@ namespace TemplateBuilderMVVM.ViewModel
         /// <summary>
         /// Gets or sets the scaling applied to the image.
         /// </summary>
-        public double Scale { get; set; }
+        public double Scale
+        {
+            get { return m_Scale; }
+            set
+            {
+                if (m_Scale != value)
+                {
+                    m_Scale = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         /// <summary>
         /// Gets the type of minutia being input.
         /// </summary>
@@ -112,7 +121,6 @@ namespace TemplateBuilderMVVM.ViewModel
                 }
             }
         }
-
         #endregion
 
         public string ImageFileName { get; set; }

@@ -63,7 +63,7 @@ namespace TemplateBuilderMVVM.ViewModel.States
         private void SetDirection(Point p)
         {
             // Get the relevant record
-            Vector direction = p - m_Record.Location;
+            Vector direction = p - m_Record.Location.Scale(m_Outer.Scale);
             double angle = Math.Atan2(direction.Y, direction.X);
             // Save the new direction
             m_Record.Direction = angle;

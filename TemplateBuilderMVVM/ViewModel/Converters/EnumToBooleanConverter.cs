@@ -9,14 +9,14 @@ using TemplateBuilderMVVM.Model;
 
 namespace TemplateBuilderMVVM.ViewModel.Converters
 {
-    public class EnumToBooleanConverter : BaseConverter
+    public class EnumToBooleanConverter : BaseConverter, IValueConverter
     {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value.Equals(parameter);
         }
 
-        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value.Equals(true) ? parameter : Binding.DoNothing;
         }

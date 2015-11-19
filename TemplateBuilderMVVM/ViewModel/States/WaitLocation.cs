@@ -20,8 +20,9 @@ namespace TemplateBuilderMVVM.ViewModel.States
 
             // Start a new minutia data record.
             MinutiaRecord record = new MinutiaRecord();
-            record.Location = new Point(pos.X, pos.Y);
 
+            // Save the position TO SCALE
+            record.Location = pos.Scale(1 / m_Outer.Scale);
             // Record minutia information.
             m_Outer.Minutae.Add(record);
 
@@ -57,6 +58,7 @@ namespace TemplateBuilderMVVM.ViewModel.States
             using (System.IO.StreamWriter file =
             new System.IO.StreamWriter(filepath))
             {
+                file.WriteLine("X, Y, Direction, Type");
                 foreach (MinutiaRecord minutia in m_Outer.Minutae)
                 {
                     file.WriteLine(ToRecord(minutia));
@@ -71,10 +73,8 @@ namespace TemplateBuilderMVVM.ViewModel.States
 
         private string ToRecord(MinutiaRecord labels)
         {
-            double locationX = labels.Location.X / m_Outer.Scale;
-            double locationY = labels.Location.Y / m_Outer.Scale;
             return String.Format("{0}, {1}, {2}, {3}",
-                locationX, locationY, labels.Location, labels.Type);
+                labels.Location.X, labels.Location.Y, labels.Direction, labels.Type);
         }
     }
 }
