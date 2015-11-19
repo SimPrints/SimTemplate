@@ -29,7 +29,7 @@ namespace TemplateBuilderMVVM.ViewModel
         // View and ViewModel-driven properties
         private MinutiaType m_InputMinutiaType;
         // View-driven properties
-        private double m_Scale;
+        private Vector m_Scale;
         // Commands
         private ICommand m_LoadFileCommand;
         private ICommand m_SaveTemplateCommand;
@@ -78,7 +78,7 @@ namespace TemplateBuilderMVVM.ViewModel
         /// <summary>
         /// Gets or sets the scaling applied to the image.
         /// </summary>
-        public double Scale
+        public Vector Scale
         {
             get { return m_Scale; }
             set

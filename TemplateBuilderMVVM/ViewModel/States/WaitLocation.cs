@@ -22,7 +22,7 @@ namespace TemplateBuilderMVVM.ViewModel.States
             MinutiaRecord record = new MinutiaRecord();
 
             // Save the position TO SCALE
-            record.Location = pos.Scale(1 / m_Outer.Scale);
+            record.Location = pos.InvScale(m_Outer.Scale);
             // Record minutia information.
             m_Outer.Minutae.Add(record);
 

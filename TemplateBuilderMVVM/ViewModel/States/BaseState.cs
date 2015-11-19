@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using TemplateBuilderMVVM.Helpers;
 
 namespace TemplateBuilderMVVM.ViewModel.States
 {
@@ -29,6 +31,17 @@ namespace TemplateBuilderMVVM.ViewModel.States
                 // Transition state to 'Templating'
                 m_StateMgr.TransitionTo(typeof(WaitLocation));
             }
+        }
+        public override void image_SizeChanged(Size newSize)
+        {
+            IntegrityCheck.IsNotNull(m_Outer.Image);
+            // Get scaling in each dimension.
+            double scaleX = newSize.Width / m_Outer.Image.Width;
+            double scaleY = newSize.Height / m_Outer.Image.Height;
+            // Check that scaling factor is equal for each dimension.
+            Vector scale = new Vector(scaleX, scaleY);
+            // Update ViewModel scale
+            m_Outer.Scale = scale;
         }
     }
 }

@@ -75,7 +75,7 @@
                                               ConverterParameter="-12.5"
                                               Mode="OneWay">
                                     <Binding Path="Location.Y"/>
-                                    <Binding Path="DataContext.Scale"
+                                    <Binding Path="DataContext.Scale.Y"
                                              RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
                                 </MultiBinding>
                             </Setter.Value>
@@ -86,7 +86,7 @@
                                               ConverterParameter="-12.5"
                                               Mode="OneWay">
                                     <Binding Path="Location.X"/>
-                                    <Binding Path="DataContext.Scale"
+                                    <Binding Path="DataContext.Scale.X"
                                              RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
                                 </MultiBinding>
                             </Setter.Value>
