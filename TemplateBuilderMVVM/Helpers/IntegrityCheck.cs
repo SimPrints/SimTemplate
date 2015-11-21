@@ -105,7 +105,7 @@ namespace TemplateBuilderMVVM.Helpers
         {
             if (value == null)
             {
-                throw Fail("Is not null.");
+                throw Fail("Value cannot be null.");
             }
         }
 
@@ -113,7 +113,7 @@ namespace TemplateBuilderMVVM.Helpers
         {
             if (value == null)
             {
-                throw Fail(String.Format("Is not null: {0}", message));
+                throw Fail(String.Format("Value cannot be null: {0}", message));
             }
         }
 
