@@ -52,11 +52,6 @@ namespace TemplateBuilderMVVM.ViewModel.States
             Console.WriteLine("Cannot save template when waiting on direction.");
         }
 
-        public override void SetMinutiaType(MinutiaType type)
-        {
-            m_Record.Type = type;
-        }
-
         #endregion
 
         #region Private Methods

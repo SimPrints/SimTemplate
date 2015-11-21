@@ -23,15 +23,17 @@ namespace TemplateBuilderMVVM.ViewModel
 
         #endregion
 
-        // ViewModel-driven properties
         private StateManager m_StateMgr;
+        // ViewModel-driven properties
         private BitmapImage m_Image;
+        private bool m_IsInputMinutiaTypePermitted;
         // View and ViewModel-driven properties
         private MinutiaType m_InputMinutiaType;
         // View-driven properties
         private Vector m_Scale;
         // Commands
         private ICommand m_LoadFileCommand;
+        private ICommand m_LoadFolderCommand;
         private ICommand m_SaveTemplateCommand;
         private ICommand m_TerminationButtonPressCommand;
         private ICommand m_BifuricationButtonPressCommand;
@@ -40,41 +42,44 @@ namespace TemplateBuilderMVVM.ViewModel
 
         public TemplateBuilderViewModel()
         {
-            Minutae = new TrulyObservableCollection<MinutiaRecord>();
             m_StateMgr = new StateManager(this);
-
-            // Commands
-            m_LoadFileCommand = new RelayCommand(x => LoadFile());
-            m_SaveTemplateCommand = new RelayCommand(x => SaveTemplate());
-            m_TerminationButtonPressCommand = new RelayCommand(
-                x => InputMinutiaType = MinutiaType.Termination);
-            m_BifuricationButtonPressCommand = new RelayCommand(
-                x => InputMinutiaType = MinutiaType.Bifurication);
+            InitialiseCommands();
         }
 
         #endregion
 
-        #region Bound Properties
+        #region Directly Bound Properties
+
         /// <summary>
         /// Gets the minutae. Bound to the canvas.
         /// </summary>
         public TrulyObservableCollection<MinutiaRecord> Minutae { get; set; }
+
         /// <summary>
-        /// Gets the 'load file' command for binding to the 'Open' button.
+        /// Gets the 'load file' command for binding to the 'openFile' button.
         /// </summary>
         public ICommand LoadFileCommand { get { return m_LoadFileCommand; } }
+
+        /// <summary>
+        /// Gets the 'load folder' command for binding to the 'openFolder' button.
+        /// </summary>
+        public ICommand LoadFolderCommand { get { return m_LoadFolderCommand; } }
+
         /// <summary>
         /// Gets the 'save template' command for binding to the 'Save' button.
         /// </summary>
         public ICommand SaveTemplateCommand { get { return m_SaveTemplateCommand; } }
+
         /// <summary>
         /// Gets the termination button press command.
         /// </summary>
-        public ICommand TerminationButtonPressCommand { get { return m_TerminationButtonPressCommand; } }
+        public ICommand SetTerminationInputMinutiaType { get { return m_TerminationButtonPressCommand; } }
+
         /// <summary>
         /// Gets the bifurication button press command.
         /// </summary>
-        public ICommand BifuricationButtonPressCommand { get { return m_BifuricationButtonPressCommand; } }
+        public ICommand SetBifuricationInputMinutiaType { get { return m_BifuricationButtonPressCommand; } }
+
         /// <summary>
         /// Gets or sets the scaling applied to the image.
         /// </summary>
@@ -90,6 +95,7 @@ namespace TemplateBuilderMVVM.ViewModel
                 }
             }
         }
+
         /// <summary>
         /// Gets the type of minutia being input.
         /// </summary>
@@ -102,10 +108,27 @@ namespace TemplateBuilderMVVM.ViewModel
                 {
                     m_InputMinutiaType = value;
                     NotifyPropertyChanged();
-                    Console.WriteLine("InputMinutiaType st to {0}", m_InputMinutiaType);
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the input minutia type radio buttons
+        /// should be enabled (bound to IsEnabled on buttons).
+        /// </summary>
+        public bool IsInputMinutiaTypePermitted
+        {
+            get { return m_IsInputMinutiaTypePermitted; }
+            set
+            {
+                if (value != m_IsInputMinutiaTypePermitted)
+                {
+                    m_IsInputMinutiaTypePermitted = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         /// <summary>
         /// Gets or sets the image file. Bound to the canvas background.
         /// </summary>
@@ -121,15 +144,23 @@ namespace TemplateBuilderMVVM.ViewModel
                 }
             }
         }
+
         #endregion
 
         public string ImageFileName { get; set; }
+
+        public IEnumerator<string> ImageFileNames { get; set; }
 
         #region Command Callbacks
 
         private void LoadFile()
         {
-            m_StateMgr.State.LoadFile();
+            m_StateMgr.State.OpenFile();
+        }
+
+        private void LoadFolder()
+        {
+            m_StateMgr.State.OpenFolder();
         }
 
         private void SaveTemplate()
@@ -137,10 +168,14 @@ namespace TemplateBuilderMVVM.ViewModel
             m_StateMgr.State.SaveTemplate();
         }
 
-        private void SetMinutiaType(MinutiaType type)
-        {
-            m_StateMgr.State.SetMinutiaType(type);
-        }
+        #endregion
+
+        #region Command CanExecute
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the 'save tempalte' button is active.
+        /// </summary>
+        public bool IsSaveTemplatePermitted { get; set; }
 
         #endregion
 
@@ -165,6 +200,23 @@ namespace TemplateBuilderMVVM.ViewModel
             {
             m_StateMgr.State.image_SizeChanged(newSize);
             }
+
+        #endregion
+
+        #region Private Methods
+
+        private void InitialiseCommands()
+        {
+            m_LoadFileCommand = new RelayCommand(x => LoadFile());
+            m_LoadFolderCommand = new RelayCommand(x => LoadFolder());
+            m_SaveTemplateCommand = new RelayCommand(
+                x => SaveTemplate(),
+                x => IsSaveTemplatePermitted);
+            m_TerminationButtonPressCommand = new RelayCommand(
+                x => InputMinutiaType = MinutiaType.Termination);
+            m_BifuricationButtonPressCommand = new RelayCommand(
+                x => InputMinutiaType = MinutiaType.Bifurication);
+        }
 
         #endregion
     }

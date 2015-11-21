@@ -15,12 +15,27 @@ using TemplateBuilderMVVM.Model;
 
 namespace TemplateBuilderMVVM.ViewModel.States
 {
-    abstract public class Templating : BaseState
+    abstract public class Templating : Initialised
     {
         #region Constructor
 
         public Templating(TemplateBuilderViewModel outer, StateManager stateMgr) : base(outer, stateMgr)
         { }
+
+        public override void OnEnteringState()
+        {
+            base.OnEnteringState();
+
+            // Ensure UI controls active
+            if (!m_Outer.IsSaveTemplatePermitted)
+            {
+                m_Outer.IsSaveTemplatePermitted = true;
+            }
+            if (!m_Outer.IsInputMinutiaTypePermitted)
+            {
+                m_Outer.IsInputMinutiaTypePermitted = true;
+            }
+        }
 
         #endregion
     }

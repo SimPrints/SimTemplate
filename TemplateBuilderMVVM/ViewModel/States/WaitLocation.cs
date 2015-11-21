@@ -64,11 +64,9 @@ namespace TemplateBuilderMVVM.ViewModel.States
                     file.WriteLine(ToRecord(minutia));
                 }
             }
-        }
 
-        public override void SetMinutiaType(MinutiaType type)
-        {
-            // Cannot set minutia type while no minutia record is being made.
+            // We've finished with this image, so transition to Idle state.
+            m_StateMgr.TransitionTo(typeof(Idle));
         }
 
         private string ToRecord(MinutiaRecord labels)

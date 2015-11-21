@@ -30,11 +30,11 @@ namespace TemplateBuilderMVVM.ViewModel.States
 
         virtual public void OnLeavingState() { }
 
-        abstract public void LoadFile();
+        abstract public void OpenFile();
+
+        abstract public void OpenFolder();
 
         abstract public void PositionInput(Point point);
-
-        abstract public void SetMinutiaType(MinutiaType type);
 
         abstract public void PositionMove(Point point);
 

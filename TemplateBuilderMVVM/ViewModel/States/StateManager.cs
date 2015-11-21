@@ -15,7 +15,10 @@ namespace TemplateBuilderMVVM.ViewModel.States
         public StateManager(TemplateBuilderViewModel viewModel)
         {
             m_ViewModel = viewModel;
+
+            // Manually transition to the first state.
             m_State = new Uninitialised(m_ViewModel, this);
+            m_State.OnEnteringState();
         }
 
         /// <summary>
@@ -38,8 +41,8 @@ namespace TemplateBuilderMVVM.ViewModel.States
             State newState = (State)Activator.CreateInstance(stateType, m_ViewModel, this);
             Console.WriteLine("State transition: {0}->{1}", m_State.Name, newState.Name);
             m_State.OnLeavingState();
-            newState.OnEnteringState();
             m_State = newState;
+            newState.OnEnteringState();
         }
     }
 }

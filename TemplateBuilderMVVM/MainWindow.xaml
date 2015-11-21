@@ -12,23 +12,27 @@
         Title="MainWindow" Height="525" Width="525">
 
     <Window.InputBindings>
-        <KeyBinding Key="t" Command="{Binding TerminationButtonPressCommand}"/>
-        <KeyBinding Key="b" Command="{Binding BifuricationButtonPressCommand}"/>
+        <KeyBinding Key="t" Command="{Binding SetTerminationInputMinutiaType}"/>
+        <KeyBinding Key="b" Command="{Binding SetBifuricationInputMinutiaType}"/>
     </Window.InputBindings>
 
     <Grid>
         <ToolBarTray HorizontalAlignment="Left" Height="66" Margin="10,10,0,0" VerticalAlignment="Top" Width="497">
             <ToolBar x:Name="programTools" Height="36" VerticalAlignment="Top">
-                <Button x:Name="openFile" Content="Open" Height="36" VerticalAlignment="Top" Width="40" Margin="0,0,0,-5"
+                <Button x:Name="openFile" Content="Open File" Height="36" VerticalAlignment="Top" Width="40" Margin="0,0,0,-5"
                         Command="{Binding Path=LoadFileCommand}"/>
+                <Button x:Name="openFolder" Content="Open Folder" Height="36" VerticalAlignment="Top"
+                        Command="{Binding Path=LoadFolderCommand}"/>
                 <Button x:Name="saveTemplate" Content="Save" Height="36" VerticalAlignment="Top" Width="48" Margin="0,0,0,-5"
-                        Command ="{Binding Path=SaveTemplateCommand}"/>
+                        Command="{Binding Path=SaveTemplateCommand}"/>
             </ToolBar>
             <ToolBar x:Name="imageTools" Height="36" VerticalAlignment="Bottom">
-                <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={conv:EnumToBooleanConverter}, ConverterParameter={x:Static local:MinutiaType.Termination}}">
+                <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={conv:EnumToBooleanConverter}, ConverterParameter={x:Static local:MinutiaType.Termination}}"
+                             IsEnabled="{Binding Path=IsInputMinutiaTypePermitted}">
                     Termination
                 </RadioButton>
-                <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={conv:EnumToBooleanConverter}, ConverterParameter={x:Static local:MinutiaType.Bifurication}}">
+                <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={conv:EnumToBooleanConverter}, ConverterParameter={x:Static local:MinutiaType.Bifurication}}"
+                             IsEnabled="{Binding Path=IsInputMinutiaTypePermitted}">
                     Bifurication
                 </RadioButton>
             </ToolBar>
