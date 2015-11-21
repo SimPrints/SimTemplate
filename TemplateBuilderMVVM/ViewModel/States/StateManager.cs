@@ -1,14 +1,17 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TemplateBuilderMVVM.Helpers;
+using TemplateBuilder.Helpers;
 
-namespace TemplateBuilderMVVM.ViewModel.States
+namespace TemplateBuilder.ViewModel.States
 {
     public class StateManager
     {
+        private static readonly ILog m_Log = LogManager.GetLogger(typeof(StateManager));
+
         private TemplateBuilderViewModel m_ViewModel;
         private State m_State;
 
@@ -39,7 +42,7 @@ namespace TemplateBuilderMVVM.ViewModel.States
                 "Supplied type not a recognised state");
 
             State newState = (State)Activator.CreateInstance(stateType, m_ViewModel, this);
-            Console.WriteLine("State transition: {0}->{1}", m_State.Name, newState.Name);
+            m_Log.DebugFormat("State transition: {0}->{1}", m_State.Name, newState.Name);
             m_State.OnLeavingState();
             m_State = newState;
             newState.OnEnteringState();

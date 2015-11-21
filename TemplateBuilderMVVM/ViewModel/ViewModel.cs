@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TemplateBuilderMVVM.ViewModel
+namespace TemplateBuilder.ViewModel
 {
     public class ViewModel : INotifyPropertyChanged
     {

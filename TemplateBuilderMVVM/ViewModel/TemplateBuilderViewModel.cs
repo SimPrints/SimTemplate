@@ -8,12 +8,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using TemplateBuilderMVVM.Helpers;
-using TemplateBuilderMVVM.Model;
-using TemplateBuilderMVVM.ViewModel.Commands;
-using TemplateBuilderMVVM.ViewModel.States;
+using TemplateBuilder.Helpers;
+using TemplateBuilder.Model;
+using TemplateBuilder.ViewModel.Commands;
+using TemplateBuilder.ViewModel.States;
 
-namespace TemplateBuilderMVVM.ViewModel
+namespace TemplateBuilder.ViewModel
 {
     public class TemplateBuilderViewModel : ViewModel
     {

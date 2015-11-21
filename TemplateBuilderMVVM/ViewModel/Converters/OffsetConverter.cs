@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace TemplateBuilderMVVM.ViewModel.Converters
+namespace TemplateBuilder.ViewModel.Converters
 {
     public class OffsetConverter : BaseConverter, IMultiValueConverter
     {

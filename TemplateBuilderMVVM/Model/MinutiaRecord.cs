@@ -7,9 +7,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using TemplateBuilderMVVM.ViewModel;
+using TemplateBuilder.ViewModel;
 
-namespace TemplateBuilderMVVM.Model
+namespace TemplateBuilder.Model
 {
     public class MinutiaRecord : INotifyPropertyChanged
     {

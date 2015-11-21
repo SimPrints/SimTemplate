@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace TemplateBuilderMVVM.ViewModel.Converters
+namespace TemplateBuilder.ViewModel.Converters
 {
     public abstract class BaseConverter : MarkupExtension
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using log4net;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,12 +10,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using TemplateBuilderMVVM.Model;
+using TemplateBuilder.Model;
 
-namespace TemplateBuilderMVVM.ViewModel.States
+namespace TemplateBuilder.ViewModel.States
 {
     abstract public class State
     {
+        private ILog m_Log;
+
         protected TemplateBuilderViewModel m_Outer;
         protected StateManager m_StateMgr;
 
@@ -47,5 +50,17 @@ namespace TemplateBuilderMVVM.ViewModel.States
         virtual public bool IsMinutiaTypeButtonsEnabled { get { return false; } }
 
         public string Name { get { return GetType().Name; } }
+
+        protected ILog Logger
+        {
+            get
+            {
+                if (m_Log == null)
+                {
+                    m_Log = LogManager.GetLogger(this.GetType());
+                }
+                return m_Log;
+            }
+        }
     }
 }

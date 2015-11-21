@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using TemplateBuilderMVVM.Model;
+using TemplateBuilder.Model;
 
-namespace TemplateBuilderMVVM.ViewModel.Converters
+namespace TemplateBuilder.ViewModel.Converters
 {
     public class EnumToBooleanConverter : BaseConverter, IValueConverter
     {

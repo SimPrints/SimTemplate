@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using TemplateBuilderMVVM.Helpers;
+using TemplateBuilder.Helpers;
 
-namespace TemplateBuilderMVVM.ViewModel.States
+namespace TemplateBuilder.ViewModel.States
 {
     abstract public class Initialised : State
     {

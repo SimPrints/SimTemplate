@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using TemplateBuilderMVVM.Helpers;
+using TemplateBuilder.Helpers;
 
-namespace TemplateBuilderMVVM.ViewModel.States
+namespace TemplateBuilder.ViewModel.States
 {
     public class LoadingFile : Initialised
     {
@@ -81,7 +81,7 @@ namespace TemplateBuilderMVVM.ViewModel.States
             catch (NotSupportedException ex)
             {
                 // Unable to load file.
-                Console.WriteLine("Unable to load file:" + ex, ex.Message);
+                Logger.DebugFormat("Unable to load file:" + ex, ex.Message);
                 // Transition to Idle, as we cannot load the file.
                 m_StateMgr.TransitionTo(typeof(Idle));
             }

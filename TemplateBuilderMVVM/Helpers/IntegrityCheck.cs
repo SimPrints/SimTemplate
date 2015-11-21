@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TemplateBuilderMVVM.Helpers
+namespace TemplateBuilder.Helpers
 {
     public static class IntegrityCheck
     {

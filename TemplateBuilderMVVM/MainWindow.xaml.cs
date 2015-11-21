@@ -1,4 +1,6 @@
-﻿using System;
+﻿using log4net;
+using log4net.Config;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -14,22 +16,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TemplateBuilderMVVM.Helpers;
-using TemplateBuilderMVVM.ViewModel;
+using TemplateBuilder.Helpers;
+using TemplateBuilder.ViewModel;
 
-namespace TemplateBuilderMVVM
+namespace TemplateBuilder
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly ILog m_Log = LogManager.GetLogger(typeof(MainWindow));
+
         private TemplateBuilderViewModel m_ViewModel;
 
         #region Constructor
 
         public MainWindow()
         {
+            XmlConfigurator.Configure();
+            m_Log.Debug("Logging initialised.");
             m_ViewModel = new TemplateBuilderViewModel();
             InitializeComponent();
             DataContext = m_ViewModel;

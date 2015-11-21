@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using TemplateBuilderMVVM.Helpers;
-using TemplateBuilderMVVM.Model;
+using TemplateBuilder.Helpers;
+using TemplateBuilder.Model;
 
-namespace TemplateBuilderMVVM.ViewModel.States
+namespace TemplateBuilder.ViewModel.States
 {
     public class Uninitialised : State
     {

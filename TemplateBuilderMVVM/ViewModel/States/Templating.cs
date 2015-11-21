@@ -10,10 +10,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using TemplateBuilderMVVM.Helpers;
-using TemplateBuilderMVVM.Model;
+using TemplateBuilder.Helpers;
+using TemplateBuilder.Model;
 
-namespace TemplateBuilderMVVM.ViewModel.States
+namespace TemplateBuilder.ViewModel.States
 {
     abstract public class Templating : Initialised
     {

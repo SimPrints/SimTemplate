@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using TemplateBuilderMVVM.Helpers;
-using TemplateBuilderMVVM.Model;
+using TemplateBuilder.Helpers;
+using TemplateBuilder.Model;
 
-namespace TemplateBuilderMVVM.ViewModel.States
+namespace TemplateBuilder.ViewModel.States
 {
     public class WaitDirection : Templating
     {
@@ -49,7 +49,7 @@ namespace TemplateBuilderMVVM.ViewModel.States
 
         public override void SaveTemplate()
         {
-            Console.WriteLine("Cannot save template when waiting on direction.");
+            Logger.Debug("Cannot save template when waiting on direction.");
         }
 
         #endregion

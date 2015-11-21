@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace TemplateBuilderMVVM.Helpers
+namespace TemplateBuilder.Helpers
 {
     public class UIHelper
     {

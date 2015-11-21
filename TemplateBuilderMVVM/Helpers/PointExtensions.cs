@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace TemplateBuilderMVVM.Helpers
+namespace TemplateBuilder.Helpers
 {
     public static class PointExtensions
     {

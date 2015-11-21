@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TemplateBuilderMVVM.ViewModel
+namespace TemplateBuilder.ViewModel
 {
     public enum MinutiaType
     {

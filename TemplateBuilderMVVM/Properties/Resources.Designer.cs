@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TemplateBuilderMVVM.Properties
+namespace TemplateBuilder.Properties
 {
 
 

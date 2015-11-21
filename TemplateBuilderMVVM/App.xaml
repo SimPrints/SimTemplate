@@ -1,9 +1,9 @@
-﻿<Application x:Class="TemplateBuilderMVVM.App"
+﻿<Application x:Class="TemplateBuilder.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TemplateBuilderMVVM"
+             xmlns:local="clr-namespace:TemplateBuilder"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        
+
     </Application.Resources>
 </Application>
