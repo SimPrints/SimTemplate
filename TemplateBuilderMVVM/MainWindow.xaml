@@ -12,8 +12,9 @@
         Title="MainWindow" Height="525" Width="525">
 
     <Window.InputBindings>
-        <KeyBinding Key="t" Command="{Binding SetTerminationInputMinutiaType}"/>
-        <KeyBinding Key="b" Command="{Binding SetBifuricationInputMinutiaType}"/>
+        <KeyBinding Key="t" Command="{Binding TerminationButtonPressCommand}"/>
+        <KeyBinding Key="b" Command="{Binding BifuricationButtonPressCommand}"/>
+        <KeyBinding Key="Esc" Command="{Binding EscapePressCommand}"/>
     </Window.InputBindings>
 
     <Grid>
@@ -58,14 +59,38 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Canvas>
-                            <Ellipse Fill="Green" Width="25" Height="25"
-                                     Panel.ZIndex="1"
-                                     MouseRightButtonUp="Ellipse_MouseRightButtonUp" />
-                            <Line Stroke="GreenYellow" StrokeThickness="5" Panel.ZIndex="2"
-                                  X1="12.5" 
-                                  Y1="12.5"
-                                  X2="25"
-                                  Y2="12.5" />
+                            <Ellipse x:Name="ellipse"
+                                     Width="30" Height="30"
+                                     Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Height, Converter={conv:MultiplyConverter}, ConverterParameter=-0.5}"
+                                     Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Width, Converter={conv:MultiplyConverter}, ConverterParameter=-0.5}"
+                                     Fill="Transparent" Stroke="Black" StrokeThickness="4" />
+                            <Line X1="0" X2="0"
+                                  Y1="{Binding ElementName=ellipse, Path=Height, Converter={conv:MultiplyConverter}, ConverterParameter=0.5}"
+                                  Y2="30"
+                                  Stroke="Black" StrokeThickness="4">
+                                <Line.RenderTransform>
+                                    <RotateTransform Angle="90"/>
+                                </Line.RenderTransform>
+                            </Line>
+
+                            <Line X1="0" X2="0"
+                                  Y1="{Binding ElementName=ellipse, Path=Height, Converter={conv:MultiplyConverter}, ConverterParameter=0.5}"
+                                  Y2="30"
+                                  Stroke="Black" StrokeThickness="4"
+                                  Visibility="{Binding Path=Type, Converter={conv:EnumToVisibilityConverter}, ConverterParameter={x:Static local:MinutiaType.Bifurication}}">
+                                <Line.RenderTransform>
+                                    <RotateTransform Angle="225"/>
+                                </Line.RenderTransform>
+                            </Line>
+                            <Line X1="0" X2="0"
+                                  Y1="{Binding ElementName=ellipse, Path=Height, Converter={conv:MultiplyConverter}, ConverterParameter=0.5}"
+                                  Y2="30"
+                                  Stroke="Black" StrokeThickness="4"
+                                  Visibility="{Binding Path=Type, Converter={conv:EnumToVisibilityConverter}, ConverterParameter={x:Static local:MinutiaType.Bifurication}}">
+                                <Line.RenderTransform>
+                                    <RotateTransform Angle="315"/>
+                                </Line.RenderTransform>
+                            </Line>
                         </Canvas>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -75,8 +100,7 @@
                     <Style>
                         <Setter Property="Canvas.Top">
                             <Setter.Value>
-                                <MultiBinding Converter="{conv:OffsetConverter}"
-                                              ConverterParameter="-12.5"
+                                <MultiBinding Converter="{conv:ScaleConverter}"
                                               Mode="OneWay">
                                     <Binding Path="Location.Y"/>
                                     <Binding Path="DataContext.Scale.Y"
@@ -86,8 +110,7 @@
                         </Setter>
                         <Setter Property="Canvas.Left">
                             <Setter.Value>
-                                <MultiBinding Converter="{conv:OffsetConverter}"
-                                              ConverterParameter="-12.5"
+                                <MultiBinding Converter="{conv:ScaleConverter}"
                                               Mode="OneWay">
                                     <Binding Path="Location.X"/>
                                     <Binding Path="DataContext.Scale.X"
@@ -97,7 +120,7 @@
                         </Setter>
                         <Setter Property="Canvas.RenderTransform">
                             <Setter.Value>
-                                <RotateTransform Angle="{Binding Direction, Converter={conv:RadToDegConverter}}" CenterX="12.5" CenterY="12.5"/>
+                                <RotateTransform Angle="{Binding Direction, Converter={conv:RadToDegConverter}}"/>
                             </Setter.Value>
                         </Setter>
                     </Style>

@@ -1,7 +1,24 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TemplateBuilder.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SqliteDatabase" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\mainDb_yesFMR_noPNG.sqlite</Value>
+    </Setting>
+    <Setting Name="IdCol" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Id</Value>
+    </Setting>
+    <Setting Name="ScannerNameCol" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ScannerName</Value>
+    </Setting>
+    <Setting Name="FingerNumberCol" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">FingerNumber</Value>
+    </Setting>
+    <Setting Name="CaptureNumberCol" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CaptureNumber</Value>
+    </Setting>
+    <Setting Name="GoldTemplateCol" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">GoldTemplate</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

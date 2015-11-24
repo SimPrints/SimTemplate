@@ -67,6 +67,16 @@ namespace TemplateBuilder.ViewModel.States
             // Do not allow opening a folder while loading a file!
         }
 
+        public override void EscapeAction()
+        {
+            // Nothing to escape.
+        }
+
+        public override void SetMinutiaType(MinutiaType type)
+        {
+            // Do nothing. Not relevant to change type while loading file.
+        }
+
         #region Private Methods
 
         private void LoadFile(string filename)
@@ -92,6 +102,7 @@ namespace TemplateBuilder.ViewModel.States
                 m_Outer.Image = image;
             }
         }
+        
 
         #endregion
     }

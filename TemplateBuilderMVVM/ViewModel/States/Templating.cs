@@ -22,6 +22,8 @@ namespace TemplateBuilder.ViewModel.States
         public Templating(TemplateBuilderViewModel outer, StateManager stateMgr) : base(outer, stateMgr)
         { }
 
+        #endregion
+
         public override void OnEnteringState()
         {
             base.OnEnteringState();
@@ -37,6 +39,16 @@ namespace TemplateBuilder.ViewModel.States
             }
         }
 
-        #endregion
+        public override void OpenFile()
+        {
+            //if (System.Windows.MessageBox.Show((
+            //        "Unsaved Template", "The template you are currently working is unsaved, would you like it saved before continuing?",
+            //        MessageBoxButton.YesNoCancel)
+            //    == MessageBoxResult.Yes)
+            //{
+            //    //m_Outer.Save
+            //    base.OpenFile();
+            //}
+        }
     }
 }

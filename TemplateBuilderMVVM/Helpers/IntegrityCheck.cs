@@ -41,6 +41,25 @@ namespace TemplateBuilder.Helpers
 
         #endregion
 
+        #region IsFalse
+
+        public static void IsFalse(bool condition)
+        {
+            IsTrue(!condition, "Is not false.");
+        }
+
+        public static void IsFalse(bool condition, string message)
+        {
+            IsTrue(!condition, message);
+        }
+
+        public static void IsFalse(bool condition, string format, params string[] args)
+        {
+            IsTrue(!condition, format, args);
+        }
+
+        #endregion
+
         #region AreEqual
 
         public static void AreEqual<T>(T expected, T actual)
@@ -151,6 +170,16 @@ namespace TemplateBuilder.Helpers
             {
                 throw Fail(String.Format("Is not null: {0}", String.Format(format, args)));
             }
+        }
+
+        #endregion
+
+        #region FailUnexpectedDefault
+
+        public static TemplateBuilderException FailUnexpectedDefault<T>(T value)
+        {
+            return new TemplateBuilderException(
+                String.Format("Unexpected default value: {0}", value));
         }
 
         #endregion

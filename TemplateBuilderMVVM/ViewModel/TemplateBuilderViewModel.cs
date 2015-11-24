@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace TemplateBuilder.ViewModel
 
         #endregion
 
+        private readonly TemplateBuilderViewModelParameters m_Parameters;
         private StateManager m_StateMgr;
         // ViewModel-driven properties
         private BitmapImage m_Image;
@@ -35,15 +37,28 @@ namespace TemplateBuilder.ViewModel
         private ICommand m_LoadFileCommand;
         private ICommand m_LoadFolderCommand;
         private ICommand m_SaveTemplateCommand;
+
         private ICommand m_TerminationButtonPressCommand;
         private ICommand m_BifuricationButtonPressCommand;
+        private ICommand m_EscapePressCommand;
 
         #region Constructor
 
-        public TemplateBuilderViewModel()
+        public TemplateBuilderViewModel(TemplateBuilderViewModelParameters parameters)
         {
-            m_StateMgr = new StateManager(this);
+            IntegrityCheck.IsNotNull(parameters);
+            IntegrityCheck.IsNotNullOrEmpty(parameters.SqliteDatabase);
+            IntegrityCheck.IsNotNullOrEmpty(parameters.IdCol);
+            IntegrityCheck.IsNotNullOrEmpty(parameters.ScannerNameCol);
+            IntegrityCheck.IsNotNullOrEmpty(parameters.FingerNumberCol);
+            IntegrityCheck.IsNotNullOrEmpty(parameters.CaptureNumberCol);
+
+            m_Parameters = parameters;
+            m_StateMgr = new StateManager(this, typeof(Uninitialised));
             InitialiseCommands();
+
+            // Start the state machine.
+            m_StateMgr.Start();
         }
 
         #endregion
@@ -71,14 +86,19 @@ namespace TemplateBuilder.ViewModel
         public ICommand SaveTemplateCommand { get { return m_SaveTemplateCommand; } }
 
         /// <summary>
-        /// Gets the termination button press command.
+        /// Gets the termination button press command for binding to the 't' key.
         /// </summary>
-        public ICommand SetTerminationInputMinutiaType { get { return m_TerminationButtonPressCommand; } }
+        public ICommand TerminationButtonPressCommand { get { return m_TerminationButtonPressCommand; } }
 
         /// <summary>
-        /// Gets the bifurication button press command.
+        /// Gets the bifurication button press command for binding to the 'b' key.
         /// </summary>
-        public ICommand SetBifuricationInputMinutiaType { get { return m_BifuricationButtonPressCommand; } }
+        public ICommand BifuricationButtonPressCommand { get { return m_BifuricationButtonPressCommand; } }
+
+        /// <summary>
+        /// Gets the escape press command for binding to the Esc key.
+        /// </summary>
+        public ICommand EscapePressCommand { get { return m_EscapePressCommand; } }
 
         /// <summary>
         /// Gets or sets the scaling applied to the image.
@@ -107,6 +127,7 @@ namespace TemplateBuilder.ViewModel
                 if (value != m_InputMinutiaType)
                 {
                     m_InputMinutiaType = value;
+                    m_StateMgr.State.SetMinutiaType(m_InputMinutiaType);
                     NotifyPropertyChanged();
                 }
             }
@@ -151,6 +172,12 @@ namespace TemplateBuilder.ViewModel
 
         public IEnumerator<string> ImageFileNames { get; set; }
 
+        public TemplateBuilderViewModelParameters Parameters { get { return m_Parameters; } }
+
+        public SQLiteConnection SQLiteConnection { get; set; }
+
+        public TemplateBuilderException Exception { get; set; }
+
         #region Command Callbacks
 
         private void LoadFile()
@@ -166,6 +193,11 @@ namespace TemplateBuilder.ViewModel
         private void SaveTemplate()
         {
             m_StateMgr.State.SaveTemplate();
+        }
+
+        private void EscapeAction()
+        {
+            m_StateMgr.State.EscapeAction();
         }
 
         #endregion
@@ -216,6 +248,7 @@ namespace TemplateBuilder.ViewModel
                 x => InputMinutiaType = MinutiaType.Termination);
             m_BifuricationButtonPressCommand = new RelayCommand(
                 x => InputMinutiaType = MinutiaType.Bifurication);
+            m_EscapePressCommand = new RelayCommand(x => EscapeAction());
         }
 
         #endregion

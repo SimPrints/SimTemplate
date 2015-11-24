@@ -21,8 +21,10 @@ namespace TemplateBuilder.ViewModel.States
             // Start a new minutia data record.
             MinutiaRecord record = new MinutiaRecord();
 
-            // Save the position TO SCALE
+            // Save the position TO SCALE.
             record.Location = pos.InvScale(m_Outer.Scale);
+            // Save the current type.
+            record.Type = m_Outer.InputMinutiaType;
             // Record minutia information.
             m_Outer.Minutae.Add(record);
 
@@ -68,11 +70,24 @@ namespace TemplateBuilder.ViewModel.States
             // We've finished with this image, so transition to Idle state.
             m_StateMgr.TransitionTo(typeof(Idle));
         }
+        public override void EscapeAction()
+        {
+            // Nothing to escape.
+        }
 
-        private string ToRecord(MinutiaRecord labels)
+        public override void SetMinutiaType(MinutiaType type)
+        {
+            // Do nothing. No current record to update.
+        }
+
+        #region Helper Methods
+
+        private static string ToRecord(MinutiaRecord labels)
         {
             return String.Format("{0}, {1}, {2}, {3}",
                 labels.Location.X, labels.Location.Y, labels.Direction, labels.Type);
         }
+
+        #endregion
     }
 }

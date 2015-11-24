@@ -1,22 +1,7 @@
 ﻿using log4net;
 using log4net.Config;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TemplateBuilder.Helpers;
 using TemplateBuilder.ViewModel;
 
 namespace TemplateBuilder
@@ -36,7 +21,14 @@ namespace TemplateBuilder
         {
             XmlConfigurator.Configure();
             m_Log.Debug("Logging initialised.");
-            m_ViewModel = new TemplateBuilderViewModel();
+            m_ViewModel = new TemplateBuilderViewModel(
+                new TemplateBuilderViewModelParameters(
+                    Properties.Settings.Default.SqliteDatabase,
+                    Properties.Settings.Default.IdCol,
+                    Properties.Settings.Default.ScannerNameCol,
+                    Properties.Settings.Default.FingerNumberCol,
+                    Properties.Settings.Default.CaptureNumberCol,
+                    Properties.Settings.Default.GoldTemplateCol));
             InitializeComponent();
             DataContext = m_ViewModel;
         }
@@ -75,5 +67,10 @@ namespace TemplateBuilder
         }
 
         #endregion
+
+        private void Image_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

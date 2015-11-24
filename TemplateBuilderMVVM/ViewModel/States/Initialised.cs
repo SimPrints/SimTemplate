@@ -25,6 +25,8 @@ namespace TemplateBuilder.ViewModel.States
         //    "png",
         //};
 
+        #region Overriden Methods
+
         public override void OpenFile()
         {
             Microsoft.Win32.OpenFileDialog od = new Microsoft.Win32.OpenFileDialog();
@@ -87,6 +89,8 @@ namespace TemplateBuilder.ViewModel.States
                 IntegrityCheck.AreEqual(0, newSize.Width);
             }
         }
+
+        #endregion
 
         protected void ChoiceLoadFile()
         {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +14,8 @@ namespace TemplateBuilder.ViewModel.States
 {
     public class Uninitialised : State
     {
-        public Uninitialised(TemplateBuilderViewModel outer, StateManager stateMgr) : base(outer, stateMgr) { }
+        public Uninitialised(TemplateBuilderViewModel outer, StateManager stateMgr)
+            : base(outer, stateMgr) { }
 
         public override void OnEnteringState()
         {
@@ -22,8 +25,29 @@ namespace TemplateBuilder.ViewModel.States
             m_Outer.Minutae = new TrulyObservableCollection<MinutiaRecord>();
             m_Outer.InputMinutiaType = MinutiaType.Termination;
 
-            // Transition to Initialised.
-            m_StateMgr.TransitionTo(typeof(Idle));
+            // Connect to SQlite.
+            SQLiteConnection m_dbConnection = new SQLiteConnection(
+                String.Format("Data Source={0};Version=3;", m_Outer.Parameters.SqliteDatabase));
+
+            bool isException = false;
+            try
+            {
+                m_dbConnection.Open();
+            }
+            catch (SqlException ex)
+            {
+                isException = true;
+                OnErrorOccurred(new TemplateBuilderException(
+                    "Failed to connect to SQLite database", ex));
+            }
+
+            if (!isException)
+            {
+                // Set the connected database to be available from ViewModel. 
+                m_Outer.SQLiteConnection = m_dbConnection;
+                // Transition to Initialised.
+                m_StateMgr.TransitionTo(typeof(Idle));
+            }
         }
 
         public override void image_SizeChanged(Size newSize)
@@ -57,6 +81,16 @@ namespace TemplateBuilder.ViewModel.States
         }
 
         public override void SaveTemplate()
+        {
+            // Do nothing. Uninitialised.
+        }
+
+        public override void SetMinutiaType(MinutiaType type)
+        {
+            // Do nothing. Uninitialised.
+        }
+
+        public override void EscapeAction()
         {
             // Do nothing. Uninitialised.
         }

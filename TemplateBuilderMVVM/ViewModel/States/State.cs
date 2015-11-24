@@ -10,16 +10,19 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 
 namespace TemplateBuilder.ViewModel.States
 {
-    abstract public class State
+    public abstract class State
     {
         private ILog m_Log;
 
         protected TemplateBuilderViewModel m_Outer;
         protected StateManager m_StateMgr;
+
+        #region Constructor
 
         public State(TemplateBuilderViewModel outer, StateManager stateMgr)
         {
@@ -27,29 +30,48 @@ namespace TemplateBuilder.ViewModel.States
             m_StateMgr = stateMgr;
         }
 
-        // TODO: move this off State and onto 'Initialised'? abstract state.
+        #endregion
 
-        virtual public void OnEnteringState() { }
+        #region Virtual Methods
 
-        virtual public void OnLeavingState() { }
+        public virtual void OnEnteringState() { }
 
-        abstract public void OpenFile();
+        public virtual void OnLeavingState() { }
 
-        abstract public void OpenFolder();
+        public virtual bool IsMinutiaTypeButtonsEnabled { get { return false; } }
 
-        abstract public void PositionInput(Point point);
+        #endregion
 
-        abstract public void PositionMove(Point point);
+        #region Abstract Methods
 
-        abstract public void RemoveItem(int index);
+        public abstract void OpenFile();
 
-        abstract public void SaveTemplate();
+        public abstract void OpenFolder();
 
-        abstract public void image_SizeChanged(Size newSize);
+        public abstract void PositionInput(Point point);
 
-        virtual public bool IsMinutiaTypeButtonsEnabled { get { return false; } }
+        public abstract void PositionMove(Point point);
+
+        public abstract void RemoveItem(int index);
+
+        public abstract void SaveTemplate();
+
+        public abstract void image_SizeChanged(Size newSize);
+
+        public abstract void SetMinutiaType(MinutiaType type);
+
+        public abstract void EscapeAction();
+
+        #endregion
 
         public string Name { get { return GetType().Name; } }
+
+        protected void OnErrorOccurred(TemplateBuilderException ex)
+        {
+            m_Outer.Exception = ex;
+            Logger.ErrorFormat("Error occurred: " + ex.Message, ex);
+            m_StateMgr.TransitionTo(typeof(Error));
+        }
 
         protected ILog Logger
         {

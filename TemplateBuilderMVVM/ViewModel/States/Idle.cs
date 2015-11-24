@@ -58,6 +58,16 @@ namespace TemplateBuilder.ViewModel.States
                 "The save template button should be deactivated in the Idke state.");
         }
 
+        public override void SetMinutiaType(MinutiaType type)
+        {
+            // No record to update.
+        }
+
+        public override void EscapeAction()
+        {
+            // Nothing to escape.
+        }
+
         #endregion
     }
 }

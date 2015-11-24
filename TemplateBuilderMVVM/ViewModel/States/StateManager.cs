@@ -14,14 +14,13 @@ namespace TemplateBuilder.ViewModel.States
 
         private TemplateBuilderViewModel m_ViewModel;
         private State m_State;
+        private bool m_IsStarted;
 
-        public StateManager(TemplateBuilderViewModel viewModel)
+        public StateManager(TemplateBuilderViewModel viewModel, Type initialState)
         {
-            m_ViewModel = viewModel;
 
-            // Manually transition to the first state.
-            m_State = new Uninitialised(m_ViewModel, this);
-            m_State.OnEnteringState();
+            m_ViewModel = viewModel;
+            m_State = ToState(initialState);
         }
 
         /// <summary>
@@ -32,20 +31,33 @@ namespace TemplateBuilder.ViewModel.States
         /// </value>
         public State State { get { return m_State; } }
 
+        public void Start()
+        {
+            IntegrityCheck.IsFalse(m_IsStarted);
+
+            m_State.OnEnteringState();
+            m_IsStarted = true;
+        }
+
         /// <summary>
         /// Transitions to a new state, executing transition actions.
         /// </summary>
         /// <param name="stateType">Type of the state.</param>
         public void TransitionTo(Type stateType) 
         {
-            IntegrityCheck.IsTrue(typeof(State).IsAssignableFrom(stateType),
-                "Supplied type not a recognised state");
+            State newState = ToState(stateType);
 
-            State newState = (State)Activator.CreateInstance(stateType, m_ViewModel, this);
             m_Log.DebugFormat("State transition: {0}->{1}", m_State.Name, newState.Name);
             m_State.OnLeavingState();
             m_State = newState;
             newState.OnEnteringState();
+        }
+
+        private State ToState(Type stateType)
+        {
+            IntegrityCheck.IsTrue(typeof(State).IsAssignableFrom(stateType),
+                "Supplied type not a recognised state");
+            return (State)Activator.CreateInstance(stateType, m_ViewModel, this);
         }
     }
 }

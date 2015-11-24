@@ -38,18 +38,30 @@ namespace TemplateBuilder.ViewModel.States
         {
             // The user has just finalised the direction of the minutia.
             SetDirection(p);
-            m_Record.Type = m_Outer.InputMinutiaType;
             m_StateMgr.TransitionTo(typeof(WaitLocation));
         }
 
         public override void RemoveItem(int index)
         {
-            //Do nothing/
+            //Do nothing.
         }
 
         public override void SaveTemplate()
         {
             Logger.Debug("Cannot save template when waiting on direction.");
+        }
+
+        public override void SetMinutiaType(MinutiaType type)
+        {
+            // Update minutia type as user has changed it.
+            m_Record.Type = m_Outer.InputMinutiaType;
+        }
+
+        public override void EscapeAction()
+        {
+            // Cancel adding the current minutia.
+            m_Outer.Minutae.Remove(m_Record);
+            m_StateMgr.TransitionTo(typeof(WaitLocation));
         }
 
         #endregion
