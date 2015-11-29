@@ -24,7 +24,7 @@ namespace TemplateBuilder.ViewModel.States
         public override void OnEnteringState()
         {
             base.OnEnteringState();
-            m_Record = m_Outer.Minutae.Last();
+            m_Record = Outer.Minutae.Last();
             IntegrityCheck.IsNotNull(m_Record.Location);
         }
 
@@ -54,13 +54,13 @@ namespace TemplateBuilder.ViewModel.States
         public override void SetMinutiaType(MinutiaType type)
         {
             // Update minutia type as user has changed it.
-            m_Record.Type = m_Outer.InputMinutiaType;
+            m_Record.Type = Outer.InputMinutiaType;
         }
 
         public override void EscapeAction()
         {
             // Cancel adding the current minutia.
-            m_Outer.Minutae.Remove(m_Record);
+            Outer.Minutae.Remove(m_Record);
             m_StateMgr.TransitionTo(typeof(WaitLocation));
         }
 
@@ -71,7 +71,7 @@ namespace TemplateBuilder.ViewModel.States
         private void SetDirection(Point p)
         {
             // Get the relevant record
-            Vector direction = p - m_Record.Location.Scale(m_Outer.Scale);
+            Vector direction = p - m_Record.Location.Scale(Outer.Scale);
             double angle = Math.Atan2(direction.Y, direction.X);
             // Save the new direction
             m_Record.Direction = angle;

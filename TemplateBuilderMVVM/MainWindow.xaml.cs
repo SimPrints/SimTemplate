@@ -2,6 +2,7 @@
 using log4net.Config;
 using System.Windows;
 using System.Windows.Input;
+using TemplateBuilder.Model.Database;
 using TemplateBuilder.ViewModel;
 
 namespace TemplateBuilder
@@ -21,16 +22,11 @@ namespace TemplateBuilder
         {
             XmlConfigurator.Configure();
             m_Log.Debug("Logging initialised.");
-            m_ViewModel = new TemplateBuilderViewModel(
-                new TemplateBuilderViewModelParameters(
-                    Properties.Settings.Default.SqliteDatabase,
-                    Properties.Settings.Default.IdCol,
-                    Properties.Settings.Default.ScannerNameCol,
-                    Properties.Settings.Default.FingerNumberCol,
-                    Properties.Settings.Default.CaptureNumberCol,
-                    Properties.Settings.Default.GoldTemplateCol));
+            m_ViewModel = new TemplateBuilderViewModel(new DataController());
             InitializeComponent();
             DataContext = m_ViewModel;
+
+            m_ViewModel.Start();
         }
 
         #endregion

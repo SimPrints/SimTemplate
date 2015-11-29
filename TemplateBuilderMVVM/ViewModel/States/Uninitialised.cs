@@ -1,20 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
+using TemplateBuilder.Model.Database;
 
 namespace TemplateBuilder.ViewModel.States
 {
-    public class Uninitialised : State
+    public class Initialising : State
     {
-        public Uninitialised(TemplateBuilderViewModel outer, StateManager stateMgr)
+        #region Constants
+
+
+
+        #endregion
+
+        public Initialising(TemplateBuilderViewModel outer, StateManager stateMgr)
             : base(outer, stateMgr) { }
 
         public override void OnEnteringState()
@@ -22,33 +32,22 @@ namespace TemplateBuilder.ViewModel.States
             base.OnEnteringState();
 
             // Initialise properties.
-            m_Outer.Minutae = new TrulyObservableCollection<MinutiaRecord>();
-            m_Outer.InputMinutiaType = MinutiaType.Termination;
+            Outer.Minutae = new TrulyObservableCollection<MinutiaRecord>();
+            Outer.InputMinutiaType = MinutiaType.Termination;
+
+            // TODO: provide opportunity to update SQL database location.
+            // TODO: provide opportunity to update image folders.
 
             // Connect to SQlite.
-            SQLiteConnection m_dbConnection = new SQLiteConnection(
-                String.Format("Data Source={0};Version=3;", m_Outer.Parameters.SqliteDatabase));
+            DataControllerConfig config = new DataControllerConfig(
+                Properties.Settings.Default.SqliteDatabase,
+                Properties.Settings.Default.ImagesDirectory);
 
-            bool isException = false;
-            try
-            {
-                m_dbConnection.Open();
-            }
-            catch (SqlException ex)
-            {
-                isException = true;
-                OnErrorOccurred(new TemplateBuilderException(
-                    "Failed to connect to SQLite database", ex));
-            }
 
-            if (!isException)
-            {
-                // Set the connected database to be available from ViewModel. 
-                m_Outer.SQLiteConnection = m_dbConnection;
-                // Transition to Initialised.
-                m_StateMgr.TransitionTo(typeof(Idle));
-            }
+            Outer.DataController.Connect(config);
         }
+
+        #region Abstract Methods
 
         public override void image_SizeChanged(Size newSize)
         {
@@ -56,11 +55,6 @@ namespace TemplateBuilder.ViewModel.States
         }
 
         public override void OpenFile()
-        {
-            // Do nothing. Uninitialised.
-        }
-
-        public override void OpenFolder()
         {
             // Do nothing. Uninitialised.
         }
@@ -94,5 +88,12 @@ namespace TemplateBuilder.ViewModel.States
         {
             // Do nothing. Uninitialised.
         }
+
+        #endregion
+
+        #region Helper Methods
+
+
+        #endregion
     }
 }

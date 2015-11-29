@@ -29,13 +29,13 @@ namespace TemplateBuilder.ViewModel.States
             base.OnEnteringState();
 
             // Ensure UI controls active
-            if (!m_Outer.IsSaveTemplatePermitted)
+            if (!Outer.IsSaveTemplatePermitted)
             {
-                m_Outer.IsSaveTemplatePermitted = true;
+                Outer.IsSaveTemplatePermitted = true;
             }
-            if (!m_Outer.IsInputMinutiaTypePermitted)
+            if (!Outer.IsInputMinutiaTypePermitted)
             {
-                m_Outer.IsInputMinutiaTypePermitted = true;
+                Outer.IsInputMinutiaTypePermitted = true;
             }
         }
 

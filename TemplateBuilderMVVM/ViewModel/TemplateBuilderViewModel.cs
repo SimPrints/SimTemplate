@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
+using TemplateBuilder.Model.Database;
 using TemplateBuilder.ViewModel.Commands;
 using TemplateBuilder.ViewModel.States;
 
@@ -24,18 +25,17 @@ namespace TemplateBuilder.ViewModel
 
         #endregion
 
-        private readonly TemplateBuilderViewModelParameters m_Parameters;
         private StateManager m_StateMgr;
         // ViewModel-driven properties
         private BitmapImage m_Image;
         private bool m_IsInputMinutiaTypePermitted;
+        private IDataController m_DataController;
         // View and ViewModel-driven properties
         private MinutiaType m_InputMinutiaType;
         // View-driven properties
         private Vector m_Scale;
         // Commands
         private ICommand m_LoadFileCommand;
-        private ICommand m_LoadFolderCommand;
         private ICommand m_SaveTemplateCommand;
 
         private ICommand m_TerminationButtonPressCommand;
@@ -44,21 +44,11 @@ namespace TemplateBuilder.ViewModel
 
         #region Constructor
 
-        public TemplateBuilderViewModel(TemplateBuilderViewModelParameters parameters)
+        public TemplateBuilderViewModel(IDataController dataController)
         {
-            IntegrityCheck.IsNotNull(parameters);
-            IntegrityCheck.IsNotNullOrEmpty(parameters.SqliteDatabase);
-            IntegrityCheck.IsNotNullOrEmpty(parameters.IdCol);
-            IntegrityCheck.IsNotNullOrEmpty(parameters.ScannerNameCol);
-            IntegrityCheck.IsNotNullOrEmpty(parameters.FingerNumberCol);
-            IntegrityCheck.IsNotNullOrEmpty(parameters.CaptureNumberCol);
-
-            m_Parameters = parameters;
-            m_StateMgr = new StateManager(this, typeof(Uninitialised));
+            m_StateMgr = new StateManager(this, typeof(Initialising));
+            m_DataController = dataController;
             InitialiseCommands();
-
-            // Start the state machine.
-            m_StateMgr.Start();
         }
 
         #endregion
@@ -74,11 +64,6 @@ namespace TemplateBuilder.ViewModel
         /// Gets the 'load file' command for binding to the 'openFile' button.
         /// </summary>
         public ICommand LoadFileCommand { get { return m_LoadFileCommand; } }
-
-        /// <summary>
-        /// Gets the 'load folder' command for binding to the 'openFolder' button.
-        /// </summary>
-        public ICommand LoadFolderCommand { get { return m_LoadFolderCommand; } }
 
         /// <summary>
         /// Gets the 'save template' command for binding to the 'Save' button.
@@ -168,13 +153,15 @@ namespace TemplateBuilder.ViewModel
 
         #endregion
 
-        public string ImageFileName { get; set; }
+        /// <summary>
+        /// Starts the TemplateBuilderViewModel running.
+        /// </summary>
+        public void Start()
+        {
+            m_StateMgr.Start();
+        }
 
-        public IEnumerator<string> ImageFileNames { get; set; }
-
-        public TemplateBuilderViewModelParameters Parameters { get { return m_Parameters; } }
-
-        public SQLiteConnection SQLiteConnection { get; set; }
+        public IDataController DataController { get { return m_DataController; } }
 
         public TemplateBuilderException Exception { get; set; }
 
@@ -183,11 +170,6 @@ namespace TemplateBuilder.ViewModel
         private void LoadFile()
         {
             m_StateMgr.State.OpenFile();
-        }
-
-        private void LoadFolder()
-        {
-            m_StateMgr.State.OpenFolder();
         }
 
         private void SaveTemplate()
@@ -240,7 +222,6 @@ namespace TemplateBuilder.ViewModel
         private void InitialiseCommands()
         {
             m_LoadFileCommand = new RelayCommand(x => LoadFile());
-            m_LoadFolderCommand = new RelayCommand(x => LoadFolder());
             m_SaveTemplateCommand = new RelayCommand(
                 x => SaveTemplate(),
                 x => IsSaveTemplatePermitted);

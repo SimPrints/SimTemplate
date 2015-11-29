@@ -22,11 +22,11 @@ namespace TemplateBuilder.ViewModel.States
             MinutiaRecord record = new MinutiaRecord();
 
             // Save the position TO SCALE.
-            record.Location = pos.InvScale(m_Outer.Scale);
+            record.Location = pos.InvScale(Outer.Scale);
             // Save the current type.
-            record.Type = m_Outer.InputMinutiaType;
+            record.Type = Outer.InputMinutiaType;
             // Record minutia information.
-            m_Outer.Minutae.Add(record);
+            Outer.Minutae.Add(record);
 
             // Indicate next input defines the direction.
             m_StateMgr.TransitionTo(typeof(WaitDirection));
@@ -40,20 +40,20 @@ namespace TemplateBuilder.ViewModel.States
         public override void RemoveItem(int index)
         {
             // Remove the item at the specified index.
-            m_Outer.Minutae.RemoveAt(index);
+            Outer.Minutae.RemoveAt(index);
         }
 
         public override void SaveTemplate()
         {
-            IntegrityCheck.IsNotNullOrEmpty(m_Outer.ImageFileName);
+            IntegrityCheck.IsNotNull(Outer.Image);
 
             // We are not partway through inputting a point
             // Construct a file name from the original image file name
             string filename = String.Format(
                 "{0}_template.txt",
-                System.IO.Path.GetFileNameWithoutExtension(m_Outer.ImageFileName));
+                System.IO.Path.GetFileNameWithoutExtension(Outer.Image.UriSource.AbsolutePath));
             string filepath = System.IO.Path.Combine(
-                System.IO.Path.GetDirectoryName(m_Outer.ImageFileName),
+                System.IO.Path.GetDirectoryName(Outer.Image.UriSource.AbsolutePath),
                 filename);
 
             // Write the Minutia details out to a new file
@@ -61,7 +61,7 @@ namespace TemplateBuilder.ViewModel.States
             new System.IO.StreamWriter(filepath))
             {
                 file.WriteLine("X, Y, Direction, Type");
-                foreach (MinutiaRecord minutia in m_Outer.Minutae)
+                foreach (MinutiaRecord minutia in Outer.Minutae)
                 {
                     file.WriteLine(ToRecord(minutia));
                 }

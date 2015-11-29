@@ -22,8 +22,6 @@
             <ToolBar x:Name="programTools" Height="36" VerticalAlignment="Top">
                 <Button x:Name="openFile" Content="Open File" Height="36" VerticalAlignment="Top" Width="40" Margin="0,0,0,-5"
                         Command="{Binding Path=LoadFileCommand}"/>
-                <Button x:Name="openFolder" Content="Open Folder" Height="36" VerticalAlignment="Top"
-                        Command="{Binding Path=LoadFolderCommand}"/>
                 <Button x:Name="saveTemplate" Content="Save" Height="36" VerticalAlignment="Top" Width="48" Margin="0,0,0,-5"
                         Command="{Binding Path=SaveTemplateCommand}"/>
             </ToolBar>

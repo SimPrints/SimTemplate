@@ -19,14 +19,14 @@ namespace TemplateBuilder.ViewModel.States
     {
         private ILog m_Log;
 
-        protected TemplateBuilderViewModel m_Outer;
+        protected TemplateBuilderViewModel Outer;
         protected StateManager m_StateMgr;
 
         #region Constructor
 
         public State(TemplateBuilderViewModel outer, StateManager stateMgr)
         {
-            m_Outer = outer;
+            Outer = outer;
             m_StateMgr = stateMgr;
         }
 
@@ -45,8 +45,6 @@ namespace TemplateBuilder.ViewModel.States
         #region Abstract Methods
 
         public abstract void OpenFile();
-
-        public abstract void OpenFolder();
 
         public abstract void PositionInput(Point point);
 
@@ -68,7 +66,7 @@ namespace TemplateBuilder.ViewModel.States
 
         protected void OnErrorOccurred(TemplateBuilderException ex)
         {
-            m_Outer.Exception = ex;
+            Outer.Exception = ex;
             Logger.ErrorFormat("Error occurred: " + ex.Message, ex);
             m_StateMgr.TransitionTo(typeof(Error));
         }

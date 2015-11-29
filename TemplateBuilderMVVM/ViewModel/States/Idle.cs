@@ -21,15 +21,29 @@ namespace TemplateBuilder.ViewModel.States
             base.OnEnteringState();
 
             // Deactivate UI controls.
-            m_Outer.IsSaveTemplatePermitted = false;
-            m_Outer.IsInputMinutiaTypePermitted = false;
+            Outer.IsSaveTemplatePermitted = false;
+            Outer.IsInputMinutiaTypePermitted = false;
 
             // Hide old image from UI, and remove other things.
-            m_Outer.Image = null;
-            m_Outer.Minutae.Clear();
+            Outer.Image = null;
+            Outer.Minutae.Clear();
 
-            // Transition to LoadFile if there is a legit file queued.
-            ChoiceLoadFile();
+            // Try to get a file from the database
+            string imageFilename = Outer.DataController.GetImageFile();
+
+            if (imageFilename != null)
+            {
+                // A file was found.
+                Logger.DebugFormat("An image file was found for image: {0}.", imageFilename);
+                Outer.Image = new BitmapImage(new Uri(imageFilename, UriKind.Absolute));
+                m_StateMgr.TransitionTo(typeof(WaitLocation));
+            }
+            else
+            {
+                // No file was found.
+                Logger.DebugFormat("No image file was found. Remaining in Idle", imageFilename);
+                //m_StateMgr.TransitionTo(typeof(U))
+            }
         }
 
         public override void PositionInput(Point point)

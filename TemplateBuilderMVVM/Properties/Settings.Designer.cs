@@ -25,7 +25,7 @@ namespace TemplateBuilder.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\mainDb_yesFMR_noPNG.sqlite")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\SimPrints\\Data\\mainDb_yesFMR_noPNG.sqlite")]
         public string SqliteDatabase {
             get {
                 return ((string)(this["SqliteDatabase"]));
@@ -34,46 +34,10 @@ namespace TemplateBuilder.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Id")]
-        public string IdCol {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Images")]
+        public string ImagesDirectory {
             get {
-                return ((string)(this["IdCol"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ScannerName")]
-        public string ScannerNameCol {
-            get {
-                return ((string)(this["ScannerNameCol"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("FingerNumber")]
-        public string FingerNumberCol {
-            get {
-                return ((string)(this["FingerNumberCol"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("CaptureNumber")]
-        public string CaptureNumberCol {
-            get {
-                return ((string)(this["CaptureNumberCol"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("GoldTemplate")]
-        public string GoldTemplateCol {
-            get {
-                return ((string)(this["GoldTemplateCol"]));
+                return ((string)(this["ImagesDirectory"]));
             }
         }
     }

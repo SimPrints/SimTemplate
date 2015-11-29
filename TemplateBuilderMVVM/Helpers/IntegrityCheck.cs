@@ -90,6 +90,36 @@ namespace TemplateBuilder.Helpers
 
         #endregion
 
+        #region AreEqual
+
+        public static void AreNotEqual<T>(T expected, T actual)
+        {
+            if (expected.Equals(actual))
+            {
+                throw Fail("Equal.");
+            }
+        }
+
+        public static void AreNotEqual<T>(T expected, T actual, string message)
+        {
+            if (expected.Equals(actual))
+            {
+                throw Fail(String.Format("{0} equal to {1}: {2}",
+                    actual, expected, message));
+            }
+        }
+
+        public static void AreNotEqual<T>(T expected, T actual, string format, params object[] args)
+        {
+            if (expected.Equals(actual))
+            {
+                throw Fail(String.Format("{0} equal to {1}: {2}",
+                    actual, expected, String.Format(format, args)));
+            }
+        }
+
+        #endregion
+
         #region IsNull
 
         public static void IsNull(object value)
