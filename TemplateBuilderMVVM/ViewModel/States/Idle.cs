@@ -28,22 +28,7 @@ namespace TemplateBuilder.ViewModel.States
             Outer.Image = null;
             Outer.Minutae.Clear();
 
-            // Try to get a file from the database
-            string imageFilename = Outer.DataController.GetImageFile();
-
-            if (imageFilename != null)
-            {
-                // A file was found.
-                Logger.DebugFormat("An image file was found for image: {0}.", imageFilename);
-                Outer.Image = new BitmapImage(new Uri(imageFilename, UriKind.Absolute));
-                m_StateMgr.TransitionTo(typeof(WaitLocation));
-            }
-            else
-            {
-                // No file was found.
-                Logger.DebugFormat("No image file was found. Remaining in Idle", imageFilename);
-                //m_StateMgr.TransitionTo(typeof(U))
-            }
+            LoadImage();
         }
 
         public override void PositionInput(Point point)

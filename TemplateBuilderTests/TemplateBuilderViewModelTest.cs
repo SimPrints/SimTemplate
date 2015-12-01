@@ -29,14 +29,14 @@ namespace TemplateBuilderTests
         public void TestConnect_Fail()
         {
             // Set Connect to return false, always
-            A.CallTo(() => m_DataController.Connect(A<DataControllerConfig>._)).Returns(false);
+            A.CallTo(() => m_DataController.Initialise(A<DataControllerConfig>._)).Returns(false);
 
             // Start the ViewModel.
             m_ViewModel.Start();
 
             // Assert that ViewModel made no further requests
             A.CallTo(() => m_DataController.GetImageFile()).MustNotHaveHappened();
-            A.CallTo(() => m_DataController.Connect(A<DataControllerConfig>._))
+            A.CallTo(() => m_DataController.Initialise(A<DataControllerConfig>._))
                 .MustHaveHappened(Repeated.Exactly.Once);
 
             // Assert public state of ViewModel

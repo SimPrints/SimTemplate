@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TemplateBuilder.Model.Database
 {
-    [Table(Name = "Capture")]
+    [Table()]
     public class Capture
     {
         private EntityRef<Person> m_Person;
@@ -44,11 +44,14 @@ namespace TemplateBuilder.Model.Database
         [Column()]
         public int CaptureNumber { get; set; }
 
+        [Column(Name = "SimAfisTemplate")]
+        public byte[] GoldTemplate { get; set; }
+
         public string ImageFileName
         {
             get
             {
-                return String.Format("{0}-{1}{2}-{3}",
+                return String.Format("{0}-{1}-{2}-{3}",
                     Person.Pid,
                     ScannerName,
                     FingerNumber,

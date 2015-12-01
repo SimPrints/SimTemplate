@@ -44,7 +44,15 @@ namespace TemplateBuilder.ViewModel.States
                 Properties.Settings.Default.ImagesDirectory);
 
 
-            Outer.DataController.Connect(config);
+            bool isSuccessful = Outer.DataController.Initialise(config);
+            if (isSuccessful)
+            {
+                m_StateMgr.TransitionTo(typeof(Idle));
+            }
+            else
+            {
+                m_StateMgr.TransitionTo(typeof(Error));
+            }
         }
 
         #region Abstract Methods

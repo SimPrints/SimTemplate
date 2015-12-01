@@ -13,7 +13,7 @@ namespace TemplateBuilder.Model.Database
         /// </summary>
         /// <param name="config">The configuration.</param>
         /// <returns>true if successful, false otherwise</returns>
-        bool Connect(DataControllerConfig config);
+        bool Initialise(DataControllerConfig config);
 
         /// <summary>
         /// Gets the next image file to process by iterating the results of the SQL query and

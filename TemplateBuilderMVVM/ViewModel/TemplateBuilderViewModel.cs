@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SQLite;
@@ -24,6 +25,8 @@ namespace TemplateBuilder.ViewModel
         private const int LINE_LENGTH = 20;
 
         #endregion
+
+        private static readonly ILog m_Log = LogManager.GetLogger(typeof(TemplateBuilderViewModel));
 
         private StateManager m_StateMgr;
         // ViewModel-driven properties
@@ -169,16 +172,19 @@ namespace TemplateBuilder.ViewModel
 
         private void LoadFile()
         {
+            m_Log.Debug("LoadFile called.");
             m_StateMgr.State.OpenFile();
         }
 
         private void SaveTemplate()
         {
+            m_Log.Debug("SaveTemplate called.");
             m_StateMgr.State.SaveTemplate();
         }
 
         private void EscapeAction()
         {
+            m_Log.Debug("EscapeAction called.");
             m_StateMgr.State.EscapeAction();
         }
 
@@ -197,6 +203,10 @@ namespace TemplateBuilder.ViewModel
 
         public void itemsControl_MouseUp(Point p)
         {
+            m_Log.DebugFormat(
+                "itemsControl_MouseUp(p.X={0}, p.Y={1}) called.",
+                p.X,
+                p.Y);
             m_StateMgr.State.PositionInput(p);
         }
 
@@ -207,13 +217,20 @@ namespace TemplateBuilder.ViewModel
 
         public void Ellipse_MouseRightButtonUp(int index)
         {
+            m_Log.DebugFormat(
+                "Ellipse_MouseRightButtonUp(index={0}) called.",
+                index);
             m_StateMgr.State.RemoveItem(index);
         }
 
         public void image_SizeChanged(Size newSize)
-            {
+        {
+            m_Log.DebugFormat(
+                "image_SizeChanged(newSize.Width={0}, newSize.Height={1}) called.",
+                newSize.Width,
+                newSize.Height);
             m_StateMgr.State.image_SizeChanged(newSize);
-            }
+        }
 
         #endregion
 

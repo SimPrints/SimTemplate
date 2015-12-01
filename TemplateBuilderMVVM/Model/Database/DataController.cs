@@ -12,13 +12,20 @@ namespace TemplateBuilder.Model.Database
 {
     public class DataController : IDataController
     {
+        #region Constants
+
+        private const int MAX_OPEN_FILE_ATTEMPTS = 100000;
+
+        #endregion
+
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(DataController));
         private static readonly string CONNECTION_STRING = "Data Source={0};Version=3;";
 
         private DataControllerConfig m_Config;
         private SimPrintsDb m_Database;
         IEnumerator<Capture> m_Query;
-        private string[] m_CandidateFiles;
+
+        private IDictionary<string, string> m_CandidateFiles;
 
         #region Constructor
 
@@ -30,7 +37,7 @@ namespace TemplateBuilder.Model.Database
 
         #region Public Methods
 
-        public bool Connect(DataControllerConfig config)
+        public bool Initialise(DataControllerConfig config)
         {
             IntegrityCheck.IsNotNull(config, "config");
             IntegrityCheck.IsNotNullOrEmpty(config.DatabasePath, "config.DatabasePath");
@@ -46,13 +53,20 @@ namespace TemplateBuilder.Model.Database
             m_Database = new SimPrintsDb(dbConnection);
             // Construct the query used to obtain a capture lacking a template.
             m_Query = ConstructQuery();
-            // Prepare a list of candidate image files for matching with captures.
-            m_CandidateFiles = GetCandidateFiles(m_Config.ImageFilesDirectory);
 
             bool returnValue = false;
-            if (m_CandidateFiles.Count() > 0 && m_Query != null)
+            if (m_Query != null)
             {
-                returnValue = true;
+                // Successfully connected to SQLite database
+                // Prepare a list of candidate image files for matching with captures.
+                m_CandidateFiles = GetCandidateFiles(m_Config.ImageFilesDirectory);
+
+                if (m_CandidateFiles != null &&
+                    m_CandidateFiles.Count() > 0 &&
+                    m_Query != null)
+                {
+                    returnValue = true;
+                }
             }
             return returnValue;
         }
@@ -60,40 +74,39 @@ namespace TemplateBuilder.Model.Database
         public string GetImageFile()
         {
             string confirmedFile = null;
-            while (confirmedFile == null)
+            bool isRunning = true;
+            int attempts = 0;
+            while (isRunning)
             {
+                attempts++;
+                if (attempts > MAX_OPEN_FILE_ATTEMPTS)
+                {
+                    isRunning = false;
+                }
+
                 // First query the database to get an image file name.
                 string filename = GetFilename();
 
                 // Now check for image file maches with the filename.
                 if (!String.IsNullOrEmpty(filename))
                 {
-                    IEnumerable<string> matches = from f in m_CandidateFiles
-                                                  where f.IndexOf(filename) > -1
-                                                  select f;
+                    string match;
+                    bool isFound = m_CandidateFiles.TryGetValue(filename, out match);
 
-                    if (matches.Count() > 0)
+                    if (isFound)
                     {
-                        // We have at least one match.
-                        if (matches.Count() == 1)
+                        // We have exactly one match.
+                        if (File.Exists(match))
                         {
-                            // We have exactly one match.
-                            if (File.Exists(matches.First()))
-                            {
-                                // The file still exists.
-                                confirmedFile = filename;
-                            }
-                            else
-                            {
-                                m_Log.WarnFormat(
-                                    "File {0} found in candidate files on local machine but file no longer exists.",
-                                    filename);
-                            }
+                            // The file still exists.
+                            confirmedFile = match;
+                            isRunning = false;
                         }
                         else
                         {
-                            m_Log.WarnFormat("{0} matches for query file name {1}. Skipping.",
-                                matches.Count(), filename);
+                            m_Log.WarnFormat(
+                                "File {0} found in candidate files on local machine but file no longer exists.",
+                                filename);
                         }
                     }
                     else
@@ -118,9 +131,20 @@ namespace TemplateBuilder.Model.Database
         private IEnumerator<Capture> ConstructQuery()
         {
             IEnumerable<Capture> query = from c in m_Database.Captures
-                                         where c.ScannerName == "LES"
+                                             //where c.ScannerName == "LES"
+                                         where c.GoldTemplate == null
                                          select c;
-            return query.GetEnumerator();
+
+            IEnumerator<Capture> queryEnumerator = null;
+            try
+            {
+                return queryEnumerator = query.GetEnumerator();
+            }
+            catch (SQLiteException ex)
+            {
+                m_Log.WarnFormat("Failed to query SQLite database: {0}", ex);
+            }
+            return queryEnumerator;
         }
 
         private string GetFilename()
@@ -141,14 +165,32 @@ namespace TemplateBuilder.Model.Database
 
         #region Static Helper Methods
 
-        private static string[] GetCandidateFiles(string path)
+        private IDictionary<string, string> GetCandidateFiles(string path)
         {
-
+            string[] candidateFiles = null;
+            IDictionary<string, string> candidateFileLookup = new Dictionary<string, string>();
             if (Directory.Exists(path))
             {
+                candidateFiles = Directory.GetFiles(path, "*.png", SearchOption.AllDirectories);
 
+                foreach (string filename in candidateFiles)
+                {
+                    string key = Path.GetFileNameWithoutExtension(filename);
+                    if (!candidateFileLookup.ContainsKey(key))
+                    {
+                        candidateFileLookup.Add(key, filename);
+                    }
+                    else
+                    {
+                        m_Log.WarnFormat("Duplicate file found. Ignoring duplicate {0}", key);
+                    }
+                }
             }
-            return Directory.GetFiles(path, "*.png", SearchOption.AllDirectories);
+            else
+            {
+                m_Log.WarnFormat("Provided image directory doesn't exist: {0}", path);
+            }
+            return candidateFileLookup;
         }
 
         #endregion

@@ -34,7 +34,7 @@ namespace TemplateBuilder.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Images")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\SimPrints\\Images\\Data_Zambia")]
         public string ImagesDirectory {
             get {
                 return ((string)(this["ImagesDirectory"]));

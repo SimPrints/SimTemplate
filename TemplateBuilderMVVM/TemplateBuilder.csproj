@@ -113,6 +113,7 @@
     <Compile Include="ViewModel\Converters\ScaleConverter.cs" />
     <Compile Include="ViewModel\Converters\RadToDegConverter.cs" />
     <Compile Include="ViewModel\Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="ViewModel\OpenImageResult.cs" />
     <Compile Include="ViewModel\States\Error.cs" />
     <Compile Include="ViewModel\States\Initialised.cs" />
     <Compile Include="ViewModel\States\Idle.cs" />
