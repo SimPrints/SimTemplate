@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using TemplateBuilder.Helpers;
+using TemplateBuilder.Model;
 
-namespace TemplateBuilder.ViewModel.States
+namespace TemplateBuilder.ViewModel.MainWindow.States
 {
     public class Idle : Initialised
     {

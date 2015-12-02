@@ -13,7 +13,7 @@ using System.Windows.Shapes;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 
-namespace TemplateBuilder.ViewModel.States
+namespace TemplateBuilder.ViewModel.MainWindow.States
 {
     abstract public class Templating : Initialised
     {

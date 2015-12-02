@@ -7,7 +7,7 @@ using System.Windows;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 
-namespace TemplateBuilder.ViewModel.States
+namespace TemplateBuilder.ViewModel.MainWindow.States
 {
     class WaitLocation : Templating
     {
@@ -47,28 +47,21 @@ namespace TemplateBuilder.ViewModel.States
         {
             IntegrityCheck.IsNotNull(Outer.Image);
 
-            // We are not partway through inputting a point
-            // Construct a file name from the original image file name
-            string filename = String.Format(
-                "{0}_template.txt",
-                System.IO.Path.GetFileNameWithoutExtension(Outer.Image.UriSource.AbsolutePath));
-            string filepath = System.IO.Path.Combine(
-                System.IO.Path.GetDirectoryName(Outer.Image.UriSource.AbsolutePath),
-                filename);
+            byte[] isoTemplate = TemplateHelper.ToIsoTemplate(Outer.Minutae);
 
-            // Write the Minutia details out to a new file
-            using (System.IO.StreamWriter file =
-            new System.IO.StreamWriter(filepath))
+            bool isSaved = Outer.DataController.SaveTemplate(isoTemplate);
+
+            if (isSaved)
             {
-                file.WriteLine("X, Y, Direction, Type");
-                foreach (MinutiaRecord minutia in Outer.Minutae)
-                {
-                    file.WriteLine(ToRecord(minutia));
-                }
+                // We've finished with this image, so transition to Idle state.
+                m_StateMgr.TransitionTo(typeof(Idle));
             }
-
-            // We've finished with this image, so transition to Idle state.
-            m_StateMgr.TransitionTo(typeof(Idle));
+            else
+            {
+                // Failed to save the template successfully.
+                // TODO: show dialog to try again?
+                m_StateMgr.TransitionTo(typeof(Idle));
+            }
         }
         public override void EscapeAction()
         {

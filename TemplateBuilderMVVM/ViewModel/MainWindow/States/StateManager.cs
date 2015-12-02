@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TemplateBuilder.Helpers;
 
-namespace TemplateBuilder.ViewModel.States
+namespace TemplateBuilder.ViewModel.MainWindow.States
 {
     public class StateManager
     {
@@ -47,7 +47,7 @@ namespace TemplateBuilder.ViewModel.States
         {
             State newState = ToState(stateType);
 
-            m_Log.DebugFormat("State transition: {0}->{1}", m_State.Name, newState.Name);
+            m_Log.InfoFormat("State transition: {0}->{1}", m_State.Name, newState.Name);
             m_State.OnLeavingState();
             m_State = newState;
             newState.OnEnteringState();

@@ -12,8 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
+using TemplateBuilder.Model.Database;
 
-namespace TemplateBuilder.ViewModel.States
+namespace TemplateBuilder.ViewModel.MainWindow.States
 {
     public abstract class State
     {
@@ -59,6 +60,13 @@ namespace TemplateBuilder.ViewModel.States
         public abstract void SetMinutiaType(MinutiaType type);
 
         public abstract void EscapeAction();
+
+        #endregion
+
+        #region Event Handlers
+
+        public abstract void DataController_InitialisationComplete(
+            InitialisationCompleteEventArgs e);
 
         #endregion
 

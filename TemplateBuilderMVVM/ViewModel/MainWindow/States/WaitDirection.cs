@@ -8,7 +8,7 @@ using System.Windows.Media;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 
-namespace TemplateBuilder.ViewModel.States
+namespace TemplateBuilder.ViewModel.MainWindow.States
 {
     public class WaitDirection : Templating
     {

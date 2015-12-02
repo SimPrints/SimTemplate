@@ -13,7 +13,7 @@ namespace TemplateBuilder.Model.Database
         /// </summary>
         /// <param name="config">The configuration.</param>
         /// <returns>true if successful, false otherwise</returns>
-        bool Initialise(DataControllerConfig config);
+        Task Initialise(DataControllerConfig config, IProgress<int> progress);
 
         /// <summary>
         /// Gets the next image file to process by iterating the results of the SQL query and
@@ -21,5 +21,14 @@ namespace TemplateBuilder.Model.Database
         /// </summary>
         /// <returns>filepath of the local file, null if no image can be found.</returns>
         string GetImageFile();
+
+        /// <summary>
+        /// Saves the template to the SQLite database.
+        /// </summary>
+        /// <param name="isoTemplate">The template in ISO standard form.</param>
+        /// <returns></returns>
+        bool SaveTemplate(byte[] isoTemplate);
+
+        event EventHandler<InitialisationCompleteEventArgs> InitialisationComplete;
     }
 }

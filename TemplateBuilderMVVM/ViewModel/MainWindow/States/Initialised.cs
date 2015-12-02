@@ -9,8 +9,9 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using TemplateBuilder.Helpers;
+using TemplateBuilder.Model.Database;
 
-namespace TemplateBuilder.ViewModel.States
+namespace TemplateBuilder.ViewModel.MainWindow.States
 {
     abstract public class Initialised : State
     {
@@ -57,6 +58,11 @@ namespace TemplateBuilder.ViewModel.States
                 IntegrityCheck.AreEqual(0, newSize.Height);
                 IntegrityCheck.AreEqual(0, newSize.Width);
             }
+        }
+
+        public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
+        {
+            throw IntegrityCheck.Fail("Not expected to have InitialisationComplete event when initialised.");
         }
 
         #endregion

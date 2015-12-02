@@ -98,38 +98,45 @@
     <Compile Include="Model\Database\DataControllerConfig.cs" />
     <Compile Include="Model\Database\IDataController.cs" />
     <Compile Include="Model\Database\Person.cs" />
+    <Compile Include="ViewModel\MainWindow\ProgressChangedEventArgs.cs" />
     <Compile Include="Model\Database\SimPrintsDb.cs" />
+    <Compile Include="Model\TemplateHelper.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\CaptureEntry.cs" />
     <Compile Include="ViewModel\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="ViewModel\Converters\MultiplyConverter.cs" />
+    <Compile Include="ViewModel\DialogAction.cs" />
     <Compile Include="ViewModel\MinutiaType.cs" />
     <Compile Include="ViewModel\Commands\RelayCommand.cs" />
     <Compile Include="ViewModel\Converters\BaseConverter.cs" />
     <Compile Include="ViewModel\Converters\ScaleConverter.cs" />
     <Compile Include="ViewModel\Converters\RadToDegConverter.cs" />
     <Compile Include="ViewModel\Converters\EnumToBooleanConverter.cs" />
-    <Compile Include="ViewModel\OpenImageResult.cs" />
-    <Compile Include="ViewModel\States\Error.cs" />
-    <Compile Include="ViewModel\States\Initialised.cs" />
-    <Compile Include="ViewModel\States\Idle.cs" />
-    <Compile Include="ViewModel\States\Uninitialised.cs" />
-    <Compile Include="ViewModel\States\State.cs" />
-    <Compile Include="ViewModel\States\StateManager.cs" />
-    <Compile Include="ViewModel\States\Templating.cs" />
-    <Compile Include="ViewModel\States\WaitDirection.cs" />
-    <Compile Include="ViewModel\States\WaitLocation.cs" />
-    <Compile Include="ViewModel\TemplateBuilderViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\OpenImageResult.cs" />
+    <Compile Include="ViewModel\MainWindow\States\Error.cs" />
+    <Compile Include="Model\Database\InitialisationCompleteEventArgs.cs" />
+    <Compile Include="ViewModel\MainWindow\States\Initialised.cs" />
+    <Compile Include="ViewModel\MainWindow\States\Idle.cs" />
+    <Compile Include="ViewModel\MainWindow\States\Initialising.cs" />
+    <Compile Include="ViewModel\MainWindow\States\State.cs" />
+    <Compile Include="ViewModel\MainWindow\States\StateManager.cs" />
+    <Compile Include="ViewModel\MainWindow\States\Templating.cs" />
+    <Compile Include="ViewModel\MainWindow\States\WaitDirection.cs" />
+    <Compile Include="ViewModel\MainWindow\States\WaitLocation.cs" />
+    <Compile Include="ViewModel\MainWindow\TemplateBuilderViewModel.cs" />
     <Compile Include="Model\MinutiaRecord.cs" />
+    <Compile Include="ViewModel\Progress\ProgressViewModel.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="View\Progress\ProgressView.xaml.cs">
+      <DependentUpon>ProgressView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="View\MainWindow\MainWindowView.xaml.cs">
+      <DependentUpon>MainWindowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -154,14 +161,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MainWindow.xaml">
+    <Page Include="View\MainWindow\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Progress\ProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.98.1\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.98.1\build\net451\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TemplateBuilder.Helpers;
+using TemplateBuilder.ViewModel.MainWindow;
 
 namespace TemplateBuilder.Model.Database
 {
@@ -24,8 +25,9 @@ namespace TemplateBuilder.Model.Database
         private DataControllerConfig m_Config;
         private SimPrintsDb m_Database;
         IEnumerator<Capture> m_Query;
-
         private IDictionary<string, string> m_CandidateFiles;
+
+        public event EventHandler<InitialisationCompleteEventArgs> m_InitialisationComplete;
 
         #region Constructor
 
@@ -35,9 +37,9 @@ namespace TemplateBuilder.Model.Database
 
         #endregion
 
-        #region Public Methods
+        #region IDataController
 
-        public bool Initialise(DataControllerConfig config)
+        async Task IDataController.Initialise(DataControllerConfig config, IProgress<int> progress)
         {
             IntegrityCheck.IsNotNull(config, "config");
             IntegrityCheck.IsNotNullOrEmpty(config.DatabasePath, "config.DatabasePath");
@@ -59,7 +61,9 @@ namespace TemplateBuilder.Model.Database
             {
                 // Successfully connected to SQLite database
                 // Prepare a list of candidate image files for matching with captures.
-                m_CandidateFiles = GetCandidateFiles(m_Config.ImageFilesDirectory);
+                // Allow thread to yield at this point as it is a slow operation (await).
+                m_CandidateFiles = await Task.Run(() =>
+                    GetCandidateFiles(m_Config.ImageFilesDirectory, progress));
 
                 if (m_CandidateFiles != null &&
                     m_CandidateFiles.Count() > 0 &&
@@ -68,10 +72,10 @@ namespace TemplateBuilder.Model.Database
                     returnValue = true;
                 }
             }
-            return returnValue;
+            OnInitialisationComplete(new InitialisationCompleteEventArgs(returnValue));
         }
 
-        public string GetImageFile()
+        string IDataController.GetImageFile()
         {
             string confirmedFile = null;
             bool isRunning = true;
@@ -124,6 +128,21 @@ namespace TemplateBuilder.Model.Database
             return confirmedFile;
         }
 
+        bool IDataController.SaveTemplate(byte[] template)
+        {
+            bool isSuccessful = false;
+
+            m_Query.Current.GoldTemplate = template;
+
+            return isSuccessful;
+        }
+
+        event EventHandler<InitialisationCompleteEventArgs> IDataController.InitialisationComplete
+        {
+            add { m_InitialisationComplete += value; }
+            remove { m_InitialisationComplete -= value; }
+        }
+
         #endregion
 
         #region Private Methods
@@ -165,7 +184,7 @@ namespace TemplateBuilder.Model.Database
 
         #region Static Helper Methods
 
-        private IDictionary<string, string> GetCandidateFiles(string path)
+        private IDictionary<string, string> GetCandidateFiles(string path, IProgress<int> progress)
         {
             string[] candidateFiles = null;
             IDictionary<string, string> candidateFileLookup = new Dictionary<string, string>();
@@ -173,8 +192,10 @@ namespace TemplateBuilder.Model.Database
             {
                 candidateFiles = Directory.GetFiles(path, "*.png", SearchOption.AllDirectories);
 
-                foreach (string filename in candidateFiles)
+                int delta = (int)(candidateFiles.Count() / 20);
+                for (int i = 0; i < candidateFiles.Count(); i++)
                 {
+                    string filename = candidateFiles[i];
                     string key = Path.GetFileNameWithoutExtension(filename);
                     if (!candidateFileLookup.ContainsKey(key))
                     {
@@ -184,6 +205,10 @@ namespace TemplateBuilder.Model.Database
                     {
                         m_Log.WarnFormat("Duplicate file found. Ignoring duplicate {0}", key);
                     }
+                    if (i % delta == 0)
+                    {
+                        progress.Report((int)(i * 100 / candidateFiles.Count()));
+                    }
                 }
             }
             else
@@ -191,6 +216,19 @@ namespace TemplateBuilder.Model.Database
                 m_Log.WarnFormat("Provided image directory doesn't exist: {0}", path);
             }
             return candidateFileLookup;
+        }
+
+        #endregion
+
+        #region Event Helpers
+
+        private void OnInitialisationComplete(InitialisationCompleteEventArgs e)
+        {
+            EventHandler<InitialisationCompleteEventArgs> temp = m_InitialisationComplete;
+            if (temp != null)
+            {
+                temp.Invoke(this, e);
+            }
         }
 
         #endregion

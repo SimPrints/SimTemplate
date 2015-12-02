@@ -1,22 +1,15 @@
 ﻿using log4net;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 using TemplateBuilder.Model.Database;
 using TemplateBuilder.ViewModel.Commands;
-using TemplateBuilder.ViewModel.States;
+using TemplateBuilder.ViewModel.MainWindow.States;
 
-namespace TemplateBuilder.ViewModel
+namespace TemplateBuilder.ViewModel.MainWindow
 {
     public class TemplateBuilderViewModel : ViewModel
     {
@@ -33,6 +26,8 @@ namespace TemplateBuilder.ViewModel
         private BitmapImage m_Image;
         private bool m_IsInputMinutiaTypePermitted;
         private IDataController m_DataController;
+        private bool m_IsProgressPopupOpen;
+        private int m_Progress;
         // View and ViewModel-driven properties
         private MinutiaType m_InputMinutiaType;
         // View-driven properties
@@ -40,10 +35,11 @@ namespace TemplateBuilder.ViewModel
         // Commands
         private ICommand m_LoadFileCommand;
         private ICommand m_SaveTemplateCommand;
-
         private ICommand m_TerminationButtonPressCommand;
         private ICommand m_BifuricationButtonPressCommand;
         private ICommand m_EscapePressCommand;
+
+        private EventHandler<ProgressChangedEventArgs> m_ProgressChanged;
 
         #region Constructor
 
@@ -52,6 +48,8 @@ namespace TemplateBuilder.ViewModel
             m_StateMgr = new StateManager(this, typeof(Initialising));
             m_DataController = dataController;
             InitialiseCommands();
+
+            m_DataController.InitialisationComplete += DataController_InitialisationComplete;
         }
 
         #endregion
@@ -168,6 +166,12 @@ namespace TemplateBuilder.ViewModel
 
         public TemplateBuilderException Exception { get; set; }
 
+        public event EventHandler<ProgressChangedEventArgs> ProgressChanged
+        {
+            add { m_ProgressChanged += value; }
+            remove { m_ProgressChanged -= value; }
+        }
+
         #region Command Callbacks
 
         private void LoadFile()
@@ -230,6 +234,32 @@ namespace TemplateBuilder.ViewModel
                 newSize.Width,
                 newSize.Height);
             m_StateMgr.State.image_SizeChanged(newSize);
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        private void DataController_InitialisationComplete(object sender, InitialisationCompleteEventArgs e)
+        {
+            m_Log.DebugFormat(
+                "DataController_InitialisationComplete(e.IsSuccessful={0}) called.",
+                e.IsSuccessful);
+
+            m_StateMgr.State.DataController_InitialisationComplete(e);
+        }
+
+        #endregion
+
+        #region Event Helpers
+
+        public void OnProgressChanged(ProgressChangedEventArgs e)
+        {
+            EventHandler<ProgressChangedEventArgs> temp = m_ProgressChanged;
+            if (temp != null)
+            {
+                temp.Invoke(this, e);
+            }
         }
 
         #endregion
