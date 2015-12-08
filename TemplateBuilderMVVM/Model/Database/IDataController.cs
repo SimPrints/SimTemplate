@@ -12,8 +12,8 @@ namespace TemplateBuilder.Model.Database
         /// Connects the controller to the SQLite database using the provided configuration.
         /// </summary>
         /// <param name="config">The configuration.</param>
-        /// <returns>true if successful, false otherwise</returns>
-        Task Initialise(DataControllerConfig config, IProgress<int> progress);
+        /// <param name="progress">The progress.</param>
+        void Initialise(DataControllerConfig config);
 
         /// <summary>
         /// Gets the next image file to process by iterating the results of the SQL query and

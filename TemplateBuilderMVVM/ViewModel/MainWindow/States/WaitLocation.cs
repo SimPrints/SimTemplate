@@ -29,7 +29,7 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             Outer.Minutae.Add(record);
 
             // Indicate next input defines the direction.
-            m_StateMgr.TransitionTo(typeof(WaitDirection));
+            StateMgr.TransitionTo(typeof(WaitDirection));
         }
 
         public override void PositionMove(Point e)
@@ -37,7 +37,7 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             // Do nothing.
         }
 
-        public override void RemoveItem(int index)
+        public override void RemoveMinutia(int index)
         {
             // Remove the item at the specified index.
             Outer.Minutae.RemoveAt(index);
@@ -54,13 +54,13 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             if (isSaved)
             {
                 // We've finished with this image, so transition to Idle state.
-                m_StateMgr.TransitionTo(typeof(Idle));
+                StateMgr.TransitionTo(typeof(Idle));
             }
             else
             {
                 // Failed to save the template successfully.
                 // TODO: show dialog to try again?
-                m_StateMgr.TransitionTo(typeof(Idle));
+                StateMgr.TransitionTo(typeof(Idle));
             }
         }
         public override void EscapeAction()
@@ -71,6 +71,21 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
         public override void SetMinutiaType(MinutiaType type)
         {
             // Do nothing. No current record to update.
+        }
+
+        public override void MoveMinutia(int index, Point point)
+        {
+            throw IntegrityCheck.Fail("Unexpected MoveMinutia(...) call in {0} state.", GetType().Name);
+        }
+
+        public override void StartMove()
+        {
+            StateMgr.TransitionTo(typeof(MovingMinutia));
+        }
+
+        public override void StopMove()
+        {
+            throw IntegrityCheck.Fail("Unexpected StopMove() call in {0} state.", GetType().Name);
         }
 
         #region Helper Methods

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 using TemplateBuilder.Model.Database;
@@ -41,18 +42,12 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             // TODO: provide opportunity to update SQL database location.
             // TODO: provide opportunity to update image folders.
 
+            // Initialise the DataController so that we can fetch images.
             DataControllerConfig config = new DataControllerConfig(
                 Properties.Settings.Default.SqliteDatabase,
                 Properties.Settings.Default.ImagesDirectory);
 
-            // The Progress<T> constructor captures our UI context,
-            //  so the lambda will be run on the UI thread.
-            //var progress = new Progress<int>(percent =>
-            //{
-            //    Logger.DebugFormat("Initialisation: {0}", percent);
-            //});
-            Outer.OnProgressChanged(new ProgressChangedEventArgs(0, DialogAction.Show));
-            Outer.DataController.Initialise(config, new Progress<int>(Progress_ReportProgress));
+            Outer.DataController.Initialise(config);
         }
 
         #region Abstract Methods
@@ -77,7 +72,7 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             // Do nothing. Uninitialised.
         }
 
-        public override void RemoveItem(int index)
+        public override void RemoveMinutia(int index)
         {
             // Do nothing. Uninitialised.
         }
@@ -97,37 +92,42 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             // Do nothing. Uninitialised.
         }
 
+        public override void MoveMinutia(int index, Point point)
+        {
+            // Do nothing. Uninitialised.
+        }
+
+        public override void StartMove()
+        {
+            // Do nothing. Uninitialised.
+        }
+
+        public override void StopMove()
+        {
+            // Do nothing. Uninitialised.
+        }
+
         #endregion
 
         #region Event Handlers
 
         public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
-        {   
-            // Notify subscribers that initialisation is complete.
-            Outer.OnProgressChanged(
-                new ProgressChangedEventArgs(100, DialogAction.Hide));
-
+        {
             // Make state transitions based on result.
             if (e.IsSuccessful)
             {
-                m_StateMgr.TransitionTo(typeof(Idle));
+                StateMgr.TransitionTo(typeof(Idle));
             }
             else
             {
-                m_StateMgr.TransitionTo(typeof(Error));
+                OnErrorOccurred(
+                    new TemplateBuilderException("Failed to initialise DataController."));
             }
         }
 
         #endregion
 
         #region Event Handlers
-        
-        private void Progress_ReportProgress(int value)
-        {
-            Logger.DebugFormat("Progress_ReportProgress(value={0}) called.", value);
-            Outer.OnProgressChanged(
-                new ProgressChangedEventArgs(value, DialogAction.DoNothing));
-        }
 
         #endregion
     }

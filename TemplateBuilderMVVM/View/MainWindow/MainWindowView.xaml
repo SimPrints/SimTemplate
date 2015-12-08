@@ -36,15 +36,16 @@
                 </RadioButton>
             </ToolBar>
         </ToolBarTray>
-        <Grid Margin="0,51,0,0">
+        <Grid Margin="0,51,0,0"
+              MouseMove="itemsControl_MouseMove"
+              MouseUp="itemsControl_MouseUp">
             <!--The image being annotated-->
             <Image x:Name="image"
                    Source="{Binding Image}" Stretch="Uniform"
-                   SizeChanged="image_SizeChanged"
-                   MouseMove="itemsControl_MouseMove" MouseUp="itemsControl_MouseUp"/>
+                   SizeChanged="image_SizeChanged" />
             <!--The control on which to display the annotations-->
             <ItemsControl x:Name="itemsControl"
-                          ItemsSource="{Binding Minutae}" BorderBrush="Black" BorderThickness="5"
+                          ItemsSource="{Binding Minutae}"
                           Width="{Binding ElementName=image, Path=ActualWidth}"
                           Height="{Binding ElementName=image, Path=ActualHeight}">
                 <!-- Set the 'panel' to be a Canvas for displaying our items -->
@@ -57,11 +58,18 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Canvas>
+                            <Ellipse x:Name="point"
+                                     Width="5" Height="5"
+                                     Canvas.Top="-2.5"
+                                     Canvas.Left="-2.5"
+                                     Fill="Red" />
                             <Ellipse x:Name="ellipse"
                                      Width="30" Height="30"
                                      Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Height, Converter={conv:MultiplyConverter}, ConverterParameter=-0.5}"
                                      Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Width, Converter={conv:MultiplyConverter}, ConverterParameter=-0.5}"
-                                     Fill="Transparent" Stroke="Black" StrokeThickness="4" />
+                                     Fill="Transparent" Stroke="Black" StrokeThickness="4"
+                                     MouseDown="Minutia_MouseDown"
+                                     MouseUp="Minutia_MouseUp" />
                             <Line X1="0" X2="0"
                                   Y1="{Binding ElementName=ellipse, Path=Height, Converter={conv:MultiplyConverter}, ConverterParameter=0.5}"
                                   Y2="30"
@@ -70,7 +78,6 @@
                                     <RotateTransform Angle="90"/>
                                 </Line.RenderTransform>
                             </Line>
-
                             <Line X1="0" X2="0"
                                   Y1="{Binding ElementName=ellipse, Path=Height, Converter={conv:MultiplyConverter}, ConverterParameter=0.5}"
                                   Y2="30"

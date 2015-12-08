@@ -13,6 +13,11 @@ namespace TemplateBuilder.Helpers
             return new TemplateBuilderException(message);
         }
 
+        public static TemplateBuilderException Fail(string format, params string[] args)
+        {
+            return new TemplateBuilderException(String.Format(format, args));
+        }
+
         #region IsTrue
 
         public static void IsTrue(bool condition)

@@ -5,34 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TemplateBuilder.Helpers;
-using TemplateBuilder.Model;
-using TemplateBuilder.Model.Database;
 
 namespace TemplateBuilder.ViewModel.MainWindow.States
 {
-    public class Error : State
+    public class MovingMinutia : Templating
     {
-        public Error(TemplateBuilderViewModel outer, StateManager stateMgr) : base(outer, stateMgr)
+        public MovingMinutia(TemplateBuilderViewModel outer, StateManager stateMgr)
+            : base(outer, stateMgr)
         { }
-
-        public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
-        {
-            throw IntegrityCheck.Fail("Not expected to have InitialisationComplete event when in error.");
-        }
 
         public override void EscapeAction()
         {
             // Do nothing.
         }
 
-        public override void image_SizeChanged(Size newSize)
+        public override void MoveMinutia(int index, Point point)
         {
-            // Do nothing.
-        }
+            IntegrityCheck.IsTrue(index > -1 && index < Outer.Minutae.Count());
+            IntegrityCheck.IsNotNull(point);
 
-        public override void OpenFile()
-        {
-            // Do nothing.
+            // Set position TO SCALE
+            Outer.Minutae[index].Location = point.InvScale(Outer.Scale);
         }
 
         public override void PositionInput(Point point)
@@ -60,19 +53,18 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             // Do nothing.
         }
 
-        public override void MoveMinutia(int index, Point point)
-        {
-            // Do nothing.
-        }
-
         public override void StartMove()
         {
-            // Do nothing.
+            // TODO: Resolve issue that makes this stick and reinstate integrity check
+            // throw IntegrityCheck.Fail("Unexpected StartMove() call in {0} state.", GetType().Name);
+            // For some reason a fast drag misses the MouseUp event and we get stuck in
+            // MovingMinutia, as a result we should interpret this start move as a StopMove.
+            StopMove();
         }
 
         public override void StopMove()
         {
-            // Do nothing.
+            StateMgr.TransitionTo(typeof(WaitLocation));
         }
     }
 }

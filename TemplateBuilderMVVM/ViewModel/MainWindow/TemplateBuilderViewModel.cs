@@ -26,8 +26,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
         private BitmapImage m_Image;
         private bool m_IsInputMinutiaTypePermitted;
         private IDataController m_DataController;
-        private bool m_IsProgressPopupOpen;
-        private int m_Progress;
         // View and ViewModel-driven properties
         private MinutiaType m_InputMinutiaType;
         // View-driven properties
@@ -38,8 +36,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
         private ICommand m_TerminationButtonPressCommand;
         private ICommand m_BifuricationButtonPressCommand;
         private ICommand m_EscapePressCommand;
-
-        private EventHandler<ProgressChangedEventArgs> m_ProgressChanged;
 
         #region Constructor
 
@@ -166,12 +162,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
         public TemplateBuilderException Exception { get; set; }
 
-        public event EventHandler<ProgressChangedEventArgs> ProgressChanged
-        {
-            add { m_ProgressChanged += value; }
-            remove { m_ProgressChanged -= value; }
-        }
-
         #region Command Callbacks
 
         private void LoadFile()
@@ -214,17 +204,26 @@ namespace TemplateBuilder.ViewModel.MainWindow
             m_StateMgr.State.PositionInput(p);
         }
 
-        public void itemsControl_MouseMove(Point p)
+        public void MouseMove(Point p)
         {
             m_StateMgr.State.PositionMove(p);
         }
 
-        public void Ellipse_MouseRightButtonUp(int index)
+        public void MoveMinutia(int minutiaIndex, Point p)
+        {
+            m_Log.DebugFormat(
+                "MoveMinutia(minutiaIndex={0}, p={1}) called.",
+                minutiaIndex,
+                p);
+            m_StateMgr.State.MoveMinutia(minutiaIndex, p);
+        }
+
+        public void Minutia_MouseUp(int index)
         {
             m_Log.DebugFormat(
                 "Ellipse_MouseRightButtonUp(index={0}) called.",
                 index);
-            m_StateMgr.State.RemoveItem(index);
+            m_StateMgr.State.RemoveMinutia(index);
         }
 
         public void image_SizeChanged(Size newSize)
@@ -234,6 +233,16 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 newSize.Width,
                 newSize.Height);
             m_StateMgr.State.image_SizeChanged(newSize);
+        }
+
+        public void StartMove()
+        {
+            m_StateMgr.State.StartMove();
+        }
+
+        public void StopMove()
+        {
+            m_StateMgr.State.StopMove();
         }
 
         #endregion
@@ -247,19 +256,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 e.IsSuccessful);
 
             m_StateMgr.State.DataController_InitialisationComplete(e);
-        }
-
-        #endregion
-
-        #region Event Helpers
-
-        public void OnProgressChanged(ProgressChangedEventArgs e)
-        {
-            EventHandler<ProgressChangedEventArgs> temp = m_ProgressChanged;
-            if (temp != null)
-            {
-                temp.Invoke(this, e);
-            }
         }
 
         #endregion

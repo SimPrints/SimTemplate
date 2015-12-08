@@ -109,6 +109,7 @@
     <Compile Include="ViewModel\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="ViewModel\Converters\MultiplyConverter.cs" />
     <Compile Include="ViewModel\DialogAction.cs" />
+    <Compile Include="ViewModel\MainWindow\States\MovingMinutia.cs" />
     <Compile Include="ViewModel\MinutiaType.cs" />
     <Compile Include="ViewModel\Commands\RelayCommand.cs" />
     <Compile Include="ViewModel\Converters\BaseConverter.cs" />
@@ -128,11 +129,7 @@
     <Compile Include="ViewModel\MainWindow\States\WaitLocation.cs" />
     <Compile Include="ViewModel\MainWindow\TemplateBuilderViewModel.cs" />
     <Compile Include="Model\MinutiaRecord.cs" />
-    <Compile Include="ViewModel\Progress\ProgressViewModel.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
-    <Compile Include="View\Progress\ProgressView.xaml.cs">
-      <DependentUpon>ProgressView.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="View\MainWindow\MainWindowView.xaml.cs">
@@ -164,10 +161,6 @@
     <Page Include="View\MainWindow\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Progress\ProgressView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

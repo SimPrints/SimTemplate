@@ -5,9 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model.Database;
-using TemplateBuilder.View.Progress;
 using TemplateBuilder.ViewModel.MainWindow;
-using TemplateBuilder.ViewModel.Progress;
 
 namespace TemplateBuilder.View.MainWindow
 {
@@ -19,7 +17,9 @@ namespace TemplateBuilder.View.MainWindow
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(MainWindowView));
 
         private readonly TemplateBuilderViewModel m_ViewModel;
-        private ProgressView m_ProgressDialog;
+
+        private int? m_SelectedMinutia;
+        private object m_SelectedMinutiaLock = new object();
 
         #region Constructor
 
@@ -31,8 +31,6 @@ namespace TemplateBuilder.View.MainWindow
             m_ViewModel = new TemplateBuilderViewModel(new DataController());
             InitializeComponent();
             DataContext = m_ViewModel;
-
-            m_ViewModel.ProgressChanged += ViewModel_ProgressChanged;
 
             Dispatcher.BeginInvoke((Action)(() => m_ViewModel.Start()));
         }
@@ -47,7 +45,15 @@ namespace TemplateBuilder.View.MainWindow
         {
             Point pos = e.GetPosition(image);
 
-            m_ViewModel.itemsControl_MouseMove(pos);
+            m_ViewModel.MouseMove(pos);
+
+            lock (m_SelectedMinutiaLock)
+            {
+                if (m_SelectedMinutia.HasValue)
+                {
+                    m_ViewModel.MoveMinutia(m_SelectedMinutia.Value, pos);
+                }
+            }
         }
 
         private void itemsControl_MouseUp(object sender, MouseButtonEventArgs e)
@@ -55,14 +61,16 @@ namespace TemplateBuilder.View.MainWindow
             Point pos = e.GetPosition(image);
 
             m_ViewModel.itemsControl_MouseUp(pos);
-        }
 
-        private void Ellipse_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            object item = (sender as FrameworkElement).DataContext;
-            int index = itemsControl.Items.IndexOf(item);
-
-            m_ViewModel.Ellipse_MouseRightButtonUp(index);
+            if (m_SelectedMinutia != null &&
+                e.ChangedButton == MouseButton.Left)
+            {
+                lock (m_SelectedMinutiaLock)
+                {
+                    m_SelectedMinutia = null;
+                }
+                m_ViewModel.StopMove();
+            }
         }
 
         private void image_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -72,50 +80,47 @@ namespace TemplateBuilder.View.MainWindow
 
         #endregion
 
-        private void Image_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        private void Minutia_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
-        }
-
-        #region Event Handler
-
-        private void ViewModel_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            m_Log.DebugFormat(
-                "ViewModel_ProgressChanged(Progress={0}, IsShowDialog={1}) called.",
-                e.Progress,
-                e.Action);
-
-            switch (e.Action)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                case TemplateBuilder.ViewModel.DialogAction.DoNothing:
-                    IntegrityCheck.IsNotNull(m_ProgressDialog);
-                    m_ProgressDialog.ViewModel.Progress = e.Progress;
-                    break;
+                object item = (sender as FrameworkElement).DataContext;
+                int index = itemsControl.Items.IndexOf(item);
 
-                case TemplateBuilder.ViewModel.DialogAction.Show:
-                    IntegrityCheck.IsNull(m_ProgressDialog);
-                    // Create new modal dialog to display
-                    Dispatcher.BeginInvoke((Action)(() =>
-                    {
-                        ProgressViewModel viewModel = new ProgressViewModel();
-                        m_ProgressDialog = new ProgressView(viewModel);
-                        m_ProgressDialog.Owner = this;
-                        m_ProgressDialog.ShowDialog();
-                    }));
-                    break;
-
-                case TemplateBuilder.ViewModel.DialogAction.Hide:
-                    IntegrityCheck.IsNotNull(m_ProgressDialog);
-                    m_ProgressDialog.Close();
-                    m_ProgressDialog = null;
-                    break;
-
-                default:
-                    throw IntegrityCheck.FailUnexpectedDefault(e.Action);
+                lock (m_SelectedMinutiaLock)
+                {
+                    m_SelectedMinutia = index;
+                }
+                m_ViewModel.StartMove();
             }
         }
 
-        #endregion
+        private void Minutia_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                object item = (sender as FrameworkElement).DataContext;
+                int index = itemsControl.Items.IndexOf(item);
+
+                m_ViewModel.Minutia_MouseUp(index);
+
+                // Mark event as handled so that we don't create a new minutia as soon as we have
+                // deleted one.
+                e.Handled = true;
+            }
+        }
+
+        private void Minutia_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point pos = e.GetPosition(image);
+
+            lock (m_SelectedMinutiaLock)
+            {
+                if (m_SelectedMinutia.HasValue)
+                {
+                    m_ViewModel.MoveMinutia(m_SelectedMinutia.Value, pos);
+                }
+            }
+        }
     }
 }

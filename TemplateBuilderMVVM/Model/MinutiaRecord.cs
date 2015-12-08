@@ -28,6 +28,7 @@ namespace TemplateBuilder.Model
                 NotifyPropertyChanged();
             }
         }
+
         public double Direction
         {
             get { return m_Direction; }
@@ -37,6 +38,7 @@ namespace TemplateBuilder.Model
                 NotifyPropertyChanged();
             }
         }
+
         public MinutiaType Type
         {
             get { return m_Type; }
@@ -46,6 +48,7 @@ namespace TemplateBuilder.Model
                 NotifyPropertyChanged();
             }
         }
+
         public MinutiaRecord() { }
 
         public MinutiaRecord(Point location, double direction, MinutiaType type)

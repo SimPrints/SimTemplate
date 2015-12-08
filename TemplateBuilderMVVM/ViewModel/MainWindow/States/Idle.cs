@@ -42,7 +42,7 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             // Do nothing.
         }
 
-        public override void RemoveItem(int index)
+        public override void RemoveMinutia(int index)
         {
             // There should be no minutia visible in this state.
             // TODO: Transition to Error?
@@ -55,7 +55,7 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             // The save template button should be deactivated in this state.
             // TODO: Transition to error?
             throw IntegrityCheck.Fail(
-                "The save template button should be deactivated in the Idke state.");
+                "The save template button should be deactivated in the Idle state.");
         }
 
         public override void SetMinutiaType(MinutiaType type)
@@ -66,6 +66,21 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
         public override void EscapeAction()
         {
             // Nothing to escape.
+        }
+        public override void MoveMinutia(int index, Point point)
+        {
+            throw IntegrityCheck.Fail(
+                "It should not be possible to drag Minutia in the Idle state.");
+        }
+
+        public override void StartMove()
+        {
+            // Do nothing.
+        }
+
+        public override void StopMove()
+        {
+            // Do nothing.
         }
 
         #endregion

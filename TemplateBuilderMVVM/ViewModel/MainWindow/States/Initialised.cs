@@ -104,7 +104,7 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
                     {
                         Outer.Image = image;
                         openImageStatus = OpenImageResult.Successful;
-                        m_StateMgr.TransitionTo(typeof(WaitLocation));
+                        StateMgr.TransitionTo(typeof(WaitLocation));
                     }
                 }
                 else
@@ -120,12 +120,12 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             switch (openImageStatus)
             {
                 case OpenImageResult.Successful:
-                    m_StateMgr.TransitionTo(typeof(WaitLocation));
+                    StateMgr.TransitionTo(typeof(WaitLocation));
                     break;
 
                 case OpenImageResult.Failed:
                 case OpenImageResult.InvalidFileCountExceeded:
-                    m_StateMgr.TransitionTo(typeof(Error));
+                    StateMgr.TransitionTo(typeof(Error));
                     break;
 
                 default:

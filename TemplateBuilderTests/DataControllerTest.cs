@@ -19,12 +19,15 @@ namespace TemplateBuilderTests
 
         #endregion
 
-        DataController m_DataController;
+        IDataController m_DataController;
+        bool m_IsSuccessful;
 
         [TestInitialize]
         public void TestSetup()
         {
             m_DataController = new DataController();
+            m_IsSuccessful = false;
+            m_DataController.InitialisationComplete += DataController_InitialisationComplete;
         }
 
         [TestMethod]
@@ -33,10 +36,10 @@ namespace TemplateBuilderTests
             DataControllerConfig config = new DataControllerConfig(
                 DATABASE_PATH,
                 IMAGE_FILES_DIRECTORY);
-            bool isSuccessful = m_DataController.Initialise(config);
+            m_DataController.Initialise(config);
 
             // Assert succeeded to connect.
-            Assert.IsTrue(isSuccessful);
+            Assert.IsTrue(m_IsSuccessful);
         }
 
         [TestMethod]
@@ -45,10 +48,10 @@ namespace TemplateBuilderTests
             DataControllerConfig config = new DataControllerConfig(
                 "blah", // pass an invalid file path
                 IMAGE_FILES_DIRECTORY);
-            bool isSuccessful = m_DataController.Initialise(config);
+            m_DataController.Initialise(config);
 
             // Assert failed to connect.
-            Assert.IsFalse(isSuccessful);
+            Assert.IsFalse(m_IsSuccessful);
         }
 
         [TestMethod]
@@ -78,8 +81,8 @@ namespace TemplateBuilderTests
             DataControllerConfig config = new DataControllerConfig(
                 DATABASE_PATH,
                 IMAGE_FILES_DIRECTORY);
-            bool isSuccessful = m_DataController.Initialise(config);
-            Assert.IsTrue(isSuccessful);
+            m_DataController.Initialise(config);
+            Assert.IsTrue(m_IsSuccessful);
         }
 
         private void ConnectGoodDatabaseNoMatchingImages()
@@ -87,8 +90,17 @@ namespace TemplateBuilderTests
             DataControllerConfig config = new DataControllerConfig(
                 DATABASE_PATH,
                 NO_MATCHING_IMAGES_DIRECTORY);
-            bool isSuccessful = m_DataController.Initialise(config);
-            Assert.IsTrue(isSuccessful);
+            m_DataController.Initialise(config);
+            Assert.IsTrue(m_IsSuccessful);
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        private void DataController_InitialisationComplete(object sender, InitialisationCompleteEventArgs e)
+        {
+            m_IsSuccessful = e.IsSuccessful;
         }
 
         #endregion

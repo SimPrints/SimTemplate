@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TemplateBuilder.Model.Database;
 using TemplateBuilder.ViewModel;
+using TemplateBuilder.ViewModel.MainWindow;
 
 namespace TemplateBuilderTests
 {
@@ -28,8 +29,9 @@ namespace TemplateBuilderTests
         [TestMethod]
         public void TestConnect_Fail()
         {
-            // Set Connect to return false, always
-            A.CallTo(() => m_DataController.Initialise(A<DataControllerConfig>._)).Returns(false);
+            // TODO: fake the initialiseComplete event
+            //A.CallTo(() => m_DataController.Initialise(A<DataControllerConfig>._))
+            //    .Invokes(() => )
 
             // Start the ViewModel.
             m_ViewModel.Start();

@@ -20,14 +20,14 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
     {
         private ILog m_Log;
 
-        protected TemplateBuilderViewModel Outer;
-        protected StateManager m_StateMgr;
+        private TemplateBuilderViewModel m_Outer;
+        private StateManager m_StateMgr;
 
         #region Constructor
 
         public State(TemplateBuilderViewModel outer, StateManager stateMgr)
         {
-            Outer = outer;
+            m_Outer = outer;
             m_StateMgr = stateMgr;
         }
 
@@ -51,7 +51,9 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
 
         public abstract void PositionMove(Point point);
 
-        public abstract void RemoveItem(int index);
+        public abstract void RemoveMinutia(int index);
+
+        public abstract void MoveMinutia(int index, Point point);
 
         public abstract void SaveTemplate();
 
@@ -60,6 +62,10 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
         public abstract void SetMinutiaType(MinutiaType type);
 
         public abstract void EscapeAction();
+
+        public abstract void StartMove();
+
+        public abstract void StopMove();
 
         #endregion
 
@@ -72,9 +78,23 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
 
         public string Name { get { return GetType().Name; } }
 
+        /// <summary>
+        /// Gets the outer class that this state is behaviour for.
+        /// </summary>
+        protected TemplateBuilderViewModel Outer { get { return m_Outer; } }
+
+        /// <summary>
+        /// Gets the state manager.
+        /// </summary>
+        protected StateManager StateMgr { get { return m_StateMgr; } }
+
+        /// <summary>
+        /// Called when an error occurred, to report it and transition to error state.
+        /// </summary>
+        /// <param name="ex">The exception.</param>
         protected void OnErrorOccurred(TemplateBuilderException ex)
         {
-            Outer.Exception = ex;
+            m_Outer.Exception = ex;
             Logger.ErrorFormat("Error occurred: " + ex.Message, ex);
             m_StateMgr.TransitionTo(typeof(Error));
         }

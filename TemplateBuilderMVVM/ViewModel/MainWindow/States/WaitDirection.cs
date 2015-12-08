@@ -38,10 +38,10 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
         {
             // The user has just finalised the direction of the minutia.
             SetDirection(p);
-            m_StateMgr.TransitionTo(typeof(WaitLocation));
+            StateMgr.TransitionTo(typeof(WaitLocation));
         }
 
-        public override void RemoveItem(int index)
+        public override void RemoveMinutia(int index)
         {
             //Do nothing.
         }
@@ -61,7 +61,13 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
         {
             // Cancel adding the current minutia.
             Outer.Minutae.Remove(m_Record);
-            m_StateMgr.TransitionTo(typeof(WaitLocation));
+            StateMgr.TransitionTo(typeof(WaitLocation));
+        }
+
+        public override void MoveMinutia(int index, Point point)
+        {
+            throw IntegrityCheck.Fail(
+                "It should not be possible to drag Minutia in the WaitDirection state.");
         }
 
         #endregion
@@ -75,6 +81,17 @@ namespace TemplateBuilder.ViewModel.MainWindow.States
             double angle = Math.Atan2(direction.Y, direction.X);
             // Save the new direction
             m_Record.Direction = angle;
+        }
+
+        public override void StartMove()
+        {
+            // The user may click the minutia when setting direction but this shouldn't start a
+            // move!
+        }
+
+        public override void StopMove()
+        {
+            throw IntegrityCheck.Fail("Unexpected StopMove() call in {0} state.", GetType().Name);
         }
 
         #endregion
