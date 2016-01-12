@@ -4,75 +4,74 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 using TemplateBuilder.Model.Database;
 
-namespace TemplateBuilder.ViewModel.MainWindow.States
+namespace TemplateBuilder.ViewModel.MainWindow
 {
-    public class Error : State
+    public partial class TemplateBuilderViewModel
     {
-        public Error(TemplateBuilderViewModel outer, StateManager stateMgr) : base(outer, stateMgr)
-        { }
-
-        public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
+        public class Error : State
         {
-            throw IntegrityCheck.Fail("Not expected to have InitialisationComplete event when in error.");
-        }
+            public Error(TemplateBuilderViewModel outer, StateManager stateMgr) : base(outer, stateMgr)
+            { }
 
-        public override void EscapeAction()
-        {
-            // Do nothing.
-        }
+            public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
+            {
+                throw IntegrityCheck.Fail("Not expected to have InitialisationComplete event when in error.");
+            }
 
-        public override void image_SizeChanged(Size newSize)
-        {
-            // Do nothing.
-        }
+            public override void EscapeAction()
+            {
+                // Ignore.
+            }
 
-        public override void OpenFile()
-        {
-            // Do nothing.
-        }
+            public override void image_SizeChanged(Size newSize)
+            {
+                // Ignore.
+            }
 
-        public override void PositionInput(Point point)
-        {
-            // Do nothing.
-        }
+            public override void SkipFile()
+            {
+                // Ignore.
+            }
 
-        public override void PositionMove(Point point)
-        {
-            // Do nothing.
-        }
+            public override void PositionInput(Point point, MouseButton changedButton)
+            {
+                // Ignore.
+            }
 
-        public override void RemoveMinutia(int index)
-        {
-            // Do nothing.
-        }
+            public override void PositionMove(Point point)
+            {
+                // Ignore.
+            }
 
-        public override void SaveTemplate()
-        {
-            // Do nothing.
-        }
+            public override void RemoveMinutia(int index)
+            {
+                // Ignore.
+            }
 
-        public override void SetMinutiaType(MinutiaType type)
-        {
-            // Do nothing.
-        }
+            public override void SaveTemplate()
+            {
+                // Ignore.
+            }
 
-        public override void MoveMinutia(int index, Point point)
-        {
-            // Do nothing.
-        }
+            public override void SetMinutiaType(MinutiaType type)
+            {
+                // Ignore.
+            }
 
-        public override void StartMove()
-        {
-            // Do nothing.
-        }
+            public override void MoveMinutia(Point point)
+            {
+                // Ignore.
+            }
 
-        public override void StopMove()
-        {
-            // Do nothing.
+            public override void StartMove(int index)
+            {
+                // Ignore.
+            }
         }
     }
 }

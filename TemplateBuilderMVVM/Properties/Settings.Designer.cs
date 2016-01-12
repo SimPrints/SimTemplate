@@ -40,5 +40,14 @@ namespace TemplateBuilder.Properties {
                 return ((string)(this["ImagesDirectory"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SimAfisTemplate")]
+        public string GoldTemplateColumnName {
+            get {
+                return ((string)(this["GoldTemplateColumnName"]));
+            }
+        }
     }
 }

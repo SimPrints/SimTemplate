@@ -15,11 +15,7 @@ namespace TemplateBuilder.View.MainWindow
     public partial class MainWindowView : Window
     {
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(MainWindowView));
-
         private readonly TemplateBuilderViewModel m_ViewModel;
-
-        private int? m_SelectedMinutia;
-        private object m_SelectedMinutiaLock = new object();
 
         #region Constructor
 
@@ -46,35 +42,21 @@ namespace TemplateBuilder.View.MainWindow
             Point pos = e.GetPosition(image);
 
             m_ViewModel.MouseMove(pos);
-
-            lock (m_SelectedMinutiaLock)
-            {
-                if (m_SelectedMinutia.HasValue)
-                {
-                    m_ViewModel.MoveMinutia(m_SelectedMinutia.Value, pos);
-                }
-            }
         }
 
         private void itemsControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            m_Log.Debug("itemsControl_MouseUp(...) called.");
+
             Point pos = e.GetPosition(image);
 
-            m_ViewModel.itemsControl_MouseUp(pos);
-
-            if (m_SelectedMinutia != null &&
-                e.ChangedButton == MouseButton.Left)
-            {
-                lock (m_SelectedMinutiaLock)
-                {
-                    m_SelectedMinutia = null;
-                }
-                m_ViewModel.StopMove();
-            }
+            m_ViewModel.itemsControl_MouseUp(pos, e.ChangedButton);
         }
 
         private void image_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            m_Log.Debug("image_SizeChanged(...) called.");
+
             m_ViewModel.image_SizeChanged(e.NewSize);
         }
 
@@ -82,21 +64,20 @@ namespace TemplateBuilder.View.MainWindow
 
         private void Minutia_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            m_Log.Debug("Minutia_MouseDown(...) called.");
+
             if (e.ChangedButton == MouseButton.Left)
             {
                 object item = (sender as FrameworkElement).DataContext;
                 int index = itemsControl.Items.IndexOf(item);
-
-                lock (m_SelectedMinutiaLock)
-                {
-                    m_SelectedMinutia = index;
-                }
-                m_ViewModel.StartMove();
+                m_ViewModel.StartMove(index);
             }
         }
 
         private void Minutia_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            m_Log.Debug("Minutia_MouseUp(...) called.");
+
             if (e.ChangedButton == MouseButton.Right)
             {
                 object item = (sender as FrameworkElement).DataContext;
@@ -113,14 +94,7 @@ namespace TemplateBuilder.View.MainWindow
         private void Minutia_MouseMove(object sender, MouseEventArgs e)
         {
             Point pos = e.GetPosition(image);
-
-            lock (m_SelectedMinutiaLock)
-            {
-                if (m_SelectedMinutia.HasValue)
-                {
-                    m_ViewModel.MoveMinutia(m_SelectedMinutia.Value, pos);
-                }
-            }
+            m_ViewModel.MoveMinutia(pos);
         }
     }
 }

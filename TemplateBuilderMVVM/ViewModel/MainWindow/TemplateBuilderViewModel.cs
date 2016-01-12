@@ -7,11 +7,10 @@ using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 using TemplateBuilder.Model.Database;
 using TemplateBuilder.ViewModel.Commands;
-using TemplateBuilder.ViewModel.MainWindow.States;
 
 namespace TemplateBuilder.ViewModel.MainWindow
 {
-    public class TemplateBuilderViewModel : ViewModel
+    public partial class TemplateBuilderViewModel : ViewModel
     {
         #region Constants
 
@@ -26,12 +25,15 @@ namespace TemplateBuilder.ViewModel.MainWindow
         private BitmapImage m_Image;
         private bool m_IsInputMinutiaTypePermitted;
         private IDataController m_DataController;
+        private TemplateBuilderException m_Exception;
         // View and ViewModel-driven properties
         private MinutiaType m_InputMinutiaType;
+        private int? m_SelectedMinutia;
+        private object m_SelectedMinutiaLock = new object();
         // View-driven properties
         private Vector m_Scale;
         // Commands
-        private ICommand m_LoadFileCommand;
+        private ICommand m_SkipFileCommand;
         private ICommand m_SaveTemplateCommand;
         private ICommand m_TerminationButtonPressCommand;
         private ICommand m_BifuricationButtonPressCommand;
@@ -60,7 +62,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
         /// <summary>
         /// Gets the 'load file' command for binding to the 'openFile' button.
         /// </summary>
-        public ICommand LoadFileCommand { get { return m_LoadFileCommand; } }
+        public ICommand SkipFileCommand { get { return m_SkipFileCommand; } }
 
         /// <summary>
         /// Gets the 'save template' command for binding to the 'Save' button.
@@ -158,21 +160,19 @@ namespace TemplateBuilder.ViewModel.MainWindow
             m_StateMgr.Start();
         }
 
-        public IDataController DataController { get { return m_DataController; } }
-
-        public TemplateBuilderException Exception { get; set; }
+        public TemplateBuilderException Exception { get { return m_Exception; } }
 
         #region Command Callbacks
 
-        private void LoadFile()
+        private void SkipFile()
         {
-            m_Log.Debug("LoadFile called.");
-            m_StateMgr.State.OpenFile();
+            m_Log.Debug("LoadFile() called.");
+            m_StateMgr.State.SkipFile();
         }
 
         private void SaveTemplate()
         {
-            m_Log.Debug("SaveTemplate called.");
+            m_Log.Debug("SaveTemplate() called.");
             m_StateMgr.State.SaveTemplate();
         }
 
@@ -195,27 +195,27 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
         #region Event Callbacks
 
-        public void itemsControl_MouseUp(Point p)
+        public void itemsControl_MouseUp(Point p, MouseButton changedButton)
         {
             m_Log.DebugFormat(
                 "itemsControl_MouseUp(p.X={0}, p.Y={1}) called.",
                 p.X,
                 p.Y);
-            m_StateMgr.State.PositionInput(p);
+            m_StateMgr.State.PositionInput(p, changedButton);
         }
 
         public void MouseMove(Point p)
         {
+            // Do not log as this occurs many times per second.
             m_StateMgr.State.PositionMove(p);
         }
 
-        public void MoveMinutia(int minutiaIndex, Point p)
+        public void MoveMinutia(Point p)
         {
             m_Log.DebugFormat(
-                "MoveMinutia(minutiaIndex={0}, p={1}) called.",
-                minutiaIndex,
+                "MoveMinutia(p={1}) called.",
                 p);
-            m_StateMgr.State.MoveMinutia(minutiaIndex, p);
+            m_StateMgr.State.MoveMinutia(p);
         }
 
         public void Minutia_MouseUp(int index)
@@ -235,14 +235,10 @@ namespace TemplateBuilder.ViewModel.MainWindow
             m_StateMgr.State.image_SizeChanged(newSize);
         }
 
-        public void StartMove()
+        public void StartMove(int index)
         {
-            m_StateMgr.State.StartMove();
-        }
-
-        public void StopMove()
-        {
-            m_StateMgr.State.StopMove();
+            m_Log.DebugFormat("StartMove(index={0}) called.", index);
+            m_StateMgr.State.StartMove(index);
         }
 
         #endregion
@@ -264,7 +260,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
         private void InitialiseCommands()
         {
-            m_LoadFileCommand = new RelayCommand(x => LoadFile());
+            m_SkipFileCommand = new RelayCommand(x => SkipFile());
             m_SaveTemplateCommand = new RelayCommand(
                 x => SaveTemplate(),
                 x => IsSaveTemplatePermitted);

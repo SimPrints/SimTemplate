@@ -8,5 +8,8 @@
     <Setting Name="ImagesDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\SimPrints\Images\Data_Zambia</Value>
     </Setting>
+    <Setting Name="GoldTemplateColumnName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SimAfisTemplate</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

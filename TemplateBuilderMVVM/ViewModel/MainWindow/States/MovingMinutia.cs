@@ -4,67 +4,73 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using TemplateBuilder.Helpers;
 
-namespace TemplateBuilder.ViewModel.MainWindow.States
+namespace TemplateBuilder.ViewModel.MainWindow
 {
-    public class MovingMinutia : Templating
+    public partial class TemplateBuilderViewModel
     {
-        public MovingMinutia(TemplateBuilderViewModel outer, StateManager stateMgr)
-            : base(outer, stateMgr)
-        { }
-
-        public override void EscapeAction()
+        public class MovingMinutia : Templating
         {
-            // Do nothing.
-        }
+            public MovingMinutia(TemplateBuilderViewModel outer, StateManager stateMgr)
+                : base(outer, stateMgr)
+            { }
 
-        public override void MoveMinutia(int index, Point point)
-        {
-            IntegrityCheck.IsTrue(index > -1 && index < Outer.Minutae.Count());
-            IntegrityCheck.IsNotNull(point);
+            public override void EscapeAction()
+            {
+                // Ignore.
+            }
 
-            // Set position TO SCALE
-            Outer.Minutae[index].Location = point.InvScale(Outer.Scale);
-        }
+            public override void PositionInput(Point point, MouseButton changedButton)
+            {
+                if (Outer.m_SelectedMinutia != null &&
+                    changedButton == MouseButton.Left)
+                {
+                    StopMove();
+                }
+            }
 
-        public override void PositionInput(Point point)
-        {
-            // Do nothing.
-        }
+            public override void PositionMove(Point point)
+            {
+                IntegrityCheck.IsNotNull(point);
 
-        public override void PositionMove(Point point)
-        {
-            // Do nothing.
-        }
+                lock (Outer.m_SelectedMinutiaLock)
+                {
+                    IntegrityCheck.IsNotNull(Outer.m_SelectedMinutia.HasValue);
+                    // Set position TO SCALE
+                    Outer.Minutae[Outer.m_SelectedMinutia.Value].Location = point.InvScale(Outer.Scale);
+                }
+            }
 
-        public override void RemoveMinutia(int index)
-        {
-            // Do nothing.
-        }
+            public override void RemoveMinutia(int index)
+            {
+                // Ignore.
+            }
 
-        public override void SaveTemplate()
-        {
-            // Do nothing.
-        }
+            public override void SaveTemplate()
+            {
+                // Ignore.
+            }
 
-        public override void SetMinutiaType(MinutiaType type)
-        {
-            // Do nothing.
-        }
+            public override void SetMinutiaType(MinutiaType type)
+            {
+                // Ignore.
+            }
 
-        public override void StartMove()
-        {
-            // TODO: Resolve issue that makes this stick and reinstate integrity check
-            // throw IntegrityCheck.Fail("Unexpected StartMove() call in {0} state.", GetType().Name);
-            // For some reason a fast drag misses the MouseUp event and we get stuck in
-            // MovingMinutia, as a result we should interpret this start move as a StopMove.
-            StopMove();
-        }
+            public override void StartMove(int index)
+            {
+                StopMove();
+            }
 
-        public override void StopMove()
-        {
-            StateMgr.TransitionTo(typeof(WaitLocation));
+            private void StopMove()
+            {
+                lock (Outer.m_SelectedMinutiaLock)
+                {
+                    Outer.m_SelectedMinutia = null;
+                }
+                StateMgr.TransitionTo(typeof(WaitLocation));
+            }
         }
     }
 }
