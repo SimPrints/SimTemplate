@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TemplateBuilder.Model.Database;
-using TemplateBuilder.ViewModel;
 using TemplateBuilder.ViewModel.MainWindow;
 
 namespace TemplateBuilderTests

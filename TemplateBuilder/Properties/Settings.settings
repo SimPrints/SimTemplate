@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TemplateBuilder.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SqliteDatabase" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\SimPrints\Data\mainDb_yesFMR_noPNG.sqlite</Value>
+    </Setting>
+    <Setting Name="ImagesDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\SimPrints\Images\Data_Zambia</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

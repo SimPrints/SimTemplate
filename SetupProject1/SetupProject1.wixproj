@@ -24,16 +24,6 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TemplateBuilderMVVM\TemplateBuilder.csproj">
-      <Name>TemplateBuilder</Name>
-      <Project>{2751b1fb-63d6-4bb7-94ec-d0fb92543b8e}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
@@ -41,6 +31,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="GPL_v3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TemplateBuilder\TemplateBuilder.csproj">
+      <Name>TemplateBuilder</Name>
+      <Project>{c783ab69-29c6-4730-a34c-c765a40bb0e2}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

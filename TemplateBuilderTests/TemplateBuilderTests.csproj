@@ -99,8 +99,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TemplateBuilderMVVM\TemplateBuilder.csproj">
-      <Project>{2751b1fb-63d6-4bb7-94ec-d0fb92543b8e}</Project>
+    <ProjectReference Include="..\TemplateBuilder\TemplateBuilder.csproj">
+      <Project>{c783ab69-29c6-4730-a34c-c765a40bb0e2}</Project>
       <Name>TemplateBuilder</Name>
     </ProjectReference>
   </ItemGroup>
