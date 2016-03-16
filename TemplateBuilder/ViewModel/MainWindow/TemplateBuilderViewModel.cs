@@ -26,7 +26,8 @@ namespace TemplateBuilder.ViewModel.MainWindow
         private StateManager<TemplateBuilderBaseState> m_StateMgr;
         private object m_StateLock;
         // ViewModel-driven properties
-        private BitmapImage m_Image;
+        private CaptureInfo m_Capture;
+        private BitmapImage m_StatusImage;
         private bool m_IsInputMinutiaTypePermitted;
         private IDataController m_DataController;
         private TemplateBuilderException m_Exception;
@@ -53,6 +54,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
             InitialiseCommands();
 
             m_DataController.InitialisationComplete += DataController_InitialisationComplete;
+            m_DataController.GetCaptureComplete += m_DataController_GetCaptureComplete;
         }
 
         #endregion
@@ -169,17 +171,27 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
         }
 
-        /// <summary>
-        /// Gets or sets the image file. Bound to the canvas background.
-        /// </summary>
-        public BitmapImage Image
+        public CaptureInfo Capture
         {
-            get { return m_Image; }
+            get { return m_Capture; }
             set
             {
-                if (value != m_Image)
+                if (value != m_Capture)
                 {
-                    m_Image = value;
+                    m_Capture = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public BitmapImage StatusImage
+        {
+            get { return m_StatusImage; }
+            set
+            {
+                if (value != m_StatusImage)
+                {
+                    m_StatusImage = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -282,15 +294,15 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
         }
 
-        public void image_SizeChanged(Size newSize)
+        public void ScaleChanged(Vector newScale)
         {
             m_Log.DebugFormat(
-                "image_SizeChanged(newSize.Width={0}, newSize.Height={1}) called.",
-                newSize.Width,
-                newSize.Height);
+                "ScaleChanged(newScale.X={0}, newScale.Y={1}) called.",
+                newScale.X,
+                newScale.Y);
             lock (m_StateLock)
             {
-                m_StateMgr.State.image_SizeChanged(newSize);
+                m_StateMgr.State.ScaleChanged(newScale);
             }
         }
 
@@ -310,11 +322,22 @@ namespace TemplateBuilder.ViewModel.MainWindow
         private void DataController_InitialisationComplete(object sender, InitialisationCompleteEventArgs e)
         {
             m_Log.DebugFormat(
-                "DataController_InitialisationComplete(e.IsSuccessful={0}) called.",
-                e.IsSuccessful);
+                "DataController_InitialisationComplete(e.Result={0}) called.",
+                e.Result);
             lock (m_StateLock)
             {
                 m_StateMgr.State.DataController_InitialisationComplete(e);
+            }
+        }
+
+        private void m_DataController_GetCaptureComplete(object sender, GetCaptureCompleteEventArgs e)
+        {
+            m_Log.DebugFormat(
+                "m_DataController_GetCaptureComplete(e.Capture.Id={0}) called.",
+                e.Capture.DbId);
+            lock (m_StateLock)
+            {
+                m_StateMgr.State.DataController_GetCaptureComplete(e);
             }
         }
 

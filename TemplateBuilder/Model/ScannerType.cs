@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TemplateBuilder.ViewModel.MainWindow
+namespace TemplateBuilder.Model
 {
     public enum ScannerType
     {

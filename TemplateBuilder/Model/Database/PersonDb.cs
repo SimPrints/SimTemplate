@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TemplateBuilder.Model.Database
 {
     [Table(Name = "Person")]
-    public class Person
+    public class PersonDb
     {
         [Column(IsPrimaryKey = true, IsDbGenerated = true)]
         public Int64 id { get; set; }
@@ -17,9 +17,9 @@ namespace TemplateBuilder.Model.Database
         [Column]
         public string Pid { get; set; }
 
-        private EntitySet<Capture> _Captures;
+        private EntitySet<CaptureDb> _Captures;
         [Association(Storage = "_Captures", OtherKey = "PersonId")]
-        public EntitySet<Capture> Captures
+        public EntitySet<CaptureDb> Captures
         {
             get { return this._Captures; }
             set { this._Captures.Assign(value); }

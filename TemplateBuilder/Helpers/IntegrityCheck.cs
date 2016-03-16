@@ -95,7 +95,7 @@ namespace TemplateBuilder.Helpers
 
         #endregion
 
-        #region AreEqual
+        #region AreNotEqual
 
         public static void AreNotEqual<T>(T expected, T actual)
         {
@@ -181,7 +181,7 @@ namespace TemplateBuilder.Helpers
 
         #endregion
 
-        #region IsNull
+        #region IsNotNullOrEmpty
 
         public static void IsNotNullOrEmpty(string value)
         {

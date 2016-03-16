@@ -32,15 +32,12 @@ namespace TemplateBuilder.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\SimPrints\\Images\\Data_Zambia")]
         public string ImagesDirectory {
             get {
                 return ((string)(this["ImagesDirectory"]));
-            }
-            set {
-                this["ImagesDirectory"] = value;
             }
         }
     }

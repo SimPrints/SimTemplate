@@ -12,8 +12,8 @@ namespace TemplateBuilder.Model.Database
     [Database]
     public class SimPrintsDb : DataContext
     {
-        public Table<Capture> Captures;
-        public Table<Person> People;
+        public Table<CaptureDb> Captures;
+        public Table<PersonDb> People;
         public SimPrintsDb(string connection) : base(connection) { }
         public SimPrintsDb(SQLiteConnection connection) : base(connection) { }
     }

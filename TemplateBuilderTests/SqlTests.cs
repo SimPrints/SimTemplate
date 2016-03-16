@@ -30,13 +30,13 @@ namespace TemplateBuilderTests
             DataContext db = new DataContext(dbConnection);
 
             // Make a basic query
-            Table<Capture> captures = db.GetTable<Capture>();
+            Table<CaptureDb> captures = db.GetTable<CaptureDb>();
             // Query for customers from London
             var q = from c in captures
                      where c.ScannerName == "LES"
                      select c;
 
-            foreach (Capture capt in q)
+            foreach (CaptureDb capt in q)
                 Console.WriteLine("id = {0}, ScannerName = {1}, FingerNumber = {2}",
                     capt.Id,
                     capt.ScannerName,
@@ -60,7 +60,7 @@ namespace TemplateBuilderTests
                     where c.ScannerName == "LES"
                     select c;
 
-            foreach (Capture capt in q)
+            foreach (CaptureDb capt in q)
             {
                 Console.WriteLine("id = {0}, ScannerName = {1}, FingerNumber = {2}, Pid = {3}",
                     capt.Id,

@@ -30,6 +30,9 @@ namespace TemplateBuilder.ViewModel.MainWindow
             {
                 base.OnEnteringState();
 
+                // Check a capture is available
+                IntegrityCheck.IsNotNull(Outer.Capture);
+
                 // Ensure UI controls active
                 if (!Outer.IsSaveTemplatePermitted)
                 {

@@ -46,7 +46,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             public virtual void SaveTemplate() { MethodNotImplemented(); }
 
-            public virtual void image_SizeChanged(Size newSize) { MethodNotImplemented(); }
+            public virtual void ScaleChanged(Vector newScale) { MethodNotImplemented(); }
 
             public virtual void SetMinutiaType(MinutiaType type) { MethodNotImplemented(); }
 
@@ -61,6 +61,12 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             public virtual void DataController_InitialisationComplete(
                 InitialisationCompleteEventArgs e)
+            {
+                MethodNotImplemented();
+            }
+
+            public virtual void DataController_GetCaptureComplete(
+                GetCaptureCompleteEventArgs e)
             {
                 MethodNotImplemented();
             }

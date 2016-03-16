@@ -18,6 +18,18 @@ namespace TemplateBuilder.ViewModel.MainWindow
             public Error(TemplateBuilderViewModel outer) : base(outer)
             { }
 
+            public override void OnEnteringState()
+            {
+                base.OnEnteringState();
+
+                // Indicate we have errored
+                //Outer.StatusImage = new BitmapImage();
+
+                // Clear UI.
+                Outer.Capture = null;
+                Outer.Minutae.Clear();
+            }
+
             public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
             {
                 throw IntegrityCheck.Fail("Not expected to have InitialisationComplete event when in error.");
@@ -28,7 +40,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Ignore.
             }
 
-            public override void image_SizeChanged(Size newSize)
+            public override void ScaleChanged(Vector newScale)
             {
                 // Ignore.
             }
@@ -69,6 +81,11 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
 
             public override void StartMove(int index)
+            {
+                // Ignore.
+            }
+
+            public override void SetScannerType(ScannerType type)
             {
                 // Ignore.
             }

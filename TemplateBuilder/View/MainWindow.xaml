@@ -53,8 +53,11 @@
               MouseMove="itemsControl_MouseMove"
               MouseUp="itemsControl_MouseUp">
             <!--The image being annotated-->
+            <Image x:Name="statusImage"
+                   Source="{Binding StatusImage}" Stretch="Uniform" />
+            <!--The image being annotated-->
             <Image x:Name="image"
-                   Source="{Binding Image}" Stretch="Uniform"
+                   Source="{Binding Capture.ImageData}" Stretch="Uniform"
                    SizeChanged="image_SizeChanged" />
             <!--The control on which to display the annotations-->
             <ItemsControl x:Name="itemsControl"

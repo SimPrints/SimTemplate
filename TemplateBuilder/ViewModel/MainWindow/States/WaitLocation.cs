@@ -48,11 +48,14 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             public override void SaveTemplate()
             {
-                IntegrityCheck.IsNotNull(Outer.Image);
+                IntegrityCheck.IsNotNull(Outer.Capture);
 
                 byte[] isoTemplate = TemplateHelper.ToIsoTemplate(Outer.Minutae);
 
-                bool isSaved = Outer.m_DataController.SaveTemplate(isoTemplate);
+                bool isSaved = Outer.m_DataController.SaveTemplate(
+                    Outer.Capture.Guid, 
+                    Outer.Capture.DbId,
+                    isoTemplate);
 
                 if (isSaved)
                 {

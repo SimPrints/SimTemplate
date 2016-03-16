@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using TemplateBuilder.Helpers;
+using TemplateBuilder.Model;
 using TemplateBuilder.Model.Database;
 using TemplateBuilder.ViewModel.MainWindow;
 
@@ -36,12 +38,13 @@ namespace TemplateBuilderTests
             m_ViewModel.Start();
 
             // Assert that ViewModel made no further requests
-            A.CallTo(() => m_DataController.GetImageFile()).MustNotHaveHappened();
-            A.CallTo(() => m_DataController.Initialise(A<DataControllerConfig>._))
+            A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._, A<bool>._))
+                .MustNotHaveHappened();
+            A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
                 .MustHaveHappened(Repeated.Exactly.Once);
 
             // Assert public state of ViewModel
-            Assert.IsNull(m_ViewModel.Image);
+            Assert.IsNull(m_ViewModel.Capture);
             Assert.AreEqual(new Vector(0, 0), m_ViewModel.Scale);
             Assert.AreEqual(0, m_ViewModel.Minutae.Count());
             Assert.IsNull(m_ViewModel.Exception);

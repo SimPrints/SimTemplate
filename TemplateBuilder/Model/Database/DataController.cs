@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.ViewModel.MainWindow;
 
@@ -17,29 +18,27 @@ namespace TemplateBuilder.Model.Database
         #region Constants
 
         private const int MAX_OPEN_FILE_ATTEMPTS = 1000;
-        private const string CONNECTION_STRING = "Data Source={0};Version=3;";
+        private const string CONNECTION_STRING = @"Data Source={0};Version=3;";
+        private const string CAPTURE_QUERY_STRING = @"SELECT * FROM Capture WHERE Capture.SimAfisTemplate IS {0} ORDER BY RANDOM() LIMIT 1;";
+        private const string CAPTURE_GIVEN_SCANNER_QUERY_STRING = @"SELECT * FROM Capture WHERE Capture.SimAfisTemplate IS {0} AND ScannerName = '{1}' ORDER BY RANDOM() LIMIT 1;";
 
         #endregion
-
-        private enum State { None, Uninialised, Initialised, Indexed, Error };
 
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(DataController));
 
         private DataControllerConfig m_Config;
         private SimPrintsDb m_Database;
-        private State m_State;
-        private IEnumerator<Capture> m_Query;
+        private InitialisationResult result;
         private IEnumerable<string> m_ImageFiles;
-        private IDictionary<string, string> m_IndexedImageFiles;
 
         private event EventHandler<InitialisationCompleteEventArgs> m_InitialisationComplete;
+        private event EventHandler<GetCaptureCompleteEventArgs> m_GetCaptureComplete;
 
         #region Constructor
 
         public DataController()
         {
-            m_State = State.Uninialised;
-            m_IndexedImageFiles = new ConcurrentDictionary<string, string>();
+            result = InitialisationResult.Uninitialised;
         }
 
         #endregion
@@ -51,7 +50,7 @@ namespace TemplateBuilder.Model.Database
         /// </summary>
         /// <param name="config">The configuration.</param>
         /// <param name="progress"></param>
-        void IDataController.Initialise(DataControllerConfig config)
+        void IDataController.BeginInitialise(DataControllerConfig config)
         {
             IntegrityCheck.IsNotNull(config, "config");
             IntegrityCheck.IsNotNullOrEmpty(config.DatabasePath, "config.DatabasePath");
@@ -65,54 +64,22 @@ namespace TemplateBuilder.Model.Database
 
             // Set the LINQ data context to the database connection.
             m_Database = new SimPrintsDb(dbConnection);
-            // Construct the query used to obtain a capture lacking a template.
-            m_Query = ConstructQuery();
 
-            if (m_Query != null)
+            // Obtain image files on local machine, to be matched with database entries.
+            m_ImageFiles = GetImageFiles(m_Config.ImageFilesDirectory);
+            if (m_ImageFiles != null &&
+                m_ImageFiles.Count() > 0)
             {
-                // We connected to SQLite
-                m_ImageFiles = GetImageFiles();
-                if (m_ImageFiles != null &&
-                    m_ImageFiles.Count() > 0)
-                {
-                    m_State = State.Initialised;
-                }
+                result = InitialisationResult.Initialised;
             }
             else
             {
-                m_State = State.Error;
-                m_Log.Error("Failed to construct SQLite database query.");
+                m_Log.Error("Failed to get image files.");
+                result = InitialisationResult.Error;
             }
 
-            // Start indexing the images for quick lookup.
-            // Execute this lengthy process on another thread and yield UI thread.
-            Task.Run(() =>
-                {
-                    GetIndexedFiles(m_Config.ImageFilesDirectory);
-                    // Upon completing indexing process...
-                    if (m_State == State.Initialised)
-                    {
-                        // If we successfully connected and obtained files before...
-                        if (m_IndexedImageFiles != null &&
-                        m_IndexedImageFiles.Count() > 0)
-                        {
-                            // If indexing was successful, update state to reflect this.
-                            m_State = State.Indexed;
-                        }
-                        else
-                        {
-                            m_Log.Warn("Failed to index image files.");
-                        }
-                    }
-                });
-
             OnInitialisationComplete(
-                new InitialisationCompleteEventArgs(m_State == State.Initialised));
-
-            // Notify subscribers whether we successfully initialised.
-            //OnInitialisationComplete(new InitialisationCompleteEventArgs(m_State == State.Initialised));
-            //OnInitialisationComplete(
-            //    new InitialisationCompleteEventArgs(m_State == State.Initialised || m_State == State.Indexed));
+                new InitialisationCompleteEventArgs(result));
         }
 
         /// <summary>
@@ -122,57 +89,17 @@ namespace TemplateBuilder.Model.Database
         /// <returns>
         /// filepath of the local file, null if no image can be found.
         /// </returns>
-        string IDataController.GetImageFile()
+        Guid IDataController.BeginGetCapture(ScannerType scannerType, bool isTemplated)
         {
-            string confirmedFile = null;
-            bool isRunning = true;
-            int attempts = 0;
-            while (isRunning)
-            {
-                // Give up if the number of attemps exceeds limit.
-                attempts++;
-                if (attempts > MAX_OPEN_FILE_ATTEMPTS)
-                {
-                    isRunning = false;
-                }
+            IntegrityCheck.IsNotNull(scannerType);
 
-                // First query the database to get an image file name.
-                string candidateName = GetNameFromDatabase();
+            Guid guid = Guid.NewGuid();
 
-                if (!String.IsNullOrEmpty(candidateName))
-                {
-                    // Try to find an image file using the filename obtained from the database.
-                    string filepath;
-                    bool isFound = TryGetPathFromName(candidateName, out filepath);
+            // Define and run the task.
+            Task getCaptureTask = Task.Run(() => GetCapture(isTemplated, scannerType, guid));
 
-                    if (isFound)
-                    {
-                        if (File.Exists(filepath))
-                        {
-                            // The file still exists.
-                            confirmedFile = filepath;
-                            isRunning = false;
-                        }
-                        else
-                        {
-                            m_Log.WarnFormat(
-                                "File {0} found in candidate files on local machine but file no longer exists.",
-                                candidateName);
-                        }
-                    }
-                    else
-                    {
-                        m_Log.WarnFormat("Found no image file containing {0}", candidateName);
-                    }
-                }
-                else
-                {
-                    // Queries are not returning any more candidates, give up immediately.
-                    m_Log.Warn("No candidate filename obtained from the database");
-                    break;
-                }
-            }
-            return confirmedFile;
+            // Return the task's unique identifier.
+            return guid;
         }
 
         /// <summary>
@@ -180,11 +107,33 @@ namespace TemplateBuilder.Model.Database
         /// </summary>
         /// <param name="template">The template.</param>
         /// <returns></returns>
-        bool IDataController.SaveTemplate(byte[] template)
+        bool IDataController.SaveTemplate(string guid, long dbId, byte[] template)
         {
-            bool isSuccessful = false;
 
-            m_Query.Current.GoldTemplate = template;
+            CaptureDb capture = (from c in m_Database.Captures
+                                 where c.Id == dbId
+                                 select c).FirstOrDefault();
+
+            bool isSuccessful = false;
+            if (capture != null)
+            {
+                if (capture.Guid == guid)
+                {
+                    // Update the template to that supplied
+                    capture.GoldTemplate = template;
+                    isSuccessful = true;
+                }
+                else
+                {
+                    m_Log.WarnFormat(
+                        "GUID of capture with DbId={0} doesn't match GUID supplied ({0} instead of {1})",
+                        capture.Id, capture.Guid, guid);
+                }
+            }
+            else
+            {
+                m_Log.WarnFormat("Failed to find capture wtih DbId={0}. Not saving template", dbId);
+            }
 
             m_Database.SubmitChanges();
 
@@ -197,37 +146,67 @@ namespace TemplateBuilder.Model.Database
             remove { m_InitialisationComplete -= value; }
         }
 
+        event EventHandler<GetCaptureCompleteEventArgs> IDataController.GetCaptureComplete
+        {
+            add { m_GetCaptureComplete += value; }
+            remove { m_GetCaptureComplete -= value; }
+        }
+
         #endregion
 
         #region Private Methods
 
-        private IEnumerator<Capture> ConstructQuery()
+        private void GetCapture(bool isTemplated, ScannerType scannerType, Guid guid)
         {
-            IEnumerable<Capture> query = from c in m_Database.Captures
-                                         //where c.ScannerName == "LES"
-                                         where c.GoldTemplate == null
-                                         select c;
+            CaptureInfo captureInfo = null;
+            bool isRunning = true;
+            int attempts = 0;
+            while (isRunning)
+            {
+                // First query the database to get an image file name.
+                CaptureDb captureCandidate = GetCaptureFromDatabase(isTemplated, scannerType);
 
-            IEnumerator<Capture> queryEnumerator = null;
-            try
-            {
-                return queryEnumerator = query.GetEnumerator();
+                if (captureCandidate != null)
+                {
+                    byte[] imageData;
+                    bool isFound = TryGetImageFromName(captureCandidate.Guid, out imageData);
+                    if (isFound)
+                    {
+                        isRunning = false;
+                        captureInfo = new CaptureInfo(
+                            captureCandidate.Guid,
+                            captureCandidate.Id,
+                            imageData,
+                            null);
+                    }
+                    else
+                    {
+                        // Give up if the number of attemps exceeds limit.
+                        attempts++;
+                        if (attempts > MAX_OPEN_FILE_ATTEMPTS)
+                        {
+                            isRunning = false;
+                        }
+                    }
+                }
+                else
+                {
+                    // Queries are not returning any more candidates, give up immediately.
+                    m_Log.Warn("No candidate filename obtained from the database");
+                    break;
+                }
             }
-            catch (SQLiteException ex)
-            {
-                m_Log.WarnFormat("Failed to query SQLite database: {0}", ex);
-            }
-            return queryEnumerator;
+            OnGetCaptureComplete(new GetCaptureCompleteEventArgs(captureInfo, guid));
         }
 
-        private IEnumerable<string> GetImageFiles()
+        private static IEnumerable<string> GetImageFiles(string directory)
         {
             ConcurrentBag<string> threadSafeImages = null;
-            if (Directory.Exists(m_Config.ImageFilesDirectory))
+            if (Directory.Exists(directory))
             {
                 // The provided image path exists, so fetch images in that directory.
                 IEnumerable<string> imageFiles = Directory.GetFiles(
-                    m_Config.ImageFilesDirectory,
+                    directory,
                     "*.png",
                     SearchOption.AllDirectories);
                 // Save the image files in a thread-safe list.
@@ -235,69 +214,72 @@ namespace TemplateBuilder.Model.Database
             }
             else
             {
-                m_State = State.Error;
                 m_Log.ErrorFormat(
                     "Supplied directory for image files does not exist ({0})",
-                    m_Config.ImageFilesDirectory);
+                    directory);
             }
             return threadSafeImages;
         }
 
-        private string GetNameFromDatabase()
+        private CaptureDb GetCaptureFromDatabase(bool isTemplated, ScannerType scannerType)
         {
-            string filename = String.Empty;
-            if (m_Query.MoveNext())
+            CaptureDb capture;
+            string withTemplateString = isTemplated ? "NOT NULL" : "NULL";
+            string query;
+            if (scannerType == ScannerType.All)
             {
-                filename = m_Query.Current.ImageFileName;
+                query = String.Format(CAPTURE_QUERY_STRING, withTemplateString);
             }
             else
             {
-                m_Log.Warn("No captures available in the enumerator.");
+                query = String.Format(CAPTURE_GIVEN_SCANNER_QUERY_STRING, withTemplateString, scannerType);
             }
-            return filename;
+            capture = m_Database.ExecuteQuery<CaptureDb>(query).FirstOrDefault();
+            return capture;
+        }
+
+        private bool TryGetImageFromName(string name, out byte[] imageData)
+        {
+            // Try to find an image file using the filename obtained from the database.
+            string filepath;
+            bool isFound = TryGetPathFromName(name, out filepath);
+
+            bool isSuccessful = false;
+            imageData = null;
+            if (isFound)
+            {
+                if (File.Exists(filepath))
+                {
+                    // The file exists.
+                    m_Log.DebugFormat("An image file was found for image: {0}.", filepath);
+                    try
+                    {
+                        imageData = File.ReadAllBytes(filepath);
+                        isSuccessful = true;
+                    }
+                    catch (NotSupportedException ex)
+                    {
+                        m_Log.WarnFormat("Failed to read image file: {0}", ex);
+                    }
+                }
+                else
+                {
+                    m_Log.WarnFormat(
+                        "File {0} found in candidate files on local machine but file no longer exists.",
+                        name);
+                }
+            }
+            else
+            {
+                m_Log.WarnFormat("Found no image file containing {0}", name);
+            }
+            return isSuccessful;
         }
 
         private bool TryGetPathFromName(string name, out string filepath)
         {
-            filepath = String.Empty;
-            bool isFound = false;
-            switch (m_State)
-            {
-                case State.Indexed:
-                    isFound = m_IndexedImageFiles.TryGetValue(name, out filepath);
-                    break;
-
-                case State.Initialised:
-                    // Dictionary is still being indexed, so first check if name entry exists.
-                    isFound = m_IndexedImageFiles.TryGetValue(name, out filepath);
-                    // If the name entry doesn't exist, search for it in the list itself.
-                    if (!isFound)
-                    {
-                        filepath = m_ImageFiles.FirstOrDefault(x => x.Contains(name));
-                        isFound = !String.IsNullOrEmpty(filepath);
-                    }
-                    break;
-
-                default:
-                    throw IntegrityCheck.FailUnexpectedDefault(m_State);
-            }
-            return isFound;
-        }
-
-        private void GetIndexedFiles(string path)
-        {
-            foreach (string filename in m_ImageFiles)
-            {
-                string key = Path.GetFileNameWithoutExtension(filename);
-                if (!m_IndexedImageFiles.ContainsKey(key))
-                {
-                    m_IndexedImageFiles.Add(key, filename);
-                }
-                else
-                {
-                    m_Log.WarnFormat("Duplicate file found. Ignoring duplicate {0}", key);
-                }
-            }
+            filepath = m_ImageFiles.FirstOrDefault(x => x.Contains(name));
+            return !String.IsNullOrEmpty(filepath);
         }
 
         #endregion
@@ -307,6 +289,15 @@ namespace TemplateBuilder.Model.Database
         private void OnInitialisationComplete(InitialisationCompleteEventArgs e)
         {
             EventHandler<InitialisationCompleteEventArgs> temp = m_InitialisationComplete;
+            if (temp != null)
+            {
+                temp.Invoke(this, e);
+            }
+        }
+
+        private void OnGetCaptureComplete(GetCaptureCompleteEventArgs e)
+        {
+            EventHandler<GetCaptureCompleteEventArgs> temp = m_GetCaptureComplete;
             if (temp != null)
             {
                 temp.Invoke(this, e);

@@ -8,13 +8,17 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
+using TemplateBuilder.Model.Database;
 
 namespace TemplateBuilder.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel
     {
+        // TODO: Rename to 'LoadingCapture'
         public class Idle : Initialised
         {
+            private Guid m_CaptureRequestId;
+
             public Idle(TemplateBuilderViewModel outer) : base(outer)
             { }
 
@@ -29,10 +33,12 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 Outer.IsInputMinutiaTypePermitted = false;
 
                 // Hide old image from UI, and remove other things.
-                Outer.Image = null;
+                Outer.Capture = null;
                 Outer.Minutae.Clear();
 
-                LoadImage();
+                // Request a capture from the database
+                m_CaptureRequestId = Outer.m_DataController
+                    .BeginGetCapture(Outer.FilteredScannerType, false);
             }
 
             public override void PositionInput(Point point, MouseButton changedButton)
@@ -58,6 +64,31 @@ namespace TemplateBuilder.ViewModel.MainWindow
             public override void StartMove(int index)
             {
                 // Ignore.
+            }
+
+            #endregion
+
+            #region Event Handlers
+
+            public override void DataController_GetCaptureComplete(GetCaptureCompleteEventArgs e)
+            {
+                if (e.RequestGuid == m_CaptureRequestId)
+                {
+                    if (e.Capture != null)
+                    {
+                        Outer.Capture = e.Capture;
+                        TransitionTo(typeof(WaitLocation));
+                    }
+                    else
+                    {
+                        // No capture was obtained.
+                        Logger.DebugFormat(
+                            "Failed to obtain capture from DataController",
+                            Outer.FilteredScannerType);
+
+                        TransitionTo(typeof(Error));
+                    }
+                }
             }
 
             #endregion

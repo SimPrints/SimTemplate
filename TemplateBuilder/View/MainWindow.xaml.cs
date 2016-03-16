@@ -3,6 +3,7 @@ using log4net.Config;
 using System;
 using System.Windows;
 using System.Windows.Input;
+using TemplateBuilder.Helpers;
 using TemplateBuilder.Model.Database;
 using TemplateBuilder.ViewModel.MainWindow;
 
@@ -56,7 +57,23 @@ namespace TemplateBuilder.View.MainWindow
         {
             m_Log.Debug("image_SizeChanged(...) called.");
 
-            m_ViewModel.image_SizeChanged(e.NewSize);
+            if (image.Source != null)
+            {
+                // Image has been resized.
+                // Get scaling in each dimension.
+                double scaleX = e.NewSize.Width / image.Source.Width;
+                double scaleY = e.NewSize.Height / image.Source.Width;
+                // Check that scaling factor is equal for each dimension.
+                Vector scale = new Vector(scaleX, scaleY);
+                // Update ViewModel scale
+                m_ViewModel.ScaleChanged(scale);
+            }
+            else
+            {
+                // Image has been removed.
+                IntegrityCheck.AreEqual(0, e.NewSize.Height);
+                IntegrityCheck.AreEqual(0, e.NewSize.Width);
+            }
         }
 
         #endregion

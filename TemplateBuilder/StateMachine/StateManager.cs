@@ -69,7 +69,7 @@ namespace TemplateBuilder.StateMachine
             else
             {
                 // This is our first transition.
-                m_Log.InfoFormat("State transition: [null]->{1}", newState.Name);
+                m_Log.InfoFormat("State transition: [null]->{0}", newState.Name);
             }
 
             lock (m_StateLock)

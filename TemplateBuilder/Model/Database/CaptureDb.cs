@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace TemplateBuilder.Model.Database
 {
-    [Table()]
-    public class Capture
+    [Table(Name = "Capture")]
+    public class CaptureDb
     {
-        private EntityRef<Person> m_Person;
+        private EntityRef<PersonDb> m_Person;
 
         [Association(Storage = "m_Person", ThisKey = "PersonId")]
-        public Person Person
+        public PersonDb Person
         {
             get { return this.m_Person.Entity; }
             set { this.m_Person.Entity = value; }
@@ -47,7 +47,7 @@ namespace TemplateBuilder.Model.Database
         [Column(Name = "SimAfisTemplate")]
         public byte[] GoldTemplate { get; set; }
 
-        public string ImageFileName
+        public string Guid
         {
             get
             {

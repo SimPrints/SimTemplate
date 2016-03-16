@@ -8,13 +8,13 @@ namespace TemplateBuilder.Model.Database
 {
     public class InitialisationCompleteEventArgs : EventArgs
     {
-        private readonly bool m_IsSuccessful;
+        private readonly InitialisationResult m_Result;
 
-        public bool IsSuccessful { get { return m_IsSuccessful; } }
+        public InitialisationResult Result { get { return m_Result; } }
 
-        public InitialisationCompleteEventArgs(bool isSuccessful)
+        public InitialisationCompleteEventArgs(InitialisationResult result)
         {
-            m_IsSuccessful = isSuccessful;
+            m_Result = result;
         }
     }
 }

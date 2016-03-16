@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 using TemplateBuilder.Model.Database;
@@ -18,9 +19,13 @@ namespace TemplateBuilder.ViewModel.MainWindow
             {
                 base.OnEnteringState();
 
+                // Indicate we are loading
+                //Outer.StatusImage = new BitmapImage();
+
                 // Initialise properties.
                 Outer.Minutae = new TrulyObservableCollection<MinutiaRecord>();
-                Outer.InputMinutiaType = MinutiaType.Termination;
+                Outer.m_InputMinutiaType = MinutiaType.Termination;
+                Outer.m_FilteredScannerType = ScannerType.All;
 
                 // TODO: provide opportunity to update SQL database location.
                 // TODO: provide opportunity to update image folders.
@@ -30,12 +35,12 @@ namespace TemplateBuilder.ViewModel.MainWindow
                     Properties.Settings.Default.SqliteDatabase,
                     Properties.Settings.Default.ImagesDirectory);
 
-                Outer.m_DataController.Initialise(config);
+                Outer.m_DataController.BeginInitialise(config);
             }
 
             #region Abstract Methods
 
-            public override void image_SizeChanged(Size newSize)
+            public override void ScaleChanged(Vector newScale)
             {
                 // Ignore. Uninitialised.
             }
@@ -87,20 +92,15 @@ namespace TemplateBuilder.ViewModel.MainWindow
             public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
             {
                 // Make state transitions based on result.
-                if (e.IsSuccessful)
+                if (e.Result == InitialisationResult.Initialised)
                 {
                     TransitionTo(typeof(Idle));
                 }
                 else
                 {
-                    OnErrorOccurred(
-                        new TemplateBuilderException("Failed to initialise DataController."));
+                    OnErrorOccurred(new TemplateBuilderException("Failed to initialise DataController."));
                 }
             }
-
-            #endregion
-
-            #region Event Handlers
 
             #endregion
         }
