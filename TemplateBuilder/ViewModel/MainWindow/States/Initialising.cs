@@ -94,7 +94,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Make state transitions based on result.
                 if (e.Result == InitialisationResult.Initialised)
                 {
-                    TransitionTo(typeof(Idle));
+                    TransitionTo(typeof(Loading));
                 }
                 else
                 {

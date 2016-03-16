@@ -15,11 +15,11 @@ namespace TemplateBuilder.ViewModel.MainWindow
     public partial class TemplateBuilderViewModel
     {
         // TODO: Rename to 'LoadingCapture'
-        public class Idle : Initialised
+        public class Loading : Initialised
         {
             private Guid m_CaptureRequestId;
 
-            public Idle(TemplateBuilderViewModel outer) : base(outer)
+            public Loading(TemplateBuilderViewModel outer) : base(outer)
             { }
 
             #region Overriden Abstract Methods

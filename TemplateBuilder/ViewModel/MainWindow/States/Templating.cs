@@ -46,7 +46,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             public override void SkipFile()
             {
-                TransitionTo(typeof(Idle));
+                TransitionTo(typeof(Loading));
             }
 
             public override void SetScannerType(ScannerType type)
@@ -55,7 +55,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // if (Outer.m_Minutia)
                 // {
                 // }
-                TransitionTo(typeof(Idle));
+                TransitionTo(typeof(Loading));
             }
         }
     }

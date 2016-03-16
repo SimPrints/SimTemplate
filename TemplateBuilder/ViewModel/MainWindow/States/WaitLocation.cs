@@ -60,13 +60,13 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 if (isSaved)
                 {
                     // We've finished with this image, so transition to Idle state.
-                    TransitionTo(typeof(Idle));
+                    TransitionTo(typeof(Loading));
                 }
                 else
                 {
                     // Failed to save the template successfully.
                     // TODO: show dialog to try again?
-                    TransitionTo(typeof(Idle));
+                    TransitionTo(typeof(Loading));
                 }
             }
             public override void EscapeAction()
