@@ -151,9 +151,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\EnumHelper.cs" />
-    <Compile Include="Helpers\WebClientEx.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Model\Database\CaptureInfo.cs" />
     <Compile Include="Model\Database\GetCaptureCompleteEventArgs.cs" />
     <Compile Include="Model\Database\InitialisationResult.cs" />
@@ -167,7 +164,7 @@
     <Compile Include="ViewModel\Converters\ScaleConverter.cs" />
     <Compile Include="Model\ScannerType.cs" />
     <Compile Include="ViewModel\MainWindow\States\Error.cs" />
-    <Compile Include="ViewModel\MainWindow\States\Idle.cs" />
+    <Compile Include="ViewModel\MainWindow\States\Loading.cs" />
     <Compile Include="ViewModel\MainWindow\States\Initialised.cs" />
     <Compile Include="ViewModel\MainWindow\States\Initialising.cs" />
     <Compile Include="ViewModel\MainWindow\States\MovingMinutia.cs" />
@@ -234,10 +231,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Error.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Loading.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -36,6 +36,9 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 Outer.Capture = null;
                 Outer.Minutae.Clear();
 
+                // Show loading status image
+                Outer.StatusImage = new Uri("pack://application:,,,/Resources/Loading.png");
+
                 // Request a capture from the database
                 m_CaptureRequestId = Outer.m_DataController
                     .BeginGetCapture(Outer.FilteredScannerType, false);
@@ -74,6 +77,9 @@ namespace TemplateBuilder.ViewModel.MainWindow
             {
                 if (e.RequestGuid == m_CaptureRequestId)
                 {
+                    // We have recieved a response from our request.
+                    Outer.StatusImage = null;
+
                     if (e.Capture != null)
                     {
                         Outer.Capture = e.Capture;

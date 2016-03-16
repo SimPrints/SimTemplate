@@ -27,7 +27,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
         private object m_StateLock;
         // ViewModel-driven properties
         private CaptureInfo m_Capture;
-        private BitmapImage m_StatusImage;
+        private Uri m_StatusImage;
         private bool m_IsInputMinutiaTypePermitted;
         private IDataController m_DataController;
         private TemplateBuilderException m_Exception;
@@ -184,7 +184,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
         }
 
-        public BitmapImage StatusImage
+        public Uri StatusImage
         {
             get { return m_StatusImage; }
             set

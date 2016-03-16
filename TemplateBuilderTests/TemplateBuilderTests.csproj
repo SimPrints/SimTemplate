@@ -88,7 +88,6 @@
   <ItemGroup>
     <Compile Include="AssemblyInitialiser.cs" />
     <Compile Include="DataControllerTest.cs" />
-    <Compile Include="IDataControllerEventTargets.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="OAuthDataControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

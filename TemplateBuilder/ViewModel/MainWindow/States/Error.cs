@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using TemplateBuilder.Helpers;
 using TemplateBuilder.Model;
 using TemplateBuilder.Model.Database;
@@ -23,7 +24,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 base.OnEnteringState();
 
                 // Indicate we have errored
-                //Outer.StatusImage = new BitmapImage();
+                Outer.StatusImage = new Uri("pack://application:,,,/Resources/Error.png");
 
                 // Clear UI.
                 Outer.Capture = null;
