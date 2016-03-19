@@ -26,6 +26,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 Outer.Minutae = new TrulyObservableCollection<MinutiaRecord>();
                 Outer.m_InputMinutiaType = MinutiaType.Termination;
                 Outer.m_FilteredScannerType = ScannerType.All;
+                Outer.m_IsGetTemplatedCapture = false;
 
                 // TODO: provide opportunity to update SQL database location.
                 // TODO: provide opportunity to update image folders.
@@ -45,7 +46,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Ignore. Uninitialised.
             }
 
-            public override void SkipFile()
+            public override void LoadFile()
             {
                 // Ignore. Uninitialised.
             }
@@ -85,6 +86,11 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Ignore. Uninitialised.
             }
 
+            public override void SetScannerType(ScannerType type)
+            {
+                // Ignore.
+            }
+
             #endregion
 
             #region Event Handlers
@@ -94,7 +100,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Make state transitions based on result.
                 if (e.Result == InitialisationResult.Initialised)
                 {
-                    TransitionTo(typeof(Loading));
+                    TransitionTo(typeof(Idle));
                 }
                 else
                 {

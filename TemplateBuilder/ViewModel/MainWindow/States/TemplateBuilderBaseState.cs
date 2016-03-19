@@ -34,7 +34,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             public virtual bool IsMinutiaTypeButtonsEnabled { get { return false; } }
 
-            public virtual void SkipFile() { MethodNotImplemented(); }
+            public virtual void LoadFile() { MethodNotImplemented(); }
 
             public virtual void PositionInput(Point point, MouseButton changedButton) { MethodNotImplemented(); }
 

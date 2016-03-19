@@ -28,7 +28,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
             {
                 base.OnEnteringState();
                 m_Record = Outer.Minutae.Last();
-                IntegrityCheck.IsNotNull(m_Record.Location);
+                IntegrityCheck.IsNotNull(m_Record.Position);
             }
 
             public override void PositionMove(Point p)
@@ -74,10 +74,13 @@ namespace TemplateBuilder.ViewModel.MainWindow
             private void SetDirection(Point p)
             {
                 // Get the relevant record
-                Vector direction = p - m_Record.Location.Scale(Outer.Scale);
-                double angle = Math.Atan2(direction.Y, direction.X);
+                Vector direction = p - m_Record.Position.Scale(Outer.Scale);
+
+                // Calculate the angle (in degrees)
+                double angle = TemplateHelper.RadianToDegree(Math.Atan2(direction.Y, direction.X));
+                
                 // Save the new direction
-                m_Record.Direction = angle;
+                m_Record.Angle = angle;
             }
 
             public override void StartMove(int index)

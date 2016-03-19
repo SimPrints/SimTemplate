@@ -2,34 +2,44 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using TemplateBuilder.Helpers;
 using TemplateBuilder.ViewModel.MainWindow;
 
 namespace TemplateBuilder.Model
 {
     public class MinutiaRecord : INotifyPropertyChanged
     {
-        private Point m_Location;
-        private double m_Direction;
+        private Point m_Position;
+        private double m_Angle;
         private MinutiaType m_Type;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Point Location
+        public Point Position
         {
-            get { return m_Location; }
+            get { return m_Position; }
             set
             {
-                m_Location = value;
+                m_Position = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public double Direction
+        /// <summary>
+        /// Gets or sets the angle of the minutia TODO: From horizontal/vertical?.
+        /// NOTE: Must be positive.
+        /// </summary>
+        /// <value>
+        /// The angle in degrees.
+        /// </value>
+        public double Angle
         {
-            get { return m_Direction; }
+            get { return m_Angle; }
             set
             {
-                m_Direction = value;
+                IntegrityCheck.IsTrue(value >= 0, "Minutia angle must be positive.");
+                IntegrityCheck.IsTrue(value <= 360, "Minutia angle must be degree between 0 - 360.");
+                m_Angle = value;
                 NotifyPropertyChanged();
             }
         }
@@ -46,10 +56,10 @@ namespace TemplateBuilder.Model
 
         public MinutiaRecord() { }
 
-        public MinutiaRecord(Point location, double direction, MinutiaType type)
+        public MinutiaRecord(Point position, double angle, MinutiaType type)
         {
-            m_Location = location;
-            m_Direction = direction;
+            m_Position = position;
+            m_Angle = angle;
             m_Type = type;
         }
 

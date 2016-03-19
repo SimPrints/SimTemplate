@@ -177,7 +177,7 @@ namespace TemplateBuilder.Model.Database
                             captureCandidate.Guid,
                             captureCandidate.Id,
                             imageData,
-                            null);
+                            captureCandidate.GoldTemplate);
                     }
                     else
                     {

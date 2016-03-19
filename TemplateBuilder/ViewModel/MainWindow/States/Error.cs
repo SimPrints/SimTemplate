@@ -28,7 +28,10 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
                 // Clear UI.
                 Outer.Capture = null;
-                Outer.Minutae.Clear();
+                App.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    Outer.Minutae.Clear();
+                }));
             }
 
             public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
@@ -46,7 +49,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Ignore.
             }
 
-            public override void SkipFile()
+            public override void LoadFile()
             {
                 // Ignore.
             }

@@ -34,6 +34,17 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
 
             #endregion
+
+            protected void ClearUpTemplating()
+            {
+                // Deactivate UI controls.
+                Outer.IsSaveTemplatePermitted = false;
+                Outer.IsTemplating = false;
+
+                // Hide old image from UI, and remove other things.
+                Outer.Capture = null;
+                Outer.Minutae.Clear();
+            }
         }
     }
 }

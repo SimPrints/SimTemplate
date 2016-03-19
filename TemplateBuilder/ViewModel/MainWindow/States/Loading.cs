@@ -14,7 +14,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel
     {
-        // TODO: Rename to 'LoadingCapture'
         public class Loading : Initialised
         {
             private Guid m_CaptureRequestId;
@@ -28,20 +27,18 @@ namespace TemplateBuilder.ViewModel.MainWindow
             {
                 base.OnEnteringState();
 
-                // Deactivate UI controls.
-                Outer.IsSaveTemplatePermitted = false;
-                Outer.IsInputMinutiaTypePermitted = false;
-
-                // Hide old image from UI, and remove other things.
-                Outer.Capture = null;
-                Outer.Minutae.Clear();
-
                 // Show loading status image
                 Outer.StatusImage = new Uri("pack://application:,,,/Resources/Loading.png");
 
                 // Request a capture from the database
                 m_CaptureRequestId = Outer.m_DataController
-                    .BeginGetCapture(Outer.FilteredScannerType, false);
+                    .BeginGetCapture(Outer.FilteredScannerType, Outer.m_IsGetTemplatedCapture);
+            }
+
+            public override void LoadFile()
+            {
+                // Assume user has changed settings and start load again.
+                // TODO: Cancel current request and try again.
             }
 
             public override void PositionInput(Point point, MouseButton changedButton)
@@ -83,6 +80,18 @@ namespace TemplateBuilder.ViewModel.MainWindow
                     if (e.Capture != null)
                     {
                         Outer.Capture = e.Capture;
+                        if (Outer.Capture.TemplateData != null)
+                        {
+                            IEnumerable<MinutiaRecord> template = TemplateHelper
+                                .ToMinutae(Outer.Capture.TemplateData);
+                            foreach (MinutiaRecord rec in template)
+                            {
+                                App.Current.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    Outer.Minutae.Add(rec);
+                                }));
+                            }
+                        }
                         TransitionTo(typeof(WaitLocation));
                     }
                     else

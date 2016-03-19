@@ -34,8 +34,8 @@ namespace TemplateBuilderTests
         public void TestSetup()
         {
             m_DataController = new DataController();
-            InitialisationCompleteEventArgs m_InitCompleteArgs = null;
-            GetCaptureCompleteEventArgs m_GetCaptureArgs = null;
+            m_InitCompleteArgs = null;
+            m_GetCaptureArgs = null;
             m_DataController.InitialisationComplete += DataController_InitialisationComplete;
         }
 

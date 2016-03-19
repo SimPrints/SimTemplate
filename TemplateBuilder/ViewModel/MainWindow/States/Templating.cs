@@ -38,14 +38,17 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 {
                     Outer.IsSaveTemplatePermitted = true;
                 }
-                if (!Outer.IsInputMinutiaTypePermitted)
+                if (!Outer.IsTemplating)
                 {
-                    Outer.IsInputMinutiaTypePermitted = true;
+                    Outer.IsTemplating = true;
                 }
             }
 
-            public override void SkipFile()
+            public override void LoadFile()
             {
+                // TODO: Implement Heirachical state machine? OnLeavingTemplatingState?
+                ClearUpTemplating();
+
                 TransitionTo(typeof(Loading));
             }
 
@@ -55,7 +58,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // if (Outer.m_Minutia)
                 // {
                 // }
-                TransitionTo(typeof(Loading));
+                // TransitionTo(typeof(Loading));
             }
         }
     }

@@ -164,6 +164,7 @@
     <Compile Include="ViewModel\Converters\ScaleConverter.cs" />
     <Compile Include="Model\ScannerType.cs" />
     <Compile Include="ViewModel\MainWindow\States\Error.cs" />
+    <Compile Include="ViewModel\MainWindow\States\Idle.cs" />
     <Compile Include="ViewModel\MainWindow\States\Loading.cs" />
     <Compile Include="ViewModel\MainWindow\States\Initialised.cs" />
     <Compile Include="ViewModel\MainWindow\States\Initialising.cs" />

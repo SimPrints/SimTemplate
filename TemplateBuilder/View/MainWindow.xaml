@@ -5,6 +5,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:model="clr-namespace:TemplateBuilder.Model;assembly="
+        xmlns:view="clr-namespace:TemplateBuilder.View;assembly="
         xmlns:local="clr-namespace:TemplateBuilder.ViewModel;assembly="
         xmlns:conv="clr-namespace:TemplateBuilder.ViewModel.Converters;assembly="
         mc:Ignorable="d"
@@ -25,28 +26,50 @@
         <KeyBinding Key="Esc" Command="{Binding EscapePressCommand}"/>
     </Window.InputBindings>
 
-    <Grid>
-        <ToolBarTray HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" >
-            <ToolBar x:Name="programTools" Height="36" VerticalAlignment="Top">
-                <Button x:Name="saveTemplate" Content="Save" Height="36" VerticalAlignment="Top" Width="48" Margin="0,0,0,-5"
+    <DockPanel x:Name="sidePanel">
+        <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical"
+                     HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ToolBar x:Name="programTools" VerticalAlignment="Top" >
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="saveTemplate" Content="Save" VerticalAlignment="Top" Margin="10"
                         Command="{Binding Path=SaveTemplateCommand}"/>
-                <Button x:Name="skipFile" Content="Skip" Height="36" VerticalAlignment="Top" Width="48" Margin="0,0,0,-5"
-                        Command="{Binding Path=SkipFileCommand}"/>
-            </ToolBar>
-            <ToolBar x:Name="imageTools" Height="36" VerticalAlignment="Bottom">
-                <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static model:MinutiaType.Termination}}"
-                             IsEnabled="{Binding Path=IsInputMinutiaTypePermitted}">
-                    Termination
-                </RadioButton>
-                <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static model:MinutiaType.Bifurication}}"
-                             IsEnabled="{Binding Path=IsInputMinutiaTypePermitted}">
-                    Bifurication
-                </RadioButton>
-                <ComboBox x:Name="comboBox" Height="31" Margin="0" VerticalAlignment="Top" Width="120"
+                    <Button x:Name="loadFile" Content="Next" VerticalAlignment="Top" Margin="10" 
+                        Command="{Binding Path=LoadFileCommand}"/>
+                </StackPanel>
+                <ComboBox x:Name="scannerTypeComboBox" VerticalAlignment="Top"
+                          Margin="5" Width="100"
                           ItemsSource="{Binding Path=ScannerTypes}"
                           SelectedItem="{Binding Path=FilteredScannerType}">
                 </ComboBox>
-
+                <StackPanel>
+                    <!-- 'isGetTemplatedCapture' radio buttons-->
+                    <RadioButton x:Name="getTemplatedCaptureButton" GroupName="isGetTemplatedCapture"
+                             IsChecked="{Binding Path=IsGetTemplatedCapture}"
+                             Margin="5">
+                        Templated
+                    </RadioButton>
+                    <RadioButton x:Name="getUntemplatedCaptureButton" GroupName="isGetTemplatedCapture"
+                                 Margin="5">
+                        Untemplated
+                    </RadioButton>
+                </StackPanel>
+            </ToolBar>
+            <ToolBar x:Name="templatingTools" VerticalAlignment="Bottom">
+                <StackPanel>
+                    <!-- 'inputMinutiaType' radio buttons -->
+                    <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static model:MinutiaType.Termination}}"
+                                 IsEnabled="{Binding Path=IsTemplating}"
+                                 GroupName="inputMinutiaType"
+                                 Margin="5">
+                        Termination
+                    </RadioButton>
+                    <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static model:MinutiaType.Bifurication}}"
+                                 IsEnabled="{Binding Path=IsTemplating}"
+                                 GroupName="inputMinutiaType"
+                                 Margin="5">
+                        Bifurication
+                    </RadioButton>
+                </StackPanel>
             </ToolBar>
         </ToolBarTray>
         <Grid Margin="0,51,0,0"
@@ -123,7 +146,7 @@
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource ScaleConverter}"
                                               Mode="OneWay">
-                                    <Binding Path="Location.Y"/>
+                                    <Binding Path="Position.Y"/>
                                     <Binding Path="DataContext.Scale.Y"
                                              RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
                                 </MultiBinding>
@@ -133,7 +156,7 @@
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource ScaleConverter}"
                                               Mode="OneWay">
-                                    <Binding Path="Location.X"/>
+                                    <Binding Path="Position.X"/>
                                     <Binding Path="DataContext.Scale.X"
                                              RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
                                 </MultiBinding>
@@ -141,12 +164,12 @@
                         </Setter>
                         <Setter Property="Canvas.RenderTransform">
                             <Setter.Value>
-                                <RotateTransform Angle="{Binding Direction, Converter={StaticResource RadToDegConverter}}"/>
+                                <RotateTransform Angle="{Binding Angle}"/>
                             </Setter.Value>
                         </Setter>
                     </Style>
                 </ItemsControl.ItemContainerStyle>
             </ItemsControl>
         </Grid>
-    </Grid>
+    </DockPanel>
 </Window>

@@ -16,6 +16,7 @@ namespace TemplateBuilder.View.MainWindow
     {
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(MainWindowView));
         private readonly TemplateBuilderViewModel m_ViewModel;
+        //private Vector m_Scale; TODO: Move scale from ViewModel to View
 
         #region Constructor
 

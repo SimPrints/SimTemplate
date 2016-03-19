@@ -25,7 +25,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 MinutiaRecord record = new MinutiaRecord();
 
                 // Save the position TO SCALE.
-                record.Location = pos.InvScale(Outer.Scale);
+                record.Position = pos.InvScale(Outer.Scale);
                 // Save the current type.
                 record.Type = Outer.InputMinutiaType;
                 // Record minutia information.
@@ -50,7 +50,16 @@ namespace TemplateBuilder.ViewModel.MainWindow
             {
                 IntegrityCheck.IsNotNull(Outer.Capture);
 
-                byte[] isoTemplate = TemplateHelper.ToIsoTemplate(Outer.Minutae);
+                byte[] isoTemplate;
+                if (Outer.Minutae.Count() > 0)
+                {
+                    isoTemplate = TemplateHelper.ToIsoTemplate(Outer.Minutae);
+                }
+                else
+                {
+                    // User has saved 0 minutia, save as 'NULL' in database
+                    isoTemplate = null;
+                }
 
                 bool isSaved = Outer.m_DataController.SaveTemplate(
                     Outer.Capture.Guid, 
@@ -60,14 +69,16 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 if (isSaved)
                 {
                     // We've finished with this image, so transition to Idle state.
-                    TransitionTo(typeof(Loading));
+                    TransitionTo(typeof(Idle));
                 }
                 else
                 {
                     // Failed to save the template successfully.
                     // TODO: show dialog to try again?
-                    TransitionTo(typeof(Loading));
+                    TransitionTo(typeof(Idle));
                 }
+                // TODO: Implement Heirachical state machine.
+                ClearUpTemplating();
             }
             public override void EscapeAction()
             {
@@ -90,7 +101,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
             private static string ToRecord(MinutiaRecord labels)
             {
                 return String.Format("{0}, {1}, {2}, {3}",
-                    labels.Location.X, labels.Location.Y, labels.Direction, labels.Type);
+                    labels.Position.X, labels.Position.Y, labels.Angle, labels.Type);
             }
 
             #endregion
