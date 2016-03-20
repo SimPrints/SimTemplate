@@ -31,6 +31,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
         private bool m_IsTemplating;
         private IDataController m_DataController;
         private TemplateBuilderException m_Exception;
+        private string m_PromptText;
         // View and ViewModel-driven properties
         private MinutiaType m_InputMinutiaType; // TODO: Justify why enum not boolean?
         private ScannerType m_FilteredScannerType;
@@ -62,10 +63,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
         #region Directly Bound Properties
 
-        /// <summary>
-        /// Gets the minutae. Bound to the canvas.
-        /// </summary>
-        public TrulyObservableCollection<MinutiaRecord> Minutae { get; set; }
+        #region Commands
 
         /// <summary>
         /// Gets the 'load file' command for binding to the 'openFile' button.
@@ -91,6 +89,13 @@ namespace TemplateBuilder.ViewModel.MainWindow
         /// Gets the escape press command for binding to the Esc key.
         /// </summary>
         public ICommand EscapePressCommand { get { return m_EscapePressCommand; } }
+
+        #endregion
+
+        /// <summary>
+        /// Gets the minutae. Bound to the canvas.
+        /// </summary>
+        public TrulyObservableCollection<MinutiaRecord> Minutae { get; set; }
 
         /// <summary>
         /// Gets or sets the scaling applied to the image.
@@ -144,13 +149,12 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
         }
 
-        public IEnumerable<string> ScannerTypes
+        public IEnumerable<ScannerType> ScannerTypes
         {
             get
             {
-                return from string name in Enum.GetNames(typeof(ScannerType)).ToList()
-                       where name != "None"
-                       select name;
+                return Enum.GetValues(typeof(ScannerType))
+                    .Cast<ScannerType>();
             }
         }
 
@@ -213,6 +217,19 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
         }
 
+        public string PromptText
+        {
+            get { return m_PromptText; }
+            set
+            {
+                if (value != m_PromptText)
+                {
+                    m_PromptText = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -259,7 +276,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
         #region Command CanExecute
 
         /// <summary>
-        /// Gets or sets a value indicating whether the 'save tempalte' button is active.
+        /// Gets or sets a value indicating whether the 'save tempalte' command is active.
         /// </summary>
         public bool IsSaveTemplatePermitted { get; set; }
 
@@ -368,9 +385,11 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 x => SaveTemplate(),
                 x => IsSaveTemplatePermitted);
             m_TerminationButtonPressCommand = new RelayCommand(
-                x => InputMinutiaType = MinutiaType.Termination);
+                x => InputMinutiaType = MinutiaType.Termination,
+                x => IsTemplating);
             m_BifuricationButtonPressCommand = new RelayCommand(
-                x => InputMinutiaType = MinutiaType.Bifurication);
+                x => InputMinutiaType = MinutiaType.Bifurication,
+                x => IsTemplating);
             m_EscapePressCommand = new RelayCommand(x => EscapeAction());
         }
 

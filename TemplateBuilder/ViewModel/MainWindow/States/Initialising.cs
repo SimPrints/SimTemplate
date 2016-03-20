@@ -25,7 +25,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Initialise properties.
                 Outer.Minutae = new TrulyObservableCollection<MinutiaRecord>();
                 Outer.m_InputMinutiaType = MinutiaType.Termination;
-                Outer.m_FilteredScannerType = ScannerType.All;
+                Outer.m_FilteredScannerType = ScannerType.None;
                 Outer.m_IsGetTemplatedCapture = false;
 
                 // TODO: provide opportunity to update SQL database location.

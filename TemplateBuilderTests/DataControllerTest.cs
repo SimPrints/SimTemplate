@@ -78,7 +78,7 @@ namespace TemplateBuilderTests
             ConnectGoodDatabase();
 
             // Call BeginGetCapture
-            Guid guid = m_DataController.BeginGetCapture(ScannerType.All, false);
+            Guid guid = m_DataController.BeginGetCapture(ScannerType.None, false);
 
             // Wait for the request to complete.
             m_GetCaptureRequestCompleteResetEvent.WaitOne(GET_CAPTURE_TIMEOUT);
@@ -95,7 +95,7 @@ namespace TemplateBuilderTests
             ConnectGoodDatabaseNoMatchingImages();
 
             // Call BeginGetCapture
-            Guid guid = m_DataController.BeginGetCapture(ScannerType.All, false);
+            Guid guid = m_DataController.BeginGetCapture(ScannerType.None, false);
 
             // Wait for the request to complete.
             m_GetCaptureRequestCompleteResetEvent.WaitOne(GET_CAPTURE_TIMEOUT);

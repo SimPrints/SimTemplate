@@ -226,7 +226,7 @@ namespace TemplateBuilder.Model.Database
             CaptureDb capture;
             string withTemplateString = isTemplated ? "NOT NULL" : "NULL";
             string query;
-            if (scannerType == ScannerType.All)
+            if (scannerType == ScannerType.None)
             {
                 query = String.Format(CAPTURE_QUERY_STRING, withTemplateString);
             }

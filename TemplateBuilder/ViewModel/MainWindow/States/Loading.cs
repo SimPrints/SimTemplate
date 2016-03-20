@@ -27,7 +27,8 @@ namespace TemplateBuilder.ViewModel.MainWindow
             {
                 base.OnEnteringState();
 
-                // Show loading status image
+                // Indicate that we are loading
+                Outer.PromptText = "Loading capture...";
                 Outer.StatusImage = new Uri("pack://application:,,,/Resources/Loading.png");
 
                 // Request a capture from the database
@@ -75,10 +76,12 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 if (e.RequestGuid == m_CaptureRequestId)
                 {
                     // We have recieved a response from our request.
+                    // Indicate we are no longer loading.
                     Outer.StatusImage = null;
 
                     if (e.Capture != null)
                     {
+                        Outer.PromptText = "Capture loaded";
                         Outer.Capture = e.Capture;
                         if (Outer.Capture.TemplateData != null)
                         {
@@ -97,11 +100,12 @@ namespace TemplateBuilder.ViewModel.MainWindow
                     else
                     {
                         // No capture was obtained.
+                        Outer.PromptText = "No capture matching the criteria obtained.";
                         Logger.DebugFormat(
                             "Failed to obtain capture from DataController",
                             Outer.FilteredScannerType);
 
-                        TransitionTo(typeof(Error));
+                        TransitionTo(typeof(Idle));
                     }
                 }
             }

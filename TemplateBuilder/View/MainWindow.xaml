@@ -13,11 +13,35 @@
         Title="MainWindow" Height="525" Width="525">
 
     <Window.Resources>
+        <conv:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
         <conv:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <conv:BooleanToOppositeBooleanConverter x:Key="BooleanToOppositeBooleanConverter" />
         <conv:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
         <conv:RadToDegConverter x:Key="RadToDegConverter" />
         <conv:MultiplyConverter x:Key="MultiplyConverter" />
         <conv:ScaleConverter x:Key="ScaleConverter" />
+        
+        <!-- Styles -->
+        <Style x:Key="baseStyle">
+            <Setter Property="TextBlock.FontSize" Value="12" />
+            <Setter Property="TextBlock.FontFamily" Value="Calibri" />
+            <Setter Property="FrameworkElement.Margin" Value="2.5, 0, 0, 2.5" />
+        </Style>
+        <Style x:Key="toolbarStackStyle">
+            <Setter Property="FrameworkElement.Margin" Value="0, 5, 0, 5" />
+        </Style>
+        <Style x:Key="iconsStyle" TargetType="Button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="2.5" />
+        </Style>
+        <Style x:Key="controlTextStyle" BasedOn="{StaticResource baseStyle}">
+            <Setter Property="TextBlock.FontSize" Value="10" />
+        </Style>
+        <Style x:Key="toolbarTitleStyle" BasedOn="{StaticResource baseStyle}">
+            <Setter Property="TextBlock.FontWeight" Value="Bold" />
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
     </Window.Resources>
 
     <Window.InputBindings>
@@ -28,50 +52,83 @@
 
     <DockPanel x:Name="sidePanel">
         <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical"
-                     HorizontalAlignment="Left" VerticalAlignment="Top">
-            <ToolBar x:Name="programTools" VerticalAlignment="Top" >
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="saveTemplate" Content="Save" VerticalAlignment="Top" Margin="10"
-                        Command="{Binding Path=SaveTemplateCommand}"/>
-                    <Button x:Name="loadFile" Content="Next" VerticalAlignment="Top" Margin="10" 
-                        Command="{Binding Path=LoadFileCommand}"/>
+                     HorizontalAlignment="Center" VerticalAlignment="Stretch">
+            <!-- Data Toolbar -->
+            <ToolBar x:Name="dataToolbar">
+                <TextBlock Style="{StaticResource toolbarTitleStyle}">Data Toolbar</TextBlock>
+                <!-- Load/Save buttons -->
+                <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Horizontal">
+                    <Button x:Name="saveTemplate"
+                            VerticalAlignment="Top"
+                            ToolTip="Saves the current template"
+                            Style="{StaticResource iconsStyle}"
+                            Command="{Binding Path=SaveTemplateCommand}">
+                        <Image Source="pack://application:,,,/Resources/Save.ico" />
+                    </Button>
+                    <Button x:Name="loadFile"
+                            VerticalAlignment="Top"
+                            ToolTip="Loads the next capture for templating"
+                            Style="{StaticResource iconsStyle}"
+                            Command="{Binding Path=LoadFileCommand}">
+                        <Image Source="pack://application:,,,/Resources/Load.ico" />
+                    </Button>
                 </StackPanel>
-                <ComboBox x:Name="scannerTypeComboBox" VerticalAlignment="Top"
-                          Margin="5" Width="100"
-                          ItemsSource="{Binding Path=ScannerTypes}"
-                          SelectedItem="{Binding Path=FilteredScannerType}">
-                </ComboBox>
-                <StackPanel>
-                    <!-- 'isGetTemplatedCapture' radio buttons-->
+                <!-- Scanner type dropdown -->
+                <StackPanel Style="{StaticResource toolbarStackStyle}">
+                    <TextBlock Style="{StaticResource controlTextStyle}">Scanner Type:</TextBlock>
+                    <ComboBox x:Name="scannerTypeComboBox" VerticalAlignment="Top"
+                            Width="100"
+                            ItemsSource="{Binding Path=ScannerTypes}"
+                            SelectedItem="{Binding Path=FilteredScannerType}"
+                              ToolTip="Load a capture from a specific scanner">
+                        <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                <!-- Template status radiobuttons -->
+                <StackPanel Style="{StaticResource toolbarStackStyle}">
+                    <TextBlock Style="{StaticResource controlTextStyle}">Template Status:</TextBlock>
                     <RadioButton x:Name="getTemplatedCaptureButton" GroupName="isGetTemplatedCapture"
-                             IsChecked="{Binding Path=IsGetTemplatedCapture}"
-                             Margin="5">
+                                 IsChecked="{Binding Path=IsGetTemplatedCapture}"
+                                 ToolTip="Load a capture that already has a template">
                         Templated
                     </RadioButton>
                     <RadioButton x:Name="getUntemplatedCaptureButton" GroupName="isGetTemplatedCapture"
-                                 Margin="5">
+                                 IsChecked="{Binding Path=IsGetTemplatedCapture, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                                 ToolTip="Load a capture that has not yet got a template">
                         Untemplated
                     </RadioButton>
                 </StackPanel>
             </ToolBar>
-            <ToolBar x:Name="templatingTools" VerticalAlignment="Bottom">
-                <StackPanel>
-                    <!-- 'inputMinutiaType' radio buttons -->
+            <!-- Templating Toolbar -->
+            <ToolBar x:Name="templatingToolbar" VerticalAlignment="Bottom">
+                <TextBlock Style="{StaticResource toolbarTitleStyle}">Templating Toolbar</TextBlock>
+                <!-- Minutia Type radiobuttons -->
+                <StackPanel Style="{StaticResource toolbarStackStyle}">
+                    <TextBlock Style="{StaticResource controlTextStyle}">Minutia Type:</TextBlock>
                     <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static model:MinutiaType.Termination}}"
                                  IsEnabled="{Binding Path=IsTemplating}"
                                  GroupName="inputMinutiaType"
-                                 Margin="5">
+                                 ToolTip="Record a termination (T)">
                         Termination
                     </RadioButton>
                     <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static model:MinutiaType.Bifurication}}"
                                  IsEnabled="{Binding Path=IsTemplating}"
                                  GroupName="inputMinutiaType"
-                                 Margin="5">
+                                 ToolTip="Record a bifurication (B)">
                         Bifurication
                     </RadioButton>
                 </StackPanel>
             </ToolBar>
         </ToolBarTray>
+        <!-- Guidance Text -->
+        <TextBlock x:Name="promptBanner" Text="{Binding Path=PromptText}" DockPanel.Dock="Top"
+                   TextAlignment="Center" FontSize="30" Foreground="Red"
+                   Style="{StaticResource baseStyle}"/>
+        <!-- Main Content -->
         <Grid Margin="0,51,0,0"
               MouseMove="itemsControl_MouseMove"
               MouseUp="itemsControl_MouseUp">

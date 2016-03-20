@@ -24,12 +24,20 @@ namespace TemplateBuilder.View.MainWindow
         {
             XmlConfigurator.Configure();
             m_Log.Debug("Logging initialised.");
-
             m_ViewModel = new TemplateBuilderViewModel(new DataController());
-            InitializeComponent();
+
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                m_Log.Error("Initialisation exception", ex);
+                throw;
+            }
             DataContext = m_ViewModel;
 
-            Dispatcher.BeginInvoke((Action)(() => m_ViewModel.Start()));
+            m_ViewModel.Start();
         }
 
         #endregion

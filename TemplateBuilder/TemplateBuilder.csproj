@@ -157,7 +157,9 @@
     <Compile Include="Model\Database\OAuthDataController.cs" />
     <Compile Include="StateMachine\BaseState.cs" />
     <Compile Include="ViewModel\Commands\RelayCommand.cs" />
+    <Compile Include="ViewModel\Converters\BooleanToOppositeBooleanConverter.cs" />
     <Compile Include="ViewModel\Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="ViewModel\Converters\EnumToDescriptionConverter.cs" />
     <Compile Include="ViewModel\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="ViewModel\Converters\MultiplyConverter.cs" />
     <Compile Include="ViewModel\Converters\RadToDegConverter.cs" />
@@ -232,10 +234,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Save.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Error.png" />
     <Resource Include="Resources\Loading.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Load.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.98.1\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.98.1\build\net451\System.Data.SQLite.Core.targets')" />
