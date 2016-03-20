@@ -41,11 +41,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             #region Abstract Methods
 
-            public override void ScaleChanged(Vector newScale)
-            {
-                // Ignore. Uninitialised.
-            }
-
             public override void LoadFile()
             {
                 // Ignore. Uninitialised.

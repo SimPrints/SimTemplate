@@ -45,7 +45,6 @@ namespace TemplateBuilderTests
 
             // Assert public state of ViewModel
             Assert.IsNull(m_ViewModel.Capture);
-            Assert.AreEqual(new Vector(0, 0), m_ViewModel.Scale);
             Assert.AreEqual(0, m_ViewModel.Minutae.Count());
             Assert.IsNull(m_ViewModel.Exception);
         }

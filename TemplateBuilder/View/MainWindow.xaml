@@ -80,7 +80,7 @@
                             Width="100"
                             ItemsSource="{Binding Path=ScannerTypes}"
                             SelectedItem="{Binding Path=FilteredScannerType}"
-                              ToolTip="Load a capture from a specific scanner">
+                              ToolTip="Load a capture from a specific scanner.">
                         <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
@@ -203,9 +203,8 @@
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource ScaleConverter}"
                                               Mode="OneWay">
-                                    <Binding Path="Position.Y"/>
-                                    <Binding Path="DataContext.Scale.Y"
-                                             RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
+                                    <Binding Path="Position.Y" />
+                                    <Binding ElementName="mainWindow" Path="Scale.Y" />
                                 </MultiBinding>
                             </Setter.Value>
                         </Setter>
@@ -214,8 +213,7 @@
                                 <MultiBinding Converter="{StaticResource ScaleConverter}"
                                               Mode="OneWay">
                                     <Binding Path="Position.X"/>
-                                    <Binding Path="DataContext.Scale.X"
-                                             RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
+                                    <Binding ElementName="mainWindow" Path="Scale.X" />
                                 </MultiBinding>
                             </Setter.Value>
                         </Setter>

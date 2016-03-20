@@ -23,11 +23,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             #region Overriden Methods
 
-            public override void ScaleChanged(Vector newScale)
-            {
-                Outer.Scale = newScale;
-            }
-
             public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
             {
                 throw IntegrityCheck.Fail("Not expected to have InitialisationComplete event when initialised.");

@@ -1,6 +1,8 @@
 ﻿using log4net;
 using log4net.Config;
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using TemplateBuilder.Helpers;
@@ -12,11 +14,11 @@ namespace TemplateBuilder.View.MainWindow
     /// <summary>
     /// Interaction logic for MainWindowView.xaml
     /// </summary>
-    public partial class MainWindowView : Window
+    public partial class MainWindowView : Window, INotifyPropertyChanged
     {
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(MainWindowView));
         private readonly TemplateBuilderViewModel m_ViewModel;
-        //private Vector m_Scale; TODO: Move scale from ViewModel to View
+        private Vector m_Scale;
 
         #region Constructor
 
@@ -26,15 +28,7 @@ namespace TemplateBuilder.View.MainWindow
             m_Log.Debug("Logging initialised.");
             m_ViewModel = new TemplateBuilderViewModel(new DataController());
 
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception ex)
-            {
-                m_Log.Error("Initialisation exception", ex);
-                throw;
-            }
+            InitializeComponent();
             DataContext = m_ViewModel;
 
             m_ViewModel.Start();
@@ -42,14 +36,29 @@ namespace TemplateBuilder.View.MainWindow
 
         #endregion
 
-        public TemplateBuilderViewModel ViewModel { get {return m_ViewModel;} }
+        public TemplateBuilderViewModel ViewModel { get { return m_ViewModel; } }
+
+        public Vector Scale
+        {
+            get { return m_Scale; }
+            set
+            {
+                if (value != m_Scale)
+                {
+                    m_Scale = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         #region Event Handlers
 
         private void itemsControl_MouseMove(object sender, MouseEventArgs e)
         {
-            Point pos = e.GetPosition(image);
-
+            Point scaled_pos = e.GetPosition(image);
+            // Account for image scaling
+            Point pos = scaled_pos.InvScale(m_Scale);
+            // Pass the pixels of the image 
             m_ViewModel.MouseMove(pos);
         }
 
@@ -57,8 +66,10 @@ namespace TemplateBuilder.View.MainWindow
         {
             m_Log.Debug("itemsControl_MouseUp(...) called.");
 
-            Point pos = e.GetPosition(image);
-
+            Point scaled_pos = e.GetPosition(image);
+            // Account for image scaling
+            Point pos = scaled_pos.InvScale(m_Scale);
+            // Pass the pixels of the image 
             m_ViewModel.itemsControl_MouseUp(pos, e.ChangedButton);
         }
 
@@ -73,9 +84,7 @@ namespace TemplateBuilder.View.MainWindow
                 double scaleX = e.NewSize.Width / image.Source.Width;
                 double scaleY = e.NewSize.Height / image.Source.Width;
                 // Check that scaling factor is equal for each dimension.
-                Vector scale = new Vector(scaleX, scaleY);
-                // Update ViewModel scale
-                m_ViewModel.ScaleChanged(scale);
+                Scale = new Vector(scaleX, scaleY);
             }
             else
             {
@@ -84,8 +93,6 @@ namespace TemplateBuilder.View.MainWindow
                 IntegrityCheck.AreEqual(0, e.NewSize.Width);
             }
         }
-
-        #endregion
 
         private void Minutia_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -118,8 +125,30 @@ namespace TemplateBuilder.View.MainWindow
 
         private void Minutia_MouseMove(object sender, MouseEventArgs e)
         {
-            Point pos = e.GetPosition(image);
+            Point scaled_pos = e.GetPosition(image);
+            // Account for image scaling
+            Point pos = scaled_pos.InvScale(m_Scale);
+            // Pass the pixels of the image 
             m_ViewModel.MoveMinutia(pos);
         }
+
+        #endregion
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // This method is called by the Set accessor of each property.
+        // The CallerMemberName attribute that is applied to the optional propertyName
+        // parameter causes the property name of the caller to be substituted as an argument.
+        protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
     }
 }

@@ -41,7 +41,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 {
                     IntegrityCheck.IsNotNull(Outer.m_SelectedMinutia.HasValue);
                     // Set position TO SCALE
-                    Outer.Minutae[Outer.m_SelectedMinutia.Value].Position = point.InvScale(Outer.Scale);
+                    Outer.Minutae[Outer.m_SelectedMinutia.Value].Position = point;
                 }
             }
 

@@ -46,8 +46,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             public virtual void SaveTemplate() { MethodNotImplemented(); }
 
-            public virtual void ScaleChanged(Vector newScale) { MethodNotImplemented(); }
-
             public virtual void SetMinutiaType(MinutiaType type) { MethodNotImplemented(); }
 
             public virtual void SetScannerType(ScannerType type) { MethodNotImplemented(); }

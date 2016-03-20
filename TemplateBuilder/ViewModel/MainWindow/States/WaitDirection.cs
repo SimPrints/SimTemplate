@@ -74,7 +74,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
             private void SetDirection(Point p)
             {
                 // Get the relevant record
-                Vector direction = p - m_Record.Position.Scale(Outer.Scale);
+                Vector direction = p - m_Record.Position;
 
                 // Calculate the angle (in degrees)
                 double angle = TemplateHelper.RadianToDegree(Math.Atan2(direction.Y, direction.X));

@@ -24,8 +24,8 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Start a new minutia data record.
                 MinutiaRecord record = new MinutiaRecord();
 
-                // Save the position TO SCALE.
-                record.Position = pos.InvScale(Outer.Scale);
+                // Save the position
+                record.Position = pos;
                 // Save the current type.
                 record.Type = Outer.InputMinutiaType;
                 // Record minutia information.

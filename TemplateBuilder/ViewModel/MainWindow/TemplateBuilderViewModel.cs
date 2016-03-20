@@ -37,7 +37,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
         private ScannerType m_FilteredScannerType;
         private int? m_SelectedMinutia;
         // View-driven properties
-        private Vector m_Scale;
         private bool m_IsGetTemplatedCapture;
         // Commands
         private ICommand m_LoadFileCommand;
@@ -96,22 +95,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
         /// Gets the minutae. Bound to the canvas.
         /// </summary>
         public TrulyObservableCollection<MinutiaRecord> Minutae { get; set; }
-
-        /// <summary>
-        /// Gets or sets the scaling applied to the image.
-        /// </summary>
-        public Vector Scale
-        {
-            get { return m_Scale; }
-            set
-            {
-                if (m_Scale != value)
-                {
-                    m_Scale = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
 
         /// <summary>
         /// Gets the type of minutia being input.
@@ -324,18 +307,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
             lock (m_StateLock)
             {
                 m_StateMgr.State.RemoveMinutia(index);
-            }
-        }
-
-        public void ScaleChanged(Vector newScale)
-        {
-            m_Log.DebugFormat(
-                "ScaleChanged(newScale.X={0}, newScale.Y={1}) called.",
-                newScale.X,
-                newScale.Y);
-            lock (m_StateLock)
-            {
-                m_StateMgr.State.ScaleChanged(newScale);
             }
         }
 

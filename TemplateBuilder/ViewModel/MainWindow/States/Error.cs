@@ -45,11 +45,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Ignore.
             }
 
-            public override void ScaleChanged(Vector newScale)
-            {
-                // Ignore.
-            }
-
             public override void LoadFile()
             {
                 // Ignore.
