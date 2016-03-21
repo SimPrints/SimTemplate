@@ -24,24 +24,23 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Ignore.
             }
 
-            public override void PositionInput(Point point, MouseButton changedButton)
+            public override void PositionInput(Point position)
             {
-                if (Outer.m_SelectedMinutia != null &&
-                    changedButton == MouseButton.Left)
+                if (Outer.m_SelectedMinutia != null)
                 {
                     StopMove();
                 }
             }
 
-            public override void PositionMove(Point point)
+            public override void PositionUpdate(Point position)
             {
-                IntegrityCheck.IsNotNull(point);
+                IntegrityCheck.IsNotNull(position);
 
                 lock (Outer.m_SelectedMinutiaLock)
                 {
                     IntegrityCheck.IsNotNull(Outer.m_SelectedMinutia.HasValue);
-                    // Set position TO SCALE
-                    Outer.Minutae[Outer.m_SelectedMinutia.Value].Position = point;
+                    // Set position
+                    Outer.Minutae[Outer.m_SelectedMinutia.Value].Position = position;
                 }
             }
 

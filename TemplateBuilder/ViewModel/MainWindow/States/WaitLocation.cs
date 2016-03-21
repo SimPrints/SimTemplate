@@ -17,7 +17,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
             public WaitLocation(TemplateBuilderViewModel outer) : base(outer)
             { }
 
-            public override void PositionInput(Point pos, MouseButton changedButton)
+            public override void PositionInput(Point position)
             {
                 // The user is starting to record a new minutia
 
@@ -25,7 +25,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 MinutiaRecord record = new MinutiaRecord();
 
                 // Save the position
-                record.Position = pos;
+                record.Position = position;
                 // Save the current type.
                 record.Type = Outer.InputMinutiaType;
                 // Record minutia information.
@@ -35,7 +35,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 TransitionTo(typeof(WaitDirection));
             }
 
-            public override void PositionMove(Point e)
+            public override void PositionUpdate(Point e)
             {
                 // Ignore.
             }

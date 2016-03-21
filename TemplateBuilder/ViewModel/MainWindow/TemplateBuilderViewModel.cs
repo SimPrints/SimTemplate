@@ -215,14 +215,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
         #endregion
 
-        /// <summary>
-        /// Starts the TemplateBuilderViewModel running.
-        /// </summary>
-        public void Start()
-        {
-            m_StateMgr.Start(typeof(Initialising));
-        }
-
         public TemplateBuilderException Exception { get { return m_Exception; } }
 
         #region Command Handlers
@@ -265,41 +257,61 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
         #endregion
 
-        #region View Event Handlers
+        #region Public Methods
 
-        public void itemsControl_MouseUp(Point p, MouseButton changedButton)
+        /// <summary>
+        /// Starts the TemplateBuilderViewModel running.
+        /// </summary>
+        public void Start()
+        {
+            m_StateMgr.Start(typeof(Initialising));
+        }
+
+        /// <summary>
+        /// Takes a position on the image as a user input for templating.
+        /// </summary>
+        /// <param name="position">The position, in pixels, on the full scale image.</param>
+        public void PositionInput(Point position)
         {
             m_Log.DebugFormat(
-                "itemsControl_MouseUp(p.X={0}, p.Y={1}) called.",
-                p.X,
-                p.Y);
+                "PositionInput(position.X={0}, position.Y={1}) called.",
+                position.X,
+                position.Y);
             lock (m_StateLock)
             {
-                m_StateMgr.State.PositionInput(p, changedButton);
+                m_StateMgr.State.PositionInput(position);
             }
         }
 
-        public void MouseMove(Point p)
+        /// <summary>
+        /// Updates a position on the image.
+        /// </summary>
+        /// <param name="position">The position, in pixels, on the full scale image.</param>
+        public void PositionUpdate(Point position)
         {
             // Do not log as this occurs many times per second.
             lock (m_StateLock)
             {
-                m_StateMgr.State.PositionMove(p);
+                m_StateMgr.State.PositionUpdate(position);
             }
         }
 
-        public void MoveMinutia(Point p)
+        /// <summary>
+        /// Updates the position of a recorded minutia.
+        /// </summary>
+        /// <param name="position">The position, in pixels, on the full scale image.</param>
+        public void MoveMinutia(Point position)
         {
             m_Log.DebugFormat(
-                "MoveMinutia(p={1}) called.",
-                p);
+                "MoveMinutia(position={1}) called.",
+                position);
             lock (m_StateLock)
             {
-                m_StateMgr.State.MoveMinutia(p);
+                m_StateMgr.State.MoveMinutia(position);
             }
         }
 
-        public void Minutia_MouseUp(int index)
+        public void RemoveMinutia(int index)
         {
             m_Log.DebugFormat(
                 "Ellipse_MouseRightButtonUp(index={0}) called.",
@@ -310,6 +322,10 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
         }
 
+        /// <summary>
+        /// Indicates a minutia is to be moved
+        /// </summary>
+        /// <param name="index">The index of the minutia.</param>
         public void StartMove(int index)
         {
             m_Log.DebugFormat("StartMove(index={0}) called.", index);

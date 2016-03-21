@@ -42,12 +42,12 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // TODO: Cancel current request and try again.
             }
 
-            public override void PositionInput(Point point, MouseButton changedButton)
+            public override void PositionInput(Point position)
             {
                 // Ignore.
             }
 
-            public override void PositionMove(Point point)
+            public override void PositionUpdate(Point position)
             {
                 // Ignore.
             }

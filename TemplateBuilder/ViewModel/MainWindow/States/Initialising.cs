@@ -46,12 +46,12 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 // Ignore. Uninitialised.
             }
 
-            public override void PositionInput(Point e, MouseButton changedButton)
+            public override void PositionInput(Point position)
             {
                 // Ignore. Uninitialised.
             }
 
-            public override void PositionMove(Point e)
+            public override void PositionUpdate(Point position)
             {
                 // Ignore. Uninitialised.
             }

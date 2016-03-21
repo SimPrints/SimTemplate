@@ -36,13 +36,13 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             public virtual void LoadFile() { MethodNotImplemented(); }
 
-            public virtual void PositionInput(Point point, MouseButton changedButton) { MethodNotImplemented(); }
+            public virtual void PositionInput(Point position) { MethodNotImplemented(); }
 
-            public virtual void PositionMove(Point point) { MethodNotImplemented(); }
+            public virtual void PositionUpdate(Point position) { MethodNotImplemented(); }
 
             public virtual void RemoveMinutia(int index) { MethodNotImplemented(); }
 
-            public virtual void MoveMinutia(Point point) { MethodNotImplemented(); }
+            public virtual void MoveMinutia(Point position) { MethodNotImplemented(); }
 
             public virtual void SaveTemplate() { MethodNotImplemented(); }
 

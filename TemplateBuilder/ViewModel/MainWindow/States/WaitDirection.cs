@@ -31,16 +31,16 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 IntegrityCheck.IsNotNull(m_Record.Position);
             }
 
-            public override void PositionMove(Point p)
+            public override void PositionUpdate(Point position)
             {
                 // Update the direction whenever the mouse moves.
-                SetDirection(p);
+                SetDirection(position);
             }
 
-            public override void PositionInput(Point p, MouseButton changedButton)
+            public override void PositionInput(Point position)
             {
                 // The user has just finalised the direction of the minutia.
-                SetDirection(p);
+                SetDirection(position);
                 TransitionTo(typeof(WaitLocation));
             }
 

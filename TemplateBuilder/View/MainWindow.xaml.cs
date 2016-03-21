@@ -59,7 +59,7 @@ namespace TemplateBuilder.View.MainWindow
             // Account for image scaling
             Point pos = scaled_pos.InvScale(m_Scale);
             // Pass the pixels of the image 
-            m_ViewModel.MouseMove(pos);
+            m_ViewModel.PositionUpdate(pos);
         }
 
         private void itemsControl_MouseUp(object sender, MouseButtonEventArgs e)
@@ -70,7 +70,7 @@ namespace TemplateBuilder.View.MainWindow
             // Account for image scaling
             Point pos = scaled_pos.InvScale(m_Scale);
             // Pass the pixels of the image 
-            m_ViewModel.itemsControl_MouseUp(pos, e.ChangedButton);
+            m_ViewModel.PositionInput(pos);
         }
 
         private void image_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -115,7 +115,7 @@ namespace TemplateBuilder.View.MainWindow
                 object item = (sender as FrameworkElement).DataContext;
                 int index = itemsControl.Items.IndexOf(item);
 
-                m_ViewModel.Minutia_MouseUp(index);
+                m_ViewModel.RemoveMinutia(index);
 
                 // Mark event as handled so that we don't create a new minutia as soon as we have
                 // deleted one.
