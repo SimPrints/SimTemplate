@@ -10,10 +10,9 @@ namespace TemplateBuilder.ViewModel.MainWindow
     {
         public class Uninitialised : TemplateBuilderBaseState
         {
+            // TODO: Implement this state and add BeginInitialize as a method.
             public Uninitialised(TemplateBuilderViewModel outer) : base(outer)
             { }
-
-
         }
     }
 }

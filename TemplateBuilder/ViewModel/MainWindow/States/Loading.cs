@@ -17,6 +17,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
         public class Loading : Initialised
         {
             private Guid m_CaptureRequestId;
+            private bool m_IsAbortRequested;
 
             public Loading(TemplateBuilderViewModel outer) : base(outer)
             { }
@@ -29,17 +30,40 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
                 // Indicate that we are loading
                 Outer.PromptText = "Loading capture...";
-                Outer.StatusImage = new Uri("pack://application:,,,/Resources/Loading.png");
+                // TODO: Find better way of managing resources. Hardcoding strings is dodge...
+                Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Loading.png");
+                Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Cancel.ico";
+
+                // Prepare variables
+                m_IsAbortRequested = false;
 
                 // Request a capture from the database
                 m_CaptureRequestId = Outer.m_DataController
                     .BeginGetCapture(Outer.FilteredScannerType, Outer.m_IsGetTemplatedCapture);
             }
 
+            public override void OnLeavingState()
+            {
+                base.OnLeavingState();
+
+                // Ensure load icon is shown.
+                Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Load.ico";
+            }
+
             public override void LoadFile()
             {
-                // Assume user has changed settings and start load again.
-                // TODO: Cancel current request and try again.
+                if (!m_IsAbortRequested)
+                {
+                    // Load file command while loading means cancel
+                    // TODO: this feels wrong...should probably send a different command? or at least rename?
+                    Outer.m_DataController.AbortCaptureRequest(m_CaptureRequestId);
+                    m_IsAbortRequested = true;
+                    Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Load.ico";
+                }
+                else
+                {
+                    m_Log.Debug("Request has already been aborted. Ignoring LoadFile() request.");
+                }
             }
 
             public override void PositionInput(Point position)
@@ -79,33 +103,50 @@ namespace TemplateBuilder.ViewModel.MainWindow
                     // Indicate we are no longer loading.
                     Outer.StatusImage = null;
 
-                    if (e.Capture != null)
+                    switch (e.Result)
                     {
-                        Outer.PromptText = "Capture loaded";
-                        Outer.Capture = e.Capture;
-                        if (Outer.Capture.TemplateData != null)
-                        {
-                            IEnumerable<MinutiaRecord> template = TemplateHelper
-                                .ToMinutae(Outer.Capture.TemplateData);
-                            foreach (MinutiaRecord rec in template)
-                            {
-                                App.Current.Dispatcher.Invoke(new Action(() =>
-                                {
-                                    Outer.Minutae.Add(rec);
-                                }));
-                            }
-                        }
-                        TransitionTo(typeof(WaitLocation));
-                    }
-                    else
-                    {
-                        // No capture was obtained.
-                        Outer.PromptText = "No capture matching the criteria obtained.";
-                        Logger.DebugFormat(
-                            "Failed to obtain capture from DataController",
-                            Outer.FilteredScannerType);
+                        case DataRequestResult.Success:
+                            IntegrityCheck.IsNotNull(e.Capture);
 
-                        TransitionTo(typeof(Idle));
+                            Outer.PromptText = "Capture loaded";
+                            Outer.Capture = e.Capture;
+                            if (Outer.Capture.TemplateData != null)
+                            {
+                                // If there is a template in the capture info, load it.
+                                IEnumerable<MinutiaRecord> template = TemplateHelper
+                                    .ToMinutae(Outer.Capture.TemplateData);
+                                foreach (MinutiaRecord rec in template)
+                                {
+                                    // Ensure we use the UI thread to add to the ObservableCollection.
+                                    App.Current.Dispatcher.Invoke(new Action(() =>
+                                    {
+                                        Outer.Minutae.Add(rec);
+                                    }));
+                                }
+                            }
+                            TransitionTo(typeof(WaitLocation));
+                            break;
+
+                        case DataRequestResult.Failed:
+                            // No capture was obtained.
+                            Outer.PromptText = "No capture matching the criteria obtained.";
+                            Logger.DebugFormat(
+                                "Cpture request to DataController failed.",
+                                Outer.FilteredScannerType);
+                            TransitionTo(typeof(Idle));
+                            break;
+
+                        case DataRequestResult.Cancelled:
+                            // User cancelled operation
+                            Outer.PromptText = "Capture request aborted.";
+                            Logger.DebugFormat(
+                                "Cpture request to DataController cancelled.",
+                                Outer.FilteredScannerType);
+                            TransitionTo(typeof(Idle));
+                            break;
+
+                        default:
+                            throw IntegrityCheck.FailUnexpectedDefault(e.Result);
                     }
                 }
             }

@@ -24,7 +24,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 base.OnEnteringState();
 
                 // Indicate we have errored
-                Outer.StatusImage = new Uri("pack://application:,,,/Resources/Error.png");
+                Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Error.png");
                 Outer.PromptText = "Fault";
 
                 // Clear UI.

@@ -63,14 +63,14 @@
                             ToolTip="Saves the current template"
                             Style="{StaticResource iconsStyle}"
                             Command="{Binding Path=SaveTemplateCommand}">
-                        <Image Source="pack://application:,,,/Resources/Save.ico" />
+                        <Image Source="pack://application:,,,/Resources/Icons/Save.ico" />
                     </Button>
                     <Button x:Name="loadFile"
                             VerticalAlignment="Top"
                             ToolTip="Loads the next capture for templating"
                             Style="{StaticResource iconsStyle}"
                             Command="{Binding Path=LoadFileCommand}">
-                        <Image Source="pack://application:,,,/Resources/Load.ico" />
+                        <Image Source="{Binding Path=LoadIcon}" />
                     </Button>
                 </StackPanel>
                 <!-- Scanner type dropdown -->

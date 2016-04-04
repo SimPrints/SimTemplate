@@ -21,9 +21,15 @@ namespace TemplateBuilder.Model.Database
         /// <param name="scannerType">Type of the scanner.</param>
         /// <param name="isTemplated">if set to <c>true</c> returns a capture that is templated.</param>
         /// <returns>
-        /// Guid for the request
+        /// unique identifier for the request.
         /// </returns>
         Guid BeginGetCapture(ScannerType scannerType, bool isTemplated);
+
+        /// <summary>
+        /// Cancels the capture requeset with the corresponding Guid.
+        /// </summary>
+        /// <param name="guid">The unique identifier of the request.</param>
+        void AbortCaptureRequest(Guid guid);
 
         /// <summary>
         /// Saves the template to the database.

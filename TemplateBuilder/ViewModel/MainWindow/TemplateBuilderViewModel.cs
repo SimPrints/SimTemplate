@@ -32,6 +32,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
         private IDataController m_DataController;
         private TemplateBuilderException m_Exception;
         private string m_PromptText;
+        private string m_LoadIcon;
         // View and ViewModel-driven properties
         private MinutiaType m_InputMinutiaType; // TODO: Justify why enum not boolean?
         private ScannerType m_FilteredScannerType;
@@ -213,6 +214,19 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
         }
 
+        public string LoadIcon
+        {
+            get { return m_LoadIcon; }
+            set
+            {
+                if (value != m_LoadIcon)
+                {
+                    m_LoadIcon = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         #endregion
 
         public TemplateBuilderException Exception { get { return m_Exception; } }
@@ -221,7 +235,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
         private void LoadFile()
         {
-               m_Log.Debug("LoadFile() called.");
+            m_Log.Debug("LoadFile() called.");
             lock (m_StateLock)
             {
                 m_StateMgr.State.LoadFile();

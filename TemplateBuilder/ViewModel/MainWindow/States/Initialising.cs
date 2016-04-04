@@ -24,9 +24,10 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
                 // Initialise properties.
                 Outer.Minutae = new TrulyObservableCollection<MinutiaRecord>();
-                Outer.m_InputMinutiaType = MinutiaType.Termination;
-                Outer.m_FilteredScannerType = ScannerType.None;
-                Outer.m_IsGetTemplatedCapture = false;
+                Outer.InputMinutiaType = MinutiaType.Termination;
+                Outer.FilteredScannerType = ScannerType.None;
+                Outer.IsGetTemplatedCapture = false;
+                Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Load.ico";
 
                 // TODO: provide opportunity to update SQL database location.
                 // TODO: provide opportunity to update image folders.
