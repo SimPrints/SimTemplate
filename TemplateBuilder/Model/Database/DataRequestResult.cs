@@ -11,6 +11,6 @@ namespace TemplateBuilder.Model.Database
         None = 1,
         Success,
         Failed,
-        Cancelled,
+        TaskFailed,
     }
 }

@@ -46,24 +46,22 @@ namespace TemplateBuilder.ViewModel.MainWindow
             {
                 base.OnLeavingState();
 
-                // Ensure load icon is shown.
+                // Ensure load icon is shown and status image is cleared.
+                Outer.StatusImage = null;
                 Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Load.ico";
             }
 
             public override void LoadFile()
             {
-                if (!m_IsAbortRequested)
-                {
-                    // Load file command while loading means cancel
-                    // TODO: this feels wrong...should probably send a different command? or at least rename?
-                    Outer.m_DataController.AbortCaptureRequest(m_CaptureRequestId);
-                    m_IsAbortRequested = true;
-                    Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Load.ico";
-                }
-                else
-                {
-                    m_Log.Debug("Request has already been aborted. Ignoring LoadFile() request.");
-                }
+                // Load file command while loading means cancel
+                // TODO: this feels wrong...should probably send a different command? or at least rename?
+                Outer.m_DataController.AbortCaptureRequest(m_CaptureRequestId);
+                // User cancelled operation
+                Outer.PromptText = "Capture request aborted.";
+                Logger.DebugFormat(
+                    "Cpture request to DataController cancelled.",
+                    Outer.FilteredScannerType);
+                TransitionTo(typeof(Idle));
             }
 
             public override void PositionInput(Point position)
@@ -131,16 +129,16 @@ namespace TemplateBuilder.ViewModel.MainWindow
                             // No capture was obtained.
                             Outer.PromptText = "No capture matching the criteria obtained.";
                             Logger.DebugFormat(
-                                "Cpture request to DataController failed.",
+                                "Capture request returned Failed response.",
                                 Outer.FilteredScannerType);
                             TransitionTo(typeof(Idle));
                             break;
 
-                        case DataRequestResult.Cancelled:
-                            // User cancelled operation
-                            Outer.PromptText = "Capture request aborted.";
-                            Logger.DebugFormat(
-                                "Cpture request to DataController cancelled.",
+                        case DataRequestResult.TaskFailed:
+                            // No capture was obtained.
+                            Outer.PromptText = "App failed to carry out capture request.";
+                            Logger.ErrorFormat(
+                                "Capture request returned TaskFailed response.",
                                 Outer.FilteredScannerType);
                             TransitionTo(typeof(Idle));
                             break;

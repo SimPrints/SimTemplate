@@ -31,7 +31,7 @@ namespace TemplateBuilder.Model.Database
         private SimPrintsDb m_Database;
         private InitialisationResult result;
         private IEnumerable<string> m_ImageFiles;
-        private IDictionary<Guid, Tuple<CancellationTokenSource, Task<GetCaptureCompleteEventArgs>>> m_TokenSourceLookup;
+        private IDictionary<Guid, CancellationTokenSource> m_TokenSourceLookup;
 
         private event EventHandler<InitialisationCompleteEventArgs> m_InitialisationComplete;
         private event EventHandler<GetCaptureCompleteEventArgs> m_GetCaptureComplete;
@@ -41,7 +41,7 @@ namespace TemplateBuilder.Model.Database
         public DataController()
         {
             result = InitialisationResult.Uninitialised;
-            m_TokenSourceLookup = new Dictionary<Guid, Tuple<CancellationTokenSource, Task<GetCaptureCompleteEventArgs>>>();
+            m_TokenSourceLookup = new Dictionary<Guid, CancellationTokenSource>();
         }
 
         #endregion
@@ -107,38 +107,26 @@ namespace TemplateBuilder.Model.Database
             CancellationToken token = cancellationTokenSource.Token;
 
             // Define and run the task, passing in the token.
-            Task<GetCaptureCompleteEventArgs> getCaptureTask = Task.Run(() =>
+            Task getCaptureTask = Task.Run(() =>
             {
                 m_Log.Debug("Get capture task running.");
-                // Were we already canceled?
-                token.ThrowIfCancellationRequested();
                 // Get a capture
-                return GetCapture(isTemplated, scannerType, guid, token);
+                GetCaptureCompleteEventArgs args = GetCapture(isTemplated, scannerType, guid, token);
+                // Raise GetCaptureComplete event.
+                OnGetCaptureComplete(args);
             }, token);
 
-            // Whatever happens we must raise the GetCaptureComplete event.
-            getCaptureTask.ContinueWith((Task<GetCaptureCompleteEventArgs> t) =>
+            // Raise the GetCaptureComplete event in the case where the Task faults.
+            getCaptureTask.ContinueWith((Task t) =>
             {
-                if (!t.IsCanceled && !t.IsFaulted)
+                if (t.IsFaulted)
                 {
-                    OnGetCaptureComplete(t.Result);
-                }
-                else if (t.IsCanceled)
-                {
-                    OnGetCaptureComplete(new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.Cancelled));
-                }
-                else if (t.IsFaulted)
-                {
-                    OnGetCaptureComplete(new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.Failed));
-                }
-                else
-                {
-                    IntegrityCheck.Fail("Unexpected Task state.");
+                    OnGetCaptureComplete(new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.TaskFailed));
                 }
             });
 
             // Store the token source and task under guid key so the token source may be retrieved later.
-            m_TokenSourceLookup.Add(guid, Tuple.Create(cancellationTokenSource, getCaptureTask));
+            m_TokenSourceLookup.Add(guid, cancellationTokenSource);
 
             // Return the task's unique identifier.
             return guid;
@@ -150,14 +138,11 @@ namespace TemplateBuilder.Model.Database
             IntegrityCheck.IsNotNull(guid);
 
             // Attempt to lookup the token.
-            Tuple<CancellationTokenSource, Task<GetCaptureCompleteEventArgs>> captureTaskVars;
-            bool isSuccessful = m_TokenSourceLookup.TryGetValue(guid, out captureTaskVars);
+            CancellationTokenSource tokenSource;
+            bool isSuccessful = m_TokenSourceLookup.TryGetValue(guid, out tokenSource);
 
             if (isSuccessful)
             {
-                CancellationTokenSource tokenSource = captureTaskVars.Item1;
-                Task task = captureTaskVars.Item2;
-
                 // Request cancellation.
                 IntegrityCheck.IsNotNull(tokenSource);
                 tokenSource.Cancel();
