@@ -151,11 +151,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\GoogleApis\ConfigurableHttpClientFactory.cs" />
+    <Compile Include="Helpers\GoogleApis\GetClientCompleteEventArgs.cs" />
+    <Compile Include="Helpers\GoogleApis\IConfigurableHttpClient.cs" />
+    <Compile Include="Model\Database\AbstractDataController.cs" />
     <Compile Include="Model\Database\CaptureInfo.cs" />
+    <Compile Include="Helpers\GoogleApis\IConfigurableHttpClientFactory.cs" />
     <Compile Include="Model\Database\DataRequestResult.cs" />
     <Compile Include="Model\Database\GetCaptureCompleteEventArgs.cs" />
     <Compile Include="Model\Database\InitialisationResult.cs" />
     <Compile Include="Model\Database\OAuthDataController.cs" />
+    <Compile Include="Model\Database\SaveTemplateEventARgs.cs" />
     <Compile Include="StateMachine\BaseState.cs" />
     <Compile Include="ViewModel\Commands\RelayCommand.cs" />
     <Compile Include="ViewModel\Converters\BooleanToOppositeBooleanConverter.cs" />
@@ -166,12 +172,14 @@
     <Compile Include="ViewModel\Converters\RadToDegConverter.cs" />
     <Compile Include="ViewModel\Converters\ScaleConverter.cs" />
     <Compile Include="Model\ScannerType.cs" />
+    <Compile Include="ViewModel\MainWindow\States\AbstractAsyncTransitionalState.cs" />
     <Compile Include="ViewModel\MainWindow\States\Error.cs" />
     <Compile Include="ViewModel\MainWindow\States\Idle.cs" />
     <Compile Include="ViewModel\MainWindow\States\Loading.cs" />
     <Compile Include="ViewModel\MainWindow\States\Initialised.cs" />
     <Compile Include="ViewModel\MainWindow\States\Initialising.cs" />
     <Compile Include="ViewModel\MainWindow\States\MovingMinutia.cs" />
+    <Compile Include="ViewModel\MainWindow\States\Saving.cs" />
     <Compile Include="ViewModel\MainWindow\States\TemplateBuilderBaseState.cs" />
     <Compile Include="StateMachine\StateManager.cs" />
     <Compile Include="ViewModel\MainWindow\States\Templating.cs" />

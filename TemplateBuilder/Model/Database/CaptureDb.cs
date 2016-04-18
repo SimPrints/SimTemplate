@@ -47,7 +47,7 @@ namespace TemplateBuilder.Model.Database
         [Column(Name = "SimAfisTemplate")]
         public byte[] GoldTemplate { get; set; }
 
-        public string Guid
+        public string HumanId
         {
             get
             {

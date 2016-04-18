@@ -85,7 +85,7 @@ namespace TemplateBuilderTests
 
             // Assertions
             Assert.IsNotNull(m_GetCaptureArgs.Capture);
-            Assert.IsFalse(String.IsNullOrEmpty(m_GetCaptureArgs.Capture.Guid));
+            Assert.IsFalse(String.IsNullOrEmpty(m_GetCaptureArgs.Capture.HumanId));
             Assert.IsNotNull(m_GetCaptureArgs.Capture.ImageData);
         }
 

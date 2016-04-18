@@ -1,82 +1,244 @@
 ﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Http;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Xml.Linq;
 using TemplateBuilder.Helpers;
+using TemplateBuilder.Helpers.GoogleApis;
 
 namespace TemplateBuilder.Model.Database
 {
-    public class OAuthDataController
+    public class OAuthDataController : AbstractDataController
     {
-        private const string OAUTH_LOGIN = "https://accounts.google.com/o/oauth2/v2/auth";
-        private const string CLIENT_ID = "916016530-chmjlljhh1a94fti71h2d9nd1denc7s5.apps.googleusercontent.com";
-        private const string CLIENT_SECRET = "Ytg35Ulbfn8WtItj2xUWB5zW";
-        private const string SCOPE = @"openid+profile+email";
-        private const string REDIRECT_URI = "http://localhost:{0}";
-        private const string RESPONSE_TYPE = "code";
+        private static readonly ILog m_Log = LogManager.GetLogger(typeof(OAuthDataController));
 
-        private const int LOCAL_PORT = 9004;
+        #region Constants
 
-        public OAuthDataController()
+        // TODO: Secret in environment variable or json file (FileStream)
+        private static readonly ClientSecrets APP_SECRETS = new ClientSecrets
         {
-            Authenticate();
+            ClientId = "916016530-chmjlljhh1a94fti71h2d9nd1denc7s5.apps.googleusercontent.com",
+            ClientSecret = "Ytg35Ulbfn8WtItj2xUWB5zW",
+        };
+        private static readonly IEnumerable<string> API_CONTEXTS = new string[]
+        {
+            "profile",
+        };
+
+        #endregion
+
+        IConfigurableHttpClientFactory m_ClientFactory;
+        IConfigurableHttpClient m_Client;
+
+        public OAuthDataController(IConfigurableHttpClientFactory clientFactory)
+        {
+            m_ClientFactory = clientFactory;
+
+            m_ClientFactory.GetClientComplete += ClientFactory_GetClientComplete;
         }
 
-        public void Authenticate()
+        #region IDataController
+
+        public override void BeginInitialise(DataControllerConfig config)
         {
-            ShowUserLogin();
-            ListenForLogin();
+            base.BeginInitialise(config);
+
+            // TODO: determine if it is possible to leave the user field empty
+            m_ClientFactory.BeginGetClient(APP_SECRETS, API_CONTEXTS, "");
         }
 
-        private void ShowUserLogin()
+        #endregion
+
+        private void ClientFactory_GetClientComplete(object sender, GetClientCompleteEventArgs e)
         {
-            UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                new ClientSecrets
+            if (e.Client != null)
+            {
+                OnInitialisationComplete(new InitialisationCompleteEventArgs(InitialisationResult.Error));
+            }
+            else
+            {
+                m_Client = e.Client;
+                OnInitialisationComplete(new InitialisationCompleteEventArgs(InitialisationResult.Initialised));
+            }
+        }
+
+        #region Private Methods
+
+        protected override void StartCaptureTask(ScannerType scannerType, bool isTemplated, Guid guid, CancellationToken token)
+        {
+            // Make HTTP request
+            Task<string> responseText = m_Client.GetStringAsync(
+                SimTemplateServerHelper.GetCaptureRequestUri(scannerType, isTemplated));
+
+            // When task is complete, raise GetCaptureComplete event
+            // Pass the task the cancellation token so that this action may be skipped
+            responseText.ContinueWith((Task<string> gCT) =>
+            {
+                // Check for cancellation (race)
+                if (!token.IsCancellationRequested)
                 {
-                    ClientId = CLIENT_ID,
-                    ClientSecret = CLIENT_SECRET,
-                },
-                new[] { "profile", "email", "openid" },
-                "sjbriggs14@gmail.com",
-                CancellationToken.None).Result;
+                    // HTTP requests are not cancellable
+                    IntegrityCheck.IsFalse(gCT.IsCanceled);
+                    if (gCT.IsCompleted)
+                    {
+                        CaptureInfo capture = ProcessResponse(gCT.Result);
+                        OnGetCaptureComplete(
+                            new GetCaptureCompleteEventArgs(capture, guid, DataRequestResult.Success));
+                    }
+                    else if (gCT.IsFaulted)
+                    {
+                        // An exception was thrown during the request.
+                        m_Log.Error("GetCapture task failed: " + gCT.Exception.Message, gCT.Exception);
+                        OnGetCaptureComplete(
+                            new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.Failed));
+                    }
+                }
+            }, token);
         }
 
-        private void ListenForLogin()
+        protected override void StartSaveTask(long dbId, byte[] template, Guid guid, CancellationToken token)
         {
-            // create the socket
-            Socket listenSocket = new Socket(AddressFamily.InterNetwork,
-                                             SocketType.Stream,
-                                             ProtocolType.Tcp);
+            // Make HTTP request
+            HttpContent content = new ByteArrayContent(template);
+            Task<HttpResponseMessage> saveResponse = m_Client.PostAsync(SimTemplateServerHelper.SaveTemplateUri(dbId), content);
 
-            // bind the listening socket to the port
-            IPEndPoint ep = new IPEndPoint(IPAddress.Loopback, LOCAL_PORT);
-            listenSocket.Bind(ep);
-
-            // start listening
-            listenSocket.Listen(1);
+            // When task is complete, raise GetCaptureComplete event
+            // Pass the task the cancellation token so that this action may be skipped
+            saveResponse.ContinueWith((Task<HttpResponseMessage> sTT) =>
+            {
+                // Check for cancellation (race)
+                if (!token.IsCancellationRequested)
+                {
+                    // HTTP requests are not cancellable
+                    IntegrityCheck.IsFalse(sTT.IsCanceled);
+                    if (sTT.IsCompleted)
+                    {
+                        HttpResponseMessage response = sTT.Result;
+                        // Do some dealing with the response to check it was successful
+                        OnSaveTemplateComplete(
+                            new SaveTemplateEventArgs(guid, DataRequestResult.Success));
+                    }
+                    else if (sTT.IsFaulted)
+                    {
+                        // An exception was thrown during the request.
+                        m_Log.Error("Save Template task failed: " + sTT.Exception.Message, sTT.Exception);
+                        OnSaveTemplateComplete(
+                            new SaveTemplateEventArgs(guid, DataRequestResult.TaskFailed));
+                    }
+                }
+            }, token);
         }
 
-        /// <summary>
-        /// Constructs a QueryString (string).
-        /// Consider this method to be the opposite of "System.Web.HttpUtility.ParseQueryString"
-        /// </summary>
-        /// <param name="nvc">NameValueCollection</param>
-        /// <returns>String</returns>
-        public static String ConstructQueryString(NameValueCollection parameters)
+        private CaptureInfo ProcessResponse(string response)
         {
-            List<String> items = new List<String>();
+            // Parse the response XML
+            XDocument xml;
+            try
+            {
+                xml = XDocument.Parse(response);
+            }
+            catch (System.Xml.XmlException ex)
+            {
+                throw new TemplateBuilderException("Failed to parse response XML", ex);
+            }
 
-            foreach (String name in parameters)
-                items.Add(String.Concat(name, "=", parameters[name]));
+            CaptureInfo capture;
+            // Expect one capture element (or none)
+            XElement captureEl = xml.Elements("capture").SingleOrDefault();
 
-            return String.Join("&", items.ToArray());
+            if (captureEl != null)
+            {
+                capture = SimTemplateServerHelper.ToCaptureInfo(captureEl);
+            }
+            else
+            {
+                throw new TemplateBuilderException("XML response contained no capture results");
+            }
+            return capture;
+        }
+
+        #endregion
+
+        private static class SimTemplateServerHelper
+        {
+            #region Constants
+            private const string ROOT_URL = @"https://simtemplateapi.azurewebsites.net";
+            private const string ELEMENT_IMAGE_LOCATION = "imageUrl";
+            private const string ELEMENT_DB_ID = "dbId";
+            private const string ELEMENT_GUID = "guid";
+            private const string ELEMENT_TEMPLATE = "template";
+            #endregion
+
+            #region Uris
+
+            public static Uri GetCaptureRequestUri(ScannerType type, bool isTemplated)
+            {
+                return new Uri(String.Format("{0}/Capture?scanner={1}&is_templated={2}",
+                    ROOT_URL, type, isTemplated));
+            }
+
+            public static Uri SaveTemplateUri(long dbId)
+            {
+                return new Uri(String.Format("{0}/Capture/{1}",
+                    ROOT_URL, dbId));
+            }
+
+            #endregion
+
+            #region Xml
+
+            public static CaptureInfo ToCaptureInfo(XElement captureEl)
+            {
+                XElement imageLocationEl = captureEl.Element(ELEMENT_IMAGE_LOCATION);
+                XElement dbIdEl = captureEl.Element(ELEMENT_DB_ID);
+                XElement guidEl = captureEl.Element(ELEMENT_GUID);
+                XElement templateEl = captureEl.Element(ELEMENT_TEMPLATE);
+
+                // Assert xml structure is as expected
+                CheckElementNotNull(imageLocationEl, ELEMENT_IMAGE_LOCATION);
+                CheckElementNotNull(dbIdEl, ELEMENT_DB_ID);
+                CheckElementNotNull(guidEl, ELEMENT_GUID);
+                CheckElementNotNull(templateEl, ELEMENT_TEMPLATE);
+
+                // Get info from elements
+                Uri imageLocation = new Uri(imageLocationEl.Value);
+                long dbId;
+                bool isIdParsed = long.TryParse(dbIdEl.Value, out dbId);
+                if (!isIdParsed)
+                {
+                    throw new TemplateBuilderException(
+                        String.Format("Failed to parse capture ID string ({0}) to long", dbIdEl.Value));
+                }
+                string humanId = guidEl.Value;
+                byte[] templateData = TemplateHelper.ToByteArray(templateEl.Value);
+                byte[] imageData;
+
+                // Get image file from url
+                using (WebClient webClient = new WebClient())
+                {
+                    imageData = webClient.DownloadData(imageLocation);
+                }
+
+                return new CaptureInfo(humanId, dbId, imageData, templateData);
+            }
+
+            private static void CheckElementNotNull(XElement el, string tag)
+            {
+                IntegrityCheck.IsNotNull(el,
+                    "Capture was missing '{0}' element.", tag);
+            }
+
+            #endregion
         }
     }
 }

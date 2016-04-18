@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using log4net;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,6 @@ namespace TemplateBuilderTests
     [System.Runtime.InteropServices.Guid("141707AC-B412-49FD-9362-D7BFD191776E")]
     public class OAuthDataControllerTest
     {
-        [TestMethod]
-        public void TestRequest()
-        {
-            OAuthDataController controller = new OAuthDataController();
-
-            Assert.IsNotNull(controller);
-        }
+        private static readonly ILog m_Log = LogManager.GetLogger(typeof(OAuthDataControllerTest));
     }
 }

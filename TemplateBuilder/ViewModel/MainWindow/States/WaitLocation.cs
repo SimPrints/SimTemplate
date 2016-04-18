@@ -50,35 +50,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
             {
                 IntegrityCheck.IsNotNull(Outer.Capture);
 
-                byte[] isoTemplate;
-                if (Outer.Minutae.Count() > 0)
-                {
-                    isoTemplate = TemplateHelper.ToIsoTemplate(Outer.Minutae);
-                }
-                else
-                {
-                    // User has saved 0 minutia, save as 'NULL' in database
-                    isoTemplate = null;
-                }
-
-                bool isSaved = Outer.m_DataController.SaveTemplate(
-                    Outer.Capture.Guid, 
-                    Outer.Capture.DbId,
-                    isoTemplate);
-
-                if (isSaved)
-                {
-                    // We've finished with this image, so transition to Idle state.
-                    TransitionTo(typeof(Idle));
-                }
-                else
-                {
-                    // Failed to save the template successfully.
-                    // TODO: show dialog to try again?
-                    TransitionTo(typeof(Idle));
-                }
-                // TODO: Implement Heirachical state machine.
-                ClearUpTemplating();
+                TransitionTo(typeof(Saving));
             }
             public override void EscapeAction()
             {

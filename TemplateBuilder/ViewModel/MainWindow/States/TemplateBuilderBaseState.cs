@@ -22,6 +22,8 @@ namespace TemplateBuilder.ViewModel.MainWindow
     {
         public abstract class TemplateBuilderBaseState : BaseState
         {
+            private ILog m_Log;
+
             #region Constructor
 
             public TemplateBuilderBaseState(TemplateBuilderViewModel outer)
@@ -69,6 +71,12 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 MethodNotImplemented();
             }
 
+            public virtual void DataController_SaveTemplateComplete(
+                SaveTemplateEventArgs e)
+            {
+                MethodNotImplemented();
+            }
+
             #endregion
 
             /// <summary>
@@ -76,9 +84,21 @@ namespace TemplateBuilder.ViewModel.MainWindow
             /// </summary>
             protected TemplateBuilderViewModel Outer { get { return (TemplateBuilderViewModel)BaseOuter; } }
 
+            protected ILog Log
+            {
+                get
+                {
+                    if (m_Log == null)
+                    {
+                        m_Log = LogManager.GetLogger(this.GetType());
+                    }
+                    return m_Log;
+                }
+            }
+
             /// <summary>
             /// Transitions to the specified state.
-            /// </summary>\\Mac\Home\Code\SimPrint\C#\SimTemplate\TemplateBuilder\ViewModel\MainWindow\States\TemplateBuilderBaseState.cs
+            /// </summary>
             /// <param name="newState">The new state.</param>
             protected void TransitionTo(Type newState)
             {

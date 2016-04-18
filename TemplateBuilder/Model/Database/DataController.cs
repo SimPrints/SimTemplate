@@ -14,7 +14,7 @@ using TemplateBuilder.ViewModel.MainWindow;
 
 namespace TemplateBuilder.Model.Database
 {
-    public class DataController : IDataController
+    public class DataController : AbstractDataController
     {
         #region Constants
 
@@ -27,21 +27,15 @@ namespace TemplateBuilder.Model.Database
 
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(DataController));
 
-        private DataControllerConfig m_Config;
         private SimPrintsDb m_Database;
-        private InitialisationResult result;
+        private InitialisationResult m_State;
         private IEnumerable<string> m_ImageFiles;
-        private IDictionary<Guid, CancellationTokenSource> m_TokenSourceLookup;
-
-        private event EventHandler<InitialisationCompleteEventArgs> m_InitialisationComplete;
-        private event EventHandler<GetCaptureCompleteEventArgs> m_GetCaptureComplete;
 
         #region Constructor
 
-        public DataController()
+        public DataController() : base()
         {
-            result = InitialisationResult.Uninitialised;
-            m_TokenSourceLookup = new Dictionary<Guid, CancellationTokenSource>();
+            m_State = InitialisationResult.Uninitialised;
         }
 
         #endregion
@@ -53,67 +47,48 @@ namespace TemplateBuilder.Model.Database
         /// </summary>
         /// <param name="config">The configuration.</param>
         /// <param name="progress"></param>
-        void IDataController.BeginInitialise(DataControllerConfig config)
+        public override void BeginInitialise(DataControllerConfig config)
         {
-            m_Log.Debug("BeginInitialise(...) called.");
-            IntegrityCheck.IsNotNull(config, "config");
-            IntegrityCheck.IsNotNullOrEmpty(config.DatabasePath, "config.DatabasePath");
-            IntegrityCheck.IsNotNullOrEmpty(config.ImageFilesDirectory, "config.ImageFilesDirectory");
-
-            m_Config = config;
+            base.BeginInitialise(config);
 
             // Connect to SQlite.
             SQLiteConnection dbConnection = new SQLiteConnection(
-                String.Format(CONNECTION_STRING, m_Config.DatabasePath));
+                String.Format(CONNECTION_STRING, Config.DatabasePath));
 
             // Set the LINQ data context to the database connection.
             m_Database = new SimPrintsDb(dbConnection);
 
             // Obtain image files on local machine, to be matched with database entries.
-            m_ImageFiles = GetImageFiles(m_Config.ImageFilesDirectory);
+            m_ImageFiles = GetImageFiles(Config.ImageFilesDirectory);
             if (m_ImageFiles != null &&
                 m_ImageFiles.Count() > 0)
             {
-                result = InitialisationResult.Initialised;
+                m_State = InitialisationResult.Initialised;
             }
             else
             {
                 m_Log.Error("Failed to get image files.");
-                result = InitialisationResult.Error;
+                m_State = InitialisationResult.Error;
             }
 
             OnInitialisationComplete(
-                new InitialisationCompleteEventArgs(result));
+                new InitialisationCompleteEventArgs(m_State));
         }
 
-        /// <summary>
-        /// Gets the next image file to process by iterating the results of the SQL query and
-        /// searching for it on the local machine.
-        /// </summary>
-        /// <returns>
-        /// filepath of the local file, null if no image can be found.
-        /// </returns>
-        Guid IDataController.BeginGetCapture(ScannerType scannerType, bool isTemplated)
+        #endregion
+
+        #region Private Methods
+
+        protected override void StartCaptureTask(ScannerType scannerType, bool isTemplated, Guid guid, CancellationToken token)
         {
-            m_Log.DebugFormat("BeginGetCapture(scannterType={0}, isTemplated={1}) called",
-                scannerType, isTemplated);
-            IntegrityCheck.IsNotNull(scannerType);
-
-            // Generate a request identifier, and cancellationTokenSource for the request
-            Guid guid = Guid.NewGuid();
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-            // Create a cancellation token for notifying of a cancellation request.
-            CancellationToken token = cancellationTokenSource.Token;
-
             // Define and run the task, passing in the token.
             Task getCaptureTask = Task.Run(() =>
             {
                 m_Log.Debug("Get capture task running.");
                 // Get a capture
-                GetCaptureCompleteEventArgs args = GetCapture(isTemplated, scannerType, guid, token);
+                CaptureInfo capture = GetCapture(isTemplated, scannerType, token);
                 // Raise GetCaptureComplete event.
-                OnGetCaptureComplete(args);
+                OnGetCaptureComplete(new GetCaptureCompleteEventArgs(capture, guid, DataRequestResult.Success));
             }, token);
 
             // Raise the GetCaptureComplete event in the case where the Task faults.
@@ -121,104 +96,49 @@ namespace TemplateBuilder.Model.Database
             {
                 if (t.IsFaulted)
                 {
+                    m_Log.Error("Failed to save template: " + t.Exception.Message, t.Exception);
                     OnGetCaptureComplete(new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.TaskFailed));
                 }
             });
-
-            // Store the token source and task under guid key so the token source may be retrieved later.
-            m_TokenSourceLookup.Add(guid, cancellationTokenSource);
-
-            // Return the task's unique identifier.
-            return guid;
         }
 
-        void IDataController.AbortCaptureRequest(Guid guid)
+        protected override void StartSaveTask(long dbId, byte[] template, Guid guid, CancellationToken token)
         {
-            m_Log.DebugFormat("CancelCaptureRequest(guid={0}) called.", guid);
-            IntegrityCheck.IsNotNull(guid);
-
-            // Attempt to lookup the token.
-            CancellationTokenSource tokenSource;
-            bool isSuccessful = m_TokenSourceLookup.TryGetValue(guid, out tokenSource);
-
-            if (isSuccessful)
+            Task saveTask = Task.Run(() =>
             {
-                // Request cancellation.
-                IntegrityCheck.IsNotNull(tokenSource);
-                tokenSource.Cancel();
-                m_TokenSourceLookup.Remove(guid);
-            }
-            else
-            {
-                // TODO: What to do if Guid doesn't correspond to a current request?
-                m_Log.WarnFormat("Cancellation of request (guid={0}) failed, token no longer exists.",
-                    guid);
-            }
-        }
+                m_Log.Debug("Save task running.");
 
-        /// <summary>
-        /// Saves the template.
-        /// </summary>
-        /// <param name="template">The template.</param>
-        /// <returns></returns>
-        bool IDataController.SaveTemplate(string guid, long dbId, byte[] template)
-        {
-            m_Log.DebugFormat("SaveTemplate(guid={0}, dbId={1}, template={3}) called.",
-                guid, dbId, template);
-            IntegrityCheck.IsNotNullOrEmpty(guid);
-            // The template is allowed to be null!
-            //IntegrityCheck.IsNotNull(template);
+                CaptureDb capture = (from c in m_Database.Captures
+                                     where c.Id == dbId
+                                     select c).FirstOrDefault();
 
-            CaptureDb capture = (from c in m_Database.Captures
-                                 where c.Id == dbId
-                                 select c).FirstOrDefault();
-
-            bool isSuccessful = false;
-            if (capture != null)
-            {
-                if (capture.Guid == guid)
+                if (capture != null)
                 {
                     // Update the template to that supplied
                     capture.GoldTemplate = template;
-                    isSuccessful = true;
+                    m_Database.SubmitChanges();
                 }
                 else
                 {
-                    m_Log.WarnFormat(
-                        "GUID of capture with DbId={0} doesn't match GUID supplied ({0} instead of {1})",
-                        capture.Id, capture.Guid, guid);
+                    m_Log.WarnFormat("Failed to find capture wtih DbId={0}. Not saving template", dbId);
                 }
-            }
-            else
+            }, token);
+
+            // Raise the SaveTemplateComplete event in the case where the Task faults.
+            saveTask.ContinueWith((Task t) =>
             {
-                m_Log.WarnFormat("Failed to find capture wtih DbId={0}. Not saving template", dbId);
-            }
-
-            m_Database.SubmitChanges();
-
-            return isSuccessful;
+                if (t.IsFaulted)
+                {
+                    m_Log.Error("Failed to save template: " + t.Exception.Message, t.Exception);
+                    OnSaveTemplateComplete(new SaveTemplateEventArgs(guid, DataRequestResult.TaskFailed));
+                }
+            });
         }
 
-        event EventHandler<InitialisationCompleteEventArgs> IDataController.InitialisationComplete
+        private CaptureInfo GetCapture(bool isTemplated, ScannerType scannerType, CancellationToken token)
         {
-            add { m_InitialisationComplete += value; }
-            remove { m_InitialisationComplete -= value; }
-        }
-
-        event EventHandler<GetCaptureCompleteEventArgs> IDataController.GetCaptureComplete
-        {
-            add { m_GetCaptureComplete += value; }
-            remove { m_GetCaptureComplete -= value; }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private GetCaptureCompleteEventArgs GetCapture(bool isTemplated, ScannerType scannerType, Guid guid, CancellationToken token)
-        {
-            m_Log.DebugFormat("GetCapture(isTemplated={0}, scannerType={1}, guid={2}, token={3}) called",
-                isTemplated, scannerType, guid, token);
+            m_Log.DebugFormat("GetCapture(isTemplated={0}, scannerType={1}, token={2}) called",
+                isTemplated, scannerType, token);
             CaptureInfo captureInfo = null;
             DataRequestResult result = DataRequestResult.None;
             bool isRunning = true;
@@ -235,14 +155,14 @@ namespace TemplateBuilder.Model.Database
                 {
                     // Try to find an image file using the file name.
                     byte[] imageData;
-                    bool isFound = TryGetImageFromName(captureCandidate.Guid, out imageData);
+                    bool isFound = TryGetImageFromName(captureCandidate.HumanId, out imageData);
                     if (isFound)
                     {
                         // Matching file found.
-                        m_Log.DebugFormat("Matching file found for capture={0}", captureCandidate.Guid);
+                        m_Log.DebugFormat("Matching file found for capture={0}", captureCandidate.HumanId);
                         isRunning = false;
                         captureInfo = new CaptureInfo(
-                            captureCandidate.Guid,
+                            captureCandidate.HumanId,
                             captureCandidate.Id,
                             imageData,
                             captureCandidate.GoldTemplate);
@@ -270,7 +190,7 @@ namespace TemplateBuilder.Model.Database
                 }
             }
             IntegrityCheck.AreNotEqual(DataRequestResult.None, result);
-            return new GetCaptureCompleteEventArgs(captureInfo, guid, result);
+            return captureInfo;
         }
 
         private static IEnumerable<string> GetImageFiles(string directory)
@@ -354,28 +274,6 @@ namespace TemplateBuilder.Model.Database
         {
             filepath = m_ImageFiles.FirstOrDefault(x => x.Contains(name));
             return !String.IsNullOrEmpty(filepath);
-        }
-
-        #endregion
-
-        #region Event Helpers
-
-        private void OnInitialisationComplete(InitialisationCompleteEventArgs e)
-        {
-            EventHandler<InitialisationCompleteEventArgs> temp = m_InitialisationComplete;
-            if (temp != null)
-            {
-                temp.Invoke(this, e);
-            }
-        }
-
-        private void OnGetCaptureComplete(GetCaptureCompleteEventArgs e)
-        {
-            EventHandler<GetCaptureCompleteEventArgs> temp = m_GetCaptureComplete;
-            if (temp != null)
-            {
-                temp.Invoke(this, e);
-            }
         }
 
         #endregion

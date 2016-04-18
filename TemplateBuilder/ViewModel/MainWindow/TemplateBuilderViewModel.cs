@@ -56,7 +56,8 @@ namespace TemplateBuilder.ViewModel.MainWindow
             InitialiseCommands();
 
             m_DataController.InitialisationComplete += DataController_InitialisationComplete;
-            m_DataController.GetCaptureComplete += m_DataController_GetCaptureComplete;
+            m_DataController.GetCaptureComplete += DataController_GetCaptureComplete;
+            m_DataController.SaveTemplateComplete += DataController_SaveTemplateComplete;
         }
 
         #endregion
@@ -364,14 +365,26 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
         }
 
-        private void m_DataController_GetCaptureComplete(object sender, GetCaptureCompleteEventArgs e)
+        private void DataController_GetCaptureComplete(object sender, GetCaptureCompleteEventArgs e)
         {
             m_Log.DebugFormat(
-                "m_DataController_GetCaptureComplete(e.Capture={0}) called.",
+                "DataController_GetCaptureComplete(e.Capture={0}) called.",
                 e.Capture);
             lock (m_StateLock)
             {
                 m_StateMgr.State.DataController_GetCaptureComplete(e);
+            }
+        }
+
+
+        private void DataController_SaveTemplateComplete(object sender, SaveTemplateEventArgs e)
+        {
+            m_Log.DebugFormat(
+                "DataController_SaveTemplateComplete(e.Result={0}) called.",
+                e.Result);
+            lock (m_StateLock)
+            {
+                m_StateMgr.State.DataController_SaveTemplateComplete(e);
             }
         }
 
