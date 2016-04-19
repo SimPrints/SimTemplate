@@ -31,7 +31,7 @@ namespace TemplateBuilder.View.MainWindow
             InitializeComponent();
             DataContext = m_ViewModel;
 
-            m_ViewModel.Start();
+            m_ViewModel.BeginInitialise();
         }
 
         #endregion

@@ -59,9 +59,11 @@ namespace TemplateBuilder.Model.Database
 
         #endregion
 
+        #region Event Handlers
+
         private void ClientFactory_GetClientComplete(object sender, GetClientCompleteEventArgs e)
         {
-            if (e.Client != null)
+            if (e.Client == null)
             {
                 OnInitialisationComplete(new InitialisationCompleteEventArgs(InitialisationResult.Error));
             }
@@ -72,10 +74,14 @@ namespace TemplateBuilder.Model.Database
             }
         }
 
+        #endregion
+
         #region Private Methods
 
         protected override void StartCaptureTask(ScannerType scannerType, bool isTemplated, Guid guid, CancellationToken token)
         {
+            m_Log.DebugFormat("Starting task with Guid={0}", guid);
+
             // Make HTTP request
             Task<string> responseText = m_Client.GetStringAsync(
                 SimTemplateServerHelper.GetCaptureRequestUri(scannerType, isTemplated));
@@ -91,16 +97,26 @@ namespace TemplateBuilder.Model.Database
                     IntegrityCheck.IsFalse(gCT.IsCanceled);
                     if (gCT.IsCompleted)
                     {
-                        CaptureInfo capture = ProcessResponse(gCT.Result);
-                        OnGetCaptureComplete(
-                            new GetCaptureCompleteEventArgs(capture, guid, DataRequestResult.Success));
+                        CaptureInfo capture;
+                        try
+                        {
+                            capture = ProcessResponse(gCT.Result);
+                            OnGetCaptureComplete(
+                                new GetCaptureCompleteEventArgs(capture, guid, DataRequestResult.Success));
+                        }
+                        catch (TemplateBuilderException ex)
+                        {
+                            m_Log.Error("Failed to process xml response:", ex);
+                            OnGetCaptureComplete(
+                                new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.Failed));
+                        }
                     }
                     else if (gCT.IsFaulted)
                     {
                         // An exception was thrown during the request.
                         m_Log.Error("GetCapture task failed: " + gCT.Exception.Message, gCT.Exception);
                         OnGetCaptureComplete(
-                            new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.Failed));
+                            new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.TaskFailed));
                     }
                 }
             }, token);
@@ -211,7 +227,13 @@ namespace TemplateBuilder.Model.Database
                 CheckElementNotNull(templateEl, ELEMENT_TEMPLATE);
 
                 // Get info from elements
-                Uri imageLocation = new Uri(imageLocationEl.Value);
+                Uri imageLocation;
+                bool isUriParsed = Uri.TryCreate(imageLocationEl.Value, UriKind.Absolute, out imageLocation);
+                if (!isUriParsed)
+                {
+                    throw new TemplateBuilderException(
+                        String.Format("Failed to parse image URL string ({0}) to Uri", imageLocationEl.Value));
+                }
                 long dbId;
                 bool isIdParsed = long.TryParse(dbIdEl.Value, out dbId);
                 if (!isIdParsed)

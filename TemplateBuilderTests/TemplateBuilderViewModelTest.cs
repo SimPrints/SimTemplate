@@ -35,6 +35,8 @@ namespace TemplateBuilderTests
             // TODO: fake the initialiseComplete event
             //A.CallTo(() => m_DataController.Initialise(A<DataControllerConfig>._))
             //    .Invokes(() => )
+            m_Log.Debug("Starting test...");
+            m_ViewModel.BeginInitialise();
 
             // Assert that ViewModel made no further requests
             A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._, A<bool>._))

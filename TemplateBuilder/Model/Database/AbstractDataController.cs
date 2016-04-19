@@ -59,7 +59,7 @@ namespace TemplateBuilder.Model.Database
                 scannerType, isTemplated);
             IntegrityCheck.IsNotNull(scannerType);
 
-            return StartTask((Guid guid, CancellationToken token) =>
+            return StartLogic((Guid guid, CancellationToken token) =>
                 StartCaptureTask(scannerType, isTemplated, guid, token));
         }
 
@@ -69,7 +69,7 @@ namespace TemplateBuilder.Model.Database
                 dbId, template);
             IntegrityCheck.IsNotNull(template);
 
-            return StartTask((Guid guid, CancellationToken token) =>
+            return StartLogic((Guid guid, CancellationToken token) =>
                 StartSaveTask(dbId, template, guid, token));
         }
 
@@ -157,7 +157,7 @@ namespace TemplateBuilder.Model.Database
 
         #region Private Methods
 
-        private Guid StartTask(Action<Guid, CancellationToken> action)
+        private Guid StartLogic(Action<Guid, CancellationToken> action)
         {
             // Generate a GUID and TokenSource for the request, and store them for lookup later.
             Guid guid = Guid.NewGuid();

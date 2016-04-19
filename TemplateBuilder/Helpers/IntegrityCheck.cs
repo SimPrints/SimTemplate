@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,11 @@ namespace TemplateBuilder.Helpers
 {
     public static class IntegrityCheck
     {
+        public static readonly ILog m_Log = LogManager.GetLogger(typeof(IntegrityCheck));
+
         public static TemplateBuilderException Fail(string message)
         {
+            m_Log.Error(message);
             return new TemplateBuilderException(message);
         }
 

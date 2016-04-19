@@ -27,9 +27,12 @@ namespace TemplateBuilder.Model.Database
         /// <param name="requestId">The request unique identifier.</param>
         public GetCaptureCompleteEventArgs(CaptureInfo capture, Guid requestId, DataRequestResult result)
         {
-            IntegrityCheck.IsNotNull(capture);
             IntegrityCheck.IsNotNull(requestId);
             IntegrityCheck.IsNotNull(result);
+            if (result == DataRequestResult.Success)
+            {
+                IntegrityCheck.IsNotNull(capture);
+            }
 
             m_Capture = capture;
             m_RequestId = requestId;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TemplateBuilder.Helpers.GoogleApis
 {
-    public class GetClientCompleteEventArgs
+    public class GetClientCompleteEventArgs : EventArgs
     {
         private IConfigurableHttpClient m_Client;
 
