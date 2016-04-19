@@ -13,6 +13,11 @@ namespace TemplateBuilder.ViewModel.MainWindow
             // TODO: Implement this state and add BeginInitialize as a method.
             public Uninitialised(TemplateBuilderViewModel outer) : base(outer)
             { }
+
+            public override void BeginInitialise()
+            {
+                TransitionTo(typeof(Initialising));
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace TemplateBuilderTests
     [TestClass]
     public class TemplateBuilderViewModelTest
     {
+        private static readonly ILog m_Log = LogManager.GetLogger(typeof(TemplateBuilderViewModelTest));
         IDataController m_DataController;
         TemplateBuilderViewModel m_ViewModel;
 
@@ -33,9 +35,6 @@ namespace TemplateBuilderTests
             // TODO: fake the initialiseComplete event
             //A.CallTo(() => m_DataController.Initialise(A<DataControllerConfig>._))
             //    .Invokes(() => )
-
-            // Start the ViewModel.
-            m_ViewModel.Start();
 
             // Assert that ViewModel made no further requests
             A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._, A<bool>._))

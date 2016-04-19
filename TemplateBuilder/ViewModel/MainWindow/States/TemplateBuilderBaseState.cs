@@ -55,6 +55,8 @@ namespace TemplateBuilder.ViewModel.MainWindow
             public virtual void EscapeAction() { MethodNotImplemented(); }
 
             public virtual void StartMove(int index) { MethodNotImplemented(); }
+
+            public virtual void BeginInitialise() { MethodNotImplemented(); }
             #endregion
 
             #region Event Handlers
@@ -78,6 +80,8 @@ namespace TemplateBuilder.ViewModel.MainWindow
             }
 
             #endregion
+
+            #region Protected Members
 
             /// <summary>
             /// Gets the outer class that this state is behaviour for.
@@ -115,6 +119,8 @@ namespace TemplateBuilder.ViewModel.MainWindow
                 Logger.ErrorFormat("Error occurred: " + ex.Message, ex);
                 TransitionTo(typeof(Error));
             }
+
+            #endregion
         }
     }
 }

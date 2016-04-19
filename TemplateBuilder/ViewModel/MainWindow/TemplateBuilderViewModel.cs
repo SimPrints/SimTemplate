@@ -50,7 +50,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
         public TemplateBuilderViewModel(IDataController dataController)
         {
-            m_StateMgr = new StateManager<TemplateBuilderBaseState>(this);
+            m_StateMgr = new StateManager<TemplateBuilderBaseState>(this, typeof(Uninitialised));
             m_StateLock = new object();
             m_DataController = dataController;
             InitialiseCommands();
@@ -275,14 +275,6 @@ namespace TemplateBuilder.ViewModel.MainWindow
         #region Public Methods
 
         /// <summary>
-        /// Starts the TemplateBuilderViewModel running.
-        /// </summary>
-        public void Start()
-        {
-            m_StateMgr.Start(typeof(Initialising));
-        }
-
-        /// <summary>
         /// Takes a position on the image as a user input for templating.
         /// </summary>
         /// <param name="position">The position, in pixels, on the full scale image.</param>
@@ -347,6 +339,16 @@ namespace TemplateBuilder.ViewModel.MainWindow
             lock (m_StateLock)
             {
                 m_StateMgr.State.StartMove(index);
+            }
+        }
+
+        public void BeginInitialise()
+        {
+            m_Log.Debug("BeginInitialise() called.");
+            lock (m_StateLock)
+            {
+
+                m_StateMgr.State.BeginInitialise();
             }
         }
 

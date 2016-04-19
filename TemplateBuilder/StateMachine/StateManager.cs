@@ -20,7 +20,7 @@ namespace TemplateBuilder.StateMachine
         private object m_StateLock = new object();
         private readonly IDictionary<Type, T> m_States;
 
-        public StateManager(BaseViewModel viewModel)
+        public StateManager(BaseViewModel viewModel, Type initialStateType)
         {
             IntegrityCheck.IsNotNull(viewModel);
 
@@ -34,6 +34,9 @@ namespace TemplateBuilder.StateMachine
             {
                 m_States.Add(type, (T)Activator.CreateInstance(type, m_ViewModel));
             }
+
+            // Transition to the initial state.
+            TransitionTo(initialStateType);
         }
 
         /// <summary>
@@ -43,15 +46,6 @@ namespace TemplateBuilder.StateMachine
         /// The state.
         /// </value>
         public T State { get { return m_CurrentState; } }
-
-        public void Start(Type initialState)
-        {
-            IntegrityCheck.IsFalse(m_IsStarted);
-            IntegrityCheck.IsNotNull(initialState);
-
-            TransitionTo(initialState);
-            m_IsStarted = true;
-        }
 
         /// <summary>
         /// Transitions to a new state, executing transition actions.
