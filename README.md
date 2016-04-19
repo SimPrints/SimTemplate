@@ -2,6 +2,17 @@
 ##Sam's super awesome template tool. :sunglasses:
 A WPF application to facilitate manual construction of templates for captures in the SimPrints database.
 
+### Documentation
+The SimTemplate application utilises the [Model-View-ViewModel Pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel), where the ViewModel's behaviour is determined by a state machine implemented using the [State Pattern](https://en.wikipedia.org/wiki/State_pattern).
+#### Class View
+##### State Machine
+![UML class diagram depicting state machine structure](Diagrams/StateMachine.png)
+##### View Model
+![UML class diagram depicting view model structure](Diagrams/ViewModel.png)
+#### Logical View
+##### State Machine
+![UML state machine diagram depicting state machine behaviour](Diagrams/TemplateBuilderStateMachine.png)
+
 ### TODOs :date:
 - [x] Scanner select drop down
 - [ ] User guidance
