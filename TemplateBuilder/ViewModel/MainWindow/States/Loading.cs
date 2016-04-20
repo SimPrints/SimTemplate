@@ -14,7 +14,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel
     {
-        public class Loading : AbstractAsyncTransitionalState<GetCaptureCompleteEventArgs>
+        public class Loading : TransitioningAsync<GetCaptureCompleteEventArgs>
         {
             public Loading(TemplateBuilderViewModel outer) : base(outer)
             { }

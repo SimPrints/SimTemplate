@@ -10,11 +10,11 @@ namespace TemplateBuilder.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel
     {
-        public abstract class AbstractAsyncTransitionalState<T> : Initialised where T : EventArgs
+        public abstract class TransitioningAsync<T> : Initialised where T : EventArgs
         {
             private object m_Identifier;
 
-            public AbstractAsyncTransitionalState(TemplateBuilderViewModel outer) : base(outer)
+            public TransitioningAsync(TemplateBuilderViewModel outer) : base(outer)
             { }
 
             public override void OnEnteringState()

@@ -11,7 +11,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel
     {
-        private class Saving : AbstractAsyncTransitionalState<SaveTemplateEventArgs>
+        private class Saving : TransitioningAsync<SaveTemplateEventArgs>
         {
             public Saving(TemplateBuilderViewModel outer) : base(outer)
             { }
