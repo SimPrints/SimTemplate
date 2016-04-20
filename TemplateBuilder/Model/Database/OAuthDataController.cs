@@ -18,7 +18,7 @@ using TemplateBuilder.Helpers.GoogleApis;
 
 namespace TemplateBuilder.Model.Database
 {
-    public class OAuthDataController : AbstractDataController
+    public class OAuthDataController : DataController
     {
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(OAuthDataController));
 
@@ -242,7 +242,11 @@ namespace TemplateBuilder.Model.Database
                         String.Format("Failed to parse capture ID string ({0}) to long", dbIdEl.Value));
                 }
                 string humanId = guidEl.Value;
-                byte[] templateData = TemplateHelper.ToByteArray(templateEl.Value);
+                byte[] templateData = null;
+                if (!String.IsNullOrEmpty(templateEl.Value))
+                {
+                    templateData = TemplateHelper.ToByteArray(templateEl.Value);
+                }
                 byte[] imageData;
 
                 // Get image file from url

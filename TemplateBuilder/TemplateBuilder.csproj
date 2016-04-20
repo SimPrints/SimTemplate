@@ -154,7 +154,7 @@
     <Compile Include="Helpers\GoogleApis\ConfigurableHttpClientFactory.cs" />
     <Compile Include="Helpers\GoogleApis\GetClientCompleteEventArgs.cs" />
     <Compile Include="Helpers\GoogleApis\IConfigurableHttpClient.cs" />
-    <Compile Include="Model\Database\AbstractDataController.cs" />
+    <Compile Include="Model\Database\DataController.cs" />
     <Compile Include="Model\Database\CaptureInfo.cs" />
     <Compile Include="Helpers\GoogleApis\IConfigurableHttpClientFactory.cs" />
     <Compile Include="Model\Database\DataRequestResult.cs" />
@@ -208,7 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Database\CaptureDb.cs" />
-    <Compile Include="Model\Database\DataController.cs" />
+    <Compile Include="Model\Database\DatabaseDataController.cs" />
     <Compile Include="Model\Database\DataControllerConfig.cs" />
     <Compile Include="Model\Database\IDataController.cs" />
     <Compile Include="Model\Database\InitialisationCompleteEventArgs.cs" />

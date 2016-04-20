@@ -26,7 +26,7 @@ namespace TemplateBuilder.View.MainWindow
         {
             XmlConfigurator.Configure();
             m_Log.Debug("Logging initialised.");
-            m_ViewModel = new TemplateBuilderViewModel(new DataController());
+            m_ViewModel = new TemplateBuilderViewModel(new DatabaseDataController());
 
             InitializeComponent();
             DataContext = m_ViewModel;
