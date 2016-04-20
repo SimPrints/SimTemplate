@@ -12,7 +12,7 @@ using TemplateBuilder.Helpers.GoogleApis;
 using TemplateBuilder.Model;
 using TemplateBuilder.Model.Database;
 
-namespace TemplateBuilderTests
+namespace TemplateBuilderTests.Model
 {
     [TestClass]
     public class OAuthDataControllerTest

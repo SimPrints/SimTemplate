@@ -12,7 +12,7 @@ using TemplateBuilder.Model;
 using TemplateBuilder.Model.Database;
 using TemplateBuilder.ViewModel.MainWindow;
 
-namespace TemplateBuilderTests
+namespace TemplateBuilderTests.ViewModel.MainWindow
 {
     [TestClass]
     public class TemplateBuilderViewModelTest

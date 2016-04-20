@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using TemplateBuilder.Model;
+using TemplateBuilder.Helpers;
 using TemplateBuilder.ViewModel.MainWindow;
 
-namespace TemplateBuilderTests
+namespace TemplateBuilderTests.Helpers
 {
     [TestClass]
     public class TemplateHelperTest
