@@ -11,6 +11,7 @@ using SimTemplate.Helpers;
 using SimTemplate.Model;
 using SimTemplate.Model.Database;
 using SimTemplate.ViewModel.MainWindow;
+using SimTemplate.Model.DataControllers;
 
 namespace AutomatedSimTemplateTests.ViewModel.MainWindow
 {

@@ -15,8 +15,9 @@ using System.Web;
 using System.Xml.Linq;
 using SimTemplate.Helpers;
 using SimTemplate.Helpers.GoogleApis;
+using SimTemplate.Model.DataControllerEventArgs;
 
-namespace SimTemplate.Model.Database
+namespace SimTemplate.Model.DataControllers
 {
     public class OAuthDataController : DataController
     {

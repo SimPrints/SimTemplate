@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="SetupProject1" Language="1033" Version="1.0.0.0" Manufacturer="SimPrints" UpgradeCode="94180c61-b350-4f94-95da-da58d0c145bb">
+  <Product Id="*" Name="SimTemplateInstaller" Language="1033" Version="1.0.0.0" Manufacturer="SimPrints" UpgradeCode="94180c61-b350-4f94-95da-da58d0c145bb">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes"/>
 
-    <Feature Id="ProductFeature" Title="SetupProject1" Level="1">
+    <Feature Id="ProductFeature" Title="SimTemplateInstaller" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
     </Feature>
 
@@ -17,7 +17,7 @@
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="SetupProject1">
+        <Directory Id="INSTALLFOLDER" Name="SimTemplateInstaller">
           <Directory Id="dirF7618158CE8FEC39DAC1DD18D359DD11" Name="de"/>
           <Directory Id="dir9901A63403F617629D713CCDD5F76555" Name="en"/>
           <Directory Id="dir63A634F9A8BE5EC5B8B7424D6A18E4C4" Name="es"/>

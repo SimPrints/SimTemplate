@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Model.Database
+namespace SimTemplate.Model.DataControllers
 {
     public enum DataRequestResult
     {
-        None = 1,
+        None = 0,
         Success,
         Failed,
         TaskFailed,

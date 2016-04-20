@@ -6,13 +6,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SimTemplate.Helpers;
+using SimTemplate.Model.DataControllerEventArgs;
 
-namespace SimTemplate.Model.Database
+namespace SimTemplate.Model.DataControllers
 {
-    public abstract class DataController : IDataController
+    public abstract class DataController : LoggingClass, IDataController
     {
-        private static readonly ILog m_Log = LogManager.GetLogger(typeof(DatabaseDataController));
-
         private DataControllerConfig m_Config;
         private IDictionary<Guid, CancellationTokenSource> m_TokenSourceLookup;
 
@@ -31,7 +30,7 @@ namespace SimTemplate.Model.Database
 
         void IDataController.AbortRequest(Guid guid)
         {
-            m_Log.DebugFormat("AbortRequest(guid={0}) called.", guid);
+            Log.DebugFormat("AbortRequest(guid={0}) called.", guid);
             IntegrityCheck.IsNotNull(guid);
 
             // Attempt to lookup the token.
@@ -48,14 +47,14 @@ namespace SimTemplate.Model.Database
             else
             {
                 // TODO: What to do if Guid doesn't correspond to a current request?
-                m_Log.WarnFormat("Cancellation of request (guid={0}) failed, token no longer exists.",
+                Log.WarnFormat("Cancellation of request (guid={0}) failed, token no longer exists.",
                     guid);
             }
         }
 
         Guid IDataController.BeginGetCapture(ScannerType scannerType, bool isTemplated)
         {
-            m_Log.DebugFormat("BeginGetCapture(scannterType={0}, isTemplated={1}) called",
+            Log.DebugFormat("BeginGetCapture(scannterType={0}, isTemplated={1}) called",
                 scannerType, isTemplated);
             IntegrityCheck.IsNotNull(scannerType);
 
@@ -65,7 +64,7 @@ namespace SimTemplate.Model.Database
 
         Guid IDataController.BeginSaveTemplate(long dbId, byte[] template)
         {
-            m_Log.DebugFormat("BeginGetCapture(dbId={0}, template={1}) called",
+            Log.DebugFormat("BeginGetCapture(dbId={0}, template={1}) called",
                 dbId, template);
 
             return StartLogic((Guid guid, CancellationToken token) =>
@@ -98,7 +97,7 @@ namespace SimTemplate.Model.Database
         public virtual void BeginInitialise(DataControllerConfig config)
         {
 
-            m_Log.Debug("BeginInitialise(...) called.");
+            Log.Debug("BeginInitialise(...) called.");
             IntegrityCheck.IsNotNull(config, "config");
             IntegrityCheck.IsNotNullOrEmpty(config.DatabasePath, "config.DatabasePath");
             IntegrityCheck.IsNotNullOrEmpty(config.ImageFilesDirectory, "config.ImageFilesDirectory");

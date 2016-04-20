@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SimTemplate.Helpers;
+using SimTemplate.Model.DataControllers;
 
-namespace SimTemplate.Model.Database
+namespace SimTemplate.Model.DataControllerEventArgs
 {
     public class GetCaptureCompleteEventArgs : EventArgs
     {

@@ -15,6 +15,7 @@ using SimTemplate.Helpers;
 using SimTemplate.Model;
 using SimTemplate.Model.Database;
 using SimTemplate.StateMachine;
+using SimTemplate.Model.DataControllerEventArgs;
 
 namespace SimTemplate.ViewModel.MainWindow
 {

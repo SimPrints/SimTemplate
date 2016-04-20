@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SimTemplate.Model.DataControllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Model.Database
+namespace SimTemplate.Model.DataControllerEventArgs
 {
     public class InitialisationCompleteEventArgs : EventArgs
     {

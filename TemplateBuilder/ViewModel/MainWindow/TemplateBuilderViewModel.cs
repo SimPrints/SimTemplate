@@ -10,6 +10,8 @@ using SimTemplate.Model;
 using SimTemplate.Model.Database;
 using SimTemplate.StateMachine;
 using SimTemplate.ViewModel.Commands;
+using SimTemplate.Model.DataControllerEventArgs;
+using SimTemplate.Model.DataControllers;
 
 namespace SimTemplate.ViewModel.MainWindow
 {

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SimTemplate.Model.DataControllerEventArgs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Model.Database
+namespace SimTemplate.Model.DataControllers
 {
     public interface IDataController
     {
