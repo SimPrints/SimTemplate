@@ -38,10 +38,23 @@
         <Style x:Key="controlTextStyle" BasedOn="{StaticResource baseStyle}">
             <Setter Property="TextBlock.FontSize" Value="10" />
         </Style>
-        <Style x:Key="toolbarTitleStyle" BasedOn="{StaticResource baseStyle}">
+        <Style x:Key="toolsTitleStyle" BasedOn="{StaticResource baseStyle}">
             <Setter Property="TextBlock.FontWeight" Value="Bold" />
             <Setter Property="TextBlock.TextAlignment" Value="Center" />
         </Style>
+        <Style x:Key="toolsSectionStyle" BasedOn="{StaticResource baseStyle}">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
+        
+        <!-- Data Templates -->
+        <DataTemplate x:Key="headerTemplate">
+            <TextBlock Text="{Binding}"
+                       Style="{StaticResource toolsTitleStyle}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="sectionTemplate">
+            <TextBlock Text="{Binding}"
+                       Style="{StaticResource toolsSectionStyle}"/>
+        </DataTemplate>
     </Window.Resources>
 
     <Window.InputBindings>
@@ -55,58 +68,67 @@
                      HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <!-- Data Toolbar -->
             <ToolBar x:Name="dataToolbar">
-                <TextBlock Style="{StaticResource toolbarTitleStyle}">Data Toolbar</TextBlock>
-                <!-- Load/Save buttons -->
-                <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Horizontal">
-                    <Button x:Name="saveTemplate"
+                <GroupBox Header="Data Tools"
+                          HeaderTemplate="{StaticResource headerTemplate}">
+                    <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Vertical">
+                        <!-- Load/Save buttons -->
+                        <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Horizontal">
+                            <Button x:Name="saveTemplate"
                             VerticalAlignment="Top"
                             ToolTip="Saves the current template"
                             Style="{StaticResource iconsStyle}"
                             Command="{Binding Path=SaveTemplateCommand}">
-                        <Image Source="pack://application:,,,/Resources/Icons/Save.ico" />
-                    </Button>
-                    <Button x:Name="loadFile"
+                                <Image Source="pack://application:,,,/Resources/Icons/Save.ico" />
+                            </Button>
+                            <Button x:Name="loadFile"
                             VerticalAlignment="Top"
                             ToolTip="Loads the next capture for templating"
                             Style="{StaticResource iconsStyle}"
                             Command="{Binding Path=LoadFileCommand}">
-                        <Image Source="{Binding Path=LoadIcon}" />
-                    </Button>
-                </StackPanel>
-                <!-- Scanner type dropdown -->
-                <StackPanel Style="{StaticResource toolbarStackStyle}">
-                    <TextBlock Style="{StaticResource controlTextStyle}">Scanner Type:</TextBlock>
-                    <ComboBox x:Name="scannerTypeComboBox" VerticalAlignment="Top"
-                            Width="100"
-                            ItemsSource="{Binding Path=ScannerTypes}"
-                            SelectedItem="{Binding Path=FilteredScannerType}"
-                              ToolTip="Load a capture from a specific scanner.">
-                        <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-                <!-- Template status radiobuttons -->
-                <StackPanel Style="{StaticResource toolbarStackStyle}">
-                    <TextBlock Style="{StaticResource controlTextStyle}">Template Status:</TextBlock>
-                    <RadioButton x:Name="getTemplatedCaptureButton" GroupName="isGetTemplatedCapture"
-                                 IsChecked="{Binding Path=IsGetTemplatedCapture}"
-                                 ToolTip="Load a capture that already has a template">
-                        Templated
-                    </RadioButton>
-                    <RadioButton x:Name="getUntemplatedCaptureButton" GroupName="isGetTemplatedCapture"
-                                 IsChecked="{Binding Path=IsGetTemplatedCapture, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
-                                 ToolTip="Load a capture that has not yet got a template">
-                        Untemplated
-                    </RadioButton>
-                </StackPanel>
-            </ToolBar>
-            <!-- Templating Toolbar -->
-            <ToolBar x:Name="templatingToolbar" VerticalAlignment="Bottom">
-                <TextBlock Style="{StaticResource toolbarTitleStyle}">Templating Toolbar</TextBlock>
-                <!-- Minutia Type radiobuttons -->
+                                <Image Source="{Binding Path=LoadIcon}" />
+                            </Button>
+                        </StackPanel>
+                        <Expander Name="myExpander" Header="Load Options" 
+                                  ExpandDirection="Down" IsExpanded="True"
+                                  HeaderTemplate="{StaticResource sectionTemplate}"> 
+                            <StackPanel Orientation="Vertical">
+                                <!-- Scanner type dropdown -->
+                                <StackPanel Style="{StaticResource toolbarStackStyle}">
+                                    <Label Style="{StaticResource controlTextStyle}">Scanner Type:</Label>
+                                    <ComboBox x:Name="scannerTypeComboBox" VerticalAlignment="Top"
+                                    Width="100"
+                                    ItemsSource="{Binding Path=ScannerTypes}"
+                                    SelectedItem="{Binding Path=FilteredScannerType}"
+                                      ToolTip="Load a capture from a specific scanner.">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
+                                <!-- Template status radiobuttons -->
+                                <StackPanel Style="{StaticResource toolbarStackStyle}">
+                                    <Label Style="{StaticResource controlTextStyle}">Template Status:</Label>
+                                    <RadioButton x:Name="getTemplatedCaptureButton" GroupName="isGetTemplatedCapture"
+                                         IsChecked="{Binding Path=IsGetTemplatedCapture}"
+                                         ToolTip="Load a capture that already has a template">
+                                        Templated
+                                    </RadioButton>
+                                    <RadioButton x:Name="getUntemplatedCaptureButton" GroupName="isGetTemplatedCapture"
+                                         IsChecked="{Binding Path=IsGetTemplatedCapture, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                                         ToolTip="Load a capture that has not yet got a template">
+                                        Untemplated
+                                    </RadioButton>
+                                </StackPanel>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                </GroupBox>
+                <!-- Templating Group -->
+                <GroupBox Header="Templating Tools"
+                          HeaderTemplate="{StaticResource headerTemplate}">
+                    <!-- Minutia Type radiobuttons -->
                 <StackPanel Style="{StaticResource toolbarStackStyle}">
                     <TextBlock Style="{StaticResource controlTextStyle}">Minutia Type:</TextBlock>
                     <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static model:MinutiaType.Termination}}"
@@ -122,6 +144,7 @@
                         Bifurication
                     </RadioButton>
                 </StackPanel>
+                </GroupBox>
             </ToolBar>
         </ToolBarTray>
         <!-- Guidance Text -->
