@@ -67,7 +67,6 @@ namespace TemplateBuilder.Model.Database
         {
             m_Log.DebugFormat("BeginGetCapture(dbId={0}, template={1}) called",
                 dbId, template);
-            IntegrityCheck.IsNotNull(template);
 
             return StartLogic((Guid guid, CancellationToken token) =>
                 StartSaveTask(dbId, template, guid, token));
