@@ -16,7 +16,6 @@ namespace TemplateBuilder.StateMachine
 
         private BaseViewModel m_ViewModel;
         private T m_CurrentState;
-        private bool m_IsStarted;
         private object m_StateLock = new object();
         private readonly IDictionary<Type, T> m_States;
 
