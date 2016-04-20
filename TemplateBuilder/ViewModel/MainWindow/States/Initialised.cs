@@ -10,7 +10,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel
     {
-        abstract public class Initialised : TemplateBuilderBaseState
+        public abstract class Initialised : TemplateBuilderBaseState
         {
             #region Constants
 
