@@ -33,7 +33,7 @@ namespace TemplateBuilderTests
         [TestInitialize]
         public void TestSetup()
         {
-            m_DataController = new DataController();
+            m_DataController = new DatabaseDataController();
             m_InitCompleteArgs = null;
             m_GetCaptureArgs = null;
             m_DataController.InitialisationComplete += DataController_InitialisationComplete;

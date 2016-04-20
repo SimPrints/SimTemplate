@@ -84,6 +84,7 @@ namespace TemplateBuilderTests
 
             Assert.AreEqual(1, m_GetCaptureCompleteEvents[0].Capture.DbId);
             Assert.AreEqual("Ale-LES-0-1", m_GetCaptureCompleteEvents[0].Capture.HumanId);
+            Assert.IsNotNull(m_GetCaptureCompleteEvents[0].Capture.ImageData);
             Assert.IsNull(m_GetCaptureCompleteEvents[0].Capture.TemplateData);
         }
     }

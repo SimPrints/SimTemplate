@@ -146,13 +146,13 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AssemblyInitialiser.cs" />
-    <Compile Include="DataControllerTest.cs" />
-    <Compile Include="Misc.cs" />
-    <Compile Include="OAuthDataControllerTest.cs" />
+    <Compile Include="Model\DataControllerTest.cs" />
+    <Compile Include="Other\Misc.cs" />
+    <Compile Include="Model\OAuthDataControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlTests.cs" />
-    <Compile Include="TemplateBuilderViewModelTest.cs" />
-    <Compile Include="TemplateHelperTest.cs" />
+    <Compile Include="Other\SqlTests.cs" />
+    <Compile Include="ViewModel\MainWindow\TemplateBuilderViewModelTest.cs" />
+    <Compile Include="Helpers\TemplateHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
