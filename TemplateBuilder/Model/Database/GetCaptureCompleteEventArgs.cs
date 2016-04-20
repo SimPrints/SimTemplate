@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TemplateBuilder.Helpers;
+using SimTemplate.Helpers;
 
-namespace TemplateBuilder.Model.Database
+namespace SimTemplate.Model.Database
 {
     public class GetCaptureCompleteEventArgs : EventArgs
     {

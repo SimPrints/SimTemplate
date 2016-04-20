@@ -5,13 +5,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.Model;
-using TemplateBuilder.Model.Database;
-using TemplateBuilder.StateMachine;
-using TemplateBuilder.ViewModel.Commands;
+using SimTemplate.Helpers;
+using SimTemplate.Model;
+using SimTemplate.Model.Database;
+using SimTemplate.StateMachine;
+using SimTemplate.ViewModel.Commands;
 
-namespace TemplateBuilder.ViewModel.MainWindow
+namespace SimTemplate.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel : BaseViewModel
     {

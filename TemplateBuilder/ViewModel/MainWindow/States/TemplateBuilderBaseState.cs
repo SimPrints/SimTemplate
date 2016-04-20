@@ -11,12 +11,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.Model;
-using TemplateBuilder.Model.Database;
-using TemplateBuilder.StateMachine;
+using SimTemplate.Helpers;
+using SimTemplate.Model;
+using SimTemplate.Model.Database;
+using SimTemplate.StateMachine;
 
-namespace TemplateBuilder.ViewModel.MainWindow
+namespace SimTemplate.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel
     {

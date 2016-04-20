@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.ViewModel.MainWindow;
+using SimTemplate.Helpers;
+using SimTemplate.Model;
+using SimTemplate.ViewModel.MainWindow;
 
-namespace TemplateBuilderTests.Helpers
+namespace AutomatedSimTemplateTests.Helpers
 {
     [TestClass]
     public class TemplateHelperTest

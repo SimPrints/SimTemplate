@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TemplateBuilder.Helpers.GoogleApis
+namespace SimTemplate.Helpers.GoogleApis
 {
     public interface IConfigurableHttpClient
     {

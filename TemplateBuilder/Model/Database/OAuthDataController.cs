@@ -13,10 +13,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.Helpers.GoogleApis;
+using SimTemplate.Helpers;
+using SimTemplate.Helpers.GoogleApis;
 
-namespace TemplateBuilder.Model.Database
+namespace SimTemplate.Model.Database
 {
     public class OAuthDataController : DataController
     {

@@ -6,8 +6,8 @@
     <ProjectGuid>{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TemplateBuilderTests</RootNamespace>
-    <AssemblyName>TemplateBuilderTests</AssemblyName>
+    <RootNamespace>AutomatedSimTemplateTests</RootNamespace>
+    <AssemblyName>AutomatedSimTemplateTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -159,9 +159,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TemplateBuilder\TemplateBuilder.csproj">
+    <ProjectReference Include="..\TemplateBuilder\SimTemplate.csproj">
       <Project>{c783ab69-29c6-4730-a34c-c765a40bb0e2}</Project>
-      <Name>TemplateBuilder</Name>
+      <Name>SimTemplate</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

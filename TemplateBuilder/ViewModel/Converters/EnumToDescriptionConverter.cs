@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace TemplateBuilder.ViewModel.Converters
+namespace SimTemplate.ViewModel.Converters
 {
     public class EnumToDescriptionConverter : IValueConverter
     {

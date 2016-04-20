@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Linq;
 
-namespace TemplateBuilderTests
+namespace AutomatedSimTemplateTests.Other
 {
     [TestClass]
     public class Misc

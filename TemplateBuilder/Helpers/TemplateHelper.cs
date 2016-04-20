@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.ViewModel.MainWindow;
+using SimTemplate.Helpers;
+using SimTemplate.Model;
+using SimTemplate.ViewModel.MainWindow;
 
-namespace TemplateBuilder.Model
+namespace SimTemplate.Helpers
 {
     /// <summary>
     /// A static helper class for converting between TemplateBuilder's MinutiaRecord class and the

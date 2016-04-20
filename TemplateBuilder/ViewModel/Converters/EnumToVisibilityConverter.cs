@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using TemplateBuilder.Model;
+using SimTemplate.Model;
 
-namespace TemplateBuilder.ViewModel.Converters
+namespace SimTemplate.ViewModel.Converters
 {
     public class EnumToVisibilityConverter : IValueConverter
     {

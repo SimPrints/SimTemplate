@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TemplateBuilder.Helpers.GoogleApis
+namespace SimTemplate.Helpers.GoogleApis
 {
     public class GetClientCompleteEventArgs : EventArgs
     {

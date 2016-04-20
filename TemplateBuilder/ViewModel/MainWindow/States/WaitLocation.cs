@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.Model;
+using SimTemplate.Helpers;
+using SimTemplate.Model;
 
-namespace TemplateBuilder.ViewModel.MainWindow
+namespace SimTemplate.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel
     {

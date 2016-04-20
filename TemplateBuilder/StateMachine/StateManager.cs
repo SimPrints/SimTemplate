@@ -5,10 +5,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.ViewModel;
+using SimTemplate.Helpers;
+using SimTemplate.ViewModel;
 
-namespace TemplateBuilder.StateMachine
+namespace SimTemplate.StateMachine
 {
     public class StateManager<T> where T : BaseState
     {

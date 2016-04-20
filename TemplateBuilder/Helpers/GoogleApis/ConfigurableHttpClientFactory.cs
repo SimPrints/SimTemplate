@@ -9,7 +9,7 @@ using log4net;
 using Google.Apis.Http;
 using System.Net.Http;
 
-namespace TemplateBuilder.Helpers.GoogleApis
+namespace SimTemplate.Helpers.GoogleApis
 {
     public class ConfigurableHttpClientFactory : IConfigurableHttpClientFactory
     {

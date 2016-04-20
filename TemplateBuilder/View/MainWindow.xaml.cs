@@ -5,11 +5,11 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.Model.Database;
-using TemplateBuilder.ViewModel.MainWindow;
+using SimTemplate.Helpers;
+using SimTemplate.Model.Database;
+using SimTemplate.ViewModel.MainWindow;
 
-namespace TemplateBuilder.View.MainWindow
+namespace SimTemplate.View.MainWindow
 {
     /// <summary>
     /// Interaction logic for MainWindowView.xaml

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace TemplateBuilder.ViewModel.Converters
+namespace SimTemplate.ViewModel.Converters
 {
     public class EnumToBooleanConverter : IValueConverter
     {

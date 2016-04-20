@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.ViewModel.MainWindow;
+using SimTemplate.Helpers;
+using SimTemplate.ViewModel.MainWindow;
 
-namespace TemplateBuilder.Model
+namespace SimTemplate.Model
 {
     public class MinutiaRecord : INotifyPropertyChanged
     {

@@ -9,10 +9,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.ViewModel.MainWindow;
+using SimTemplate.Helpers;
+using SimTemplate.ViewModel.MainWindow;
 
-namespace TemplateBuilder.Model.Database
+namespace SimTemplate.Model.Database
 {
     public class DatabaseDataController : DataController
     {

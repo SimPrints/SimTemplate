@@ -1,10 +1,10 @@
 ﻿using log4net;
 using System;
 using System.Runtime.CompilerServices;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.ViewModel;
+using SimTemplate.Helpers;
+using SimTemplate.ViewModel;
 
-namespace TemplateBuilder.StateMachine
+namespace SimTemplate.StateMachine
 {
     public abstract class BaseState
     {

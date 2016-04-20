@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.Model;
-using TemplateBuilder.Model.Database;
-using TemplateBuilder.ViewModel.MainWindow;
+using SimTemplate.Helpers;
+using SimTemplate.Model;
+using SimTemplate.Model.Database;
+using SimTemplate.ViewModel.MainWindow;
 
-namespace TemplateBuilderTests.ViewModel.MainWindow
+namespace AutomatedSimTemplateTests.ViewModel.MainWindow
 {
     [TestClass]
     public class TemplateBuilderViewModelTest

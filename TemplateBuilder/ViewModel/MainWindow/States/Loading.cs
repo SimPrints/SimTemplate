@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using TemplateBuilder.Helpers;
-using TemplateBuilder.Model;
-using TemplateBuilder.Model.Database;
+using SimTemplate.Helpers;
+using SimTemplate.Model;
+using SimTemplate.Model.Database;
 
-namespace TemplateBuilder.ViewModel.MainWindow
+namespace SimTemplate.ViewModel.MainWindow
 {
     public partial class TemplateBuilderViewModel
     {

@@ -8,11 +8,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TemplateBuilder.Helpers.GoogleApis;
-using TemplateBuilder.Model;
-using TemplateBuilder.Model.Database;
+using SimTemplate.Helpers.GoogleApis;
+using SimTemplate.Model;
+using SimTemplate.Model.Database;
 
-namespace TemplateBuilderTests.Model
+namespace AutomatedSimTemplateTests.Model
 {
     [TestClass]
     public class OAuthDataControllerTest

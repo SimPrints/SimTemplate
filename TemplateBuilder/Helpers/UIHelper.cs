@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace TemplateBuilder.Helpers
+namespace SimTemplate.Helpers
 {
     public class UIHelper
     {

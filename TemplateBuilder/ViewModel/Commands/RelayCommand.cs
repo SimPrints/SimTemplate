@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace TemplateBuilder.ViewModel.Commands
+namespace SimTemplate.ViewModel.Commands
 {
     public class RelayCommand : ICommand
     {

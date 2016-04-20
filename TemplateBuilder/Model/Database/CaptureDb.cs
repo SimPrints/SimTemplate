@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TemplateBuilder.Model.Database
+namespace SimTemplate.Model.Database
 {
     [Table(Name = "Capture")]
     public class CaptureDb

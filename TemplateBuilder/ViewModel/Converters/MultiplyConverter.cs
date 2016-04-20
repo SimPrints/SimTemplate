@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using TemplateBuilder.Helpers;
+using SimTemplate.Helpers;
 
-namespace TemplateBuilder.ViewModel.Converters
+namespace SimTemplate.ViewModel.Converters
 {
     public class MultiplyConverter : IValueConverter
     {

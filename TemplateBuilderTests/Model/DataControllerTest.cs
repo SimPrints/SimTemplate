@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TemplateBuilder.Model;
-using TemplateBuilder.Model.Database;
+using SimTemplate.Model;
+using SimTemplate.Model.Database;
 
-namespace TemplateBuilderTests
+namespace AutomatedSimTemplateTests.Model
 {
     [TestClass]
     public class DataControllerTest
