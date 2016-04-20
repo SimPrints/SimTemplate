@@ -29,7 +29,7 @@ namespace TemplateBuilder.ViewModel.MainWindow
 
             protected void CheckCompleteAndContinue(object id, T e)
             {
-                if (m_Identifier == id)
+                if (m_Identifier.Equals(id))
                 {
                     OnOperationComplete(e);
                 }
