@@ -33,7 +33,7 @@
     <Content Include="GPL_v3.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TemplateBuilder\SimTemplate.csproj">
+    <ProjectReference Include="..\SimTemplate\SimTemplate.csproj">
       <Name>SimTemplate</Name>
       <Project>{c783ab69-29c6-4730-a34c-c765a40bb0e2}</Project>
       <Private>True</Private>
