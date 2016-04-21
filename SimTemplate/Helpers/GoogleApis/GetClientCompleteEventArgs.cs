@@ -8,11 +8,11 @@ namespace SimTemplate.Helpers.GoogleApis
 {
     public class GetClientCompleteEventArgs : EventArgs
     {
-        private IConfigurableHttpClient m_Client;
+        private IAuthenticationClient m_Client;
 
-        public IConfigurableHttpClient Client { get{ return m_Client; } }
+        public IAuthenticationClient Client { get{ return m_Client; } }
 
-        public GetClientCompleteEventArgs(IConfigurableHttpClient client)
+        public GetClientCompleteEventArgs(IAuthenticationClient client)
         {
             m_Client = client;
         }

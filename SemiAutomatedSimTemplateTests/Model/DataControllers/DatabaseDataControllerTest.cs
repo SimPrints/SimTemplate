@@ -13,7 +13,7 @@ using SimTemplate.Model.DataControllers;
 namespace AutomatedSimTemplateTests.Model
 {
     [TestClass]
-    public class DataControllerTest
+    public class DatabaseDataControllerTest
     {
         #region Constants
 

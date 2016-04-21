@@ -21,7 +21,7 @@ namespace AutomatedSimTemplateTests.Model
     {
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(OAuthDataControllerTest));
 
-        private IConfigurableHttpClient m_Client;
+        private IAuthenticationClient m_Client;
         private IDataController m_Controller;
 
         private IList<InitialisationCompleteEventArgs> m_InitialisationComplete;
@@ -33,7 +33,7 @@ namespace AutomatedSimTemplateTests.Model
             m_InitialisationComplete = new List<InitialisationCompleteEventArgs>();
             m_GetCaptureCompleteEvents = new List<GetCaptureCompleteEventArgs>();
             // Instantiate and configure a fake client to facilitate the tests
-            m_Client = A.Fake<IConfigurableHttpClient>();
+            m_Client = A.Fake<IAuthenticationClient>();
             // Create a fake client factory that will return our fake client
             IConfigurableHttpClientFactory clientFactory = A.Fake<IConfigurableHttpClientFactory>();
             A.CallTo(() => clientFactory.BeginGetClient(A<ClientSecrets>._, A<IEnumerable<string>>._, A<string>._))

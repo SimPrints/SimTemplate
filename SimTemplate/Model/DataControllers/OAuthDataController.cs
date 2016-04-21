@@ -39,7 +39,7 @@ namespace SimTemplate.Model.DataControllers
         #endregion
 
         IConfigurableHttpClientFactory m_ClientFactory;
-        IConfigurableHttpClient m_Client;
+        IAuthenticationClient m_Client;
 
         public OAuthDataController(IConfigurableHttpClientFactory clientFactory)
         {

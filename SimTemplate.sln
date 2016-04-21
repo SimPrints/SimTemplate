@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimTemplate", "TemplateBuil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemiAutomatedSimTemplateTests", "SemiAutomatedSimTemplateTests\SemiAutomatedSimTemplateTests.csproj", "{98641A90-9761-439C-94E0-9000C36FBEEF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonSimTemplateTest", "CommonSimTemplateTest\CommonSimTemplateTest.csproj", "{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,14 @@ Global
 		{98641A90-9761-439C-94E0-9000C36FBEEF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{98641A90-9761-439C-94E0-9000C36FBEEF}.Release|x86.ActiveCfg = Release|Any CPU
 		{98641A90-9761-439C-94E0-9000C36FBEEF}.Release|x86.Build.0 = Release|Any CPU
+		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Debug|x86.Build.0 = Debug|Any CPU
+		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Release|x86.ActiveCfg = Release|Any CPU
+		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,5 +69,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC} = {F7AC053B-910B-4FB1-AB53-792FBF98BA14}
 		{98641A90-9761-439C-94E0-9000C36FBEEF} = {F7AC053B-910B-4FB1-AB53-792FBF98BA14}
+		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC} = {F7AC053B-910B-4FB1-AB53-792FBF98BA14}
 	EndGlobalSection
 EndGlobal

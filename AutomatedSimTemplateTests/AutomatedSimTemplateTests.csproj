@@ -142,7 +142,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AssemblyInitialiser.cs" />
-    <Compile Include="Model\DataControllerTest.cs" />
     <Compile Include="Other\Misc.cs" />
     <Compile Include="Model\OAuthDataControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

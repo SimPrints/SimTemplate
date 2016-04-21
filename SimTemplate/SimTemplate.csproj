@@ -153,7 +153,8 @@
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\GoogleApis\ConfigurableHttpClientFactory.cs" />
     <Compile Include="Helpers\GoogleApis\GetClientCompleteEventArgs.cs" />
-    <Compile Include="Helpers\GoogleApis\IConfigurableHttpClient.cs" />
+    <Compile Include="Helpers\GoogleApis\GoogleAuthenticator.cs" />
+    <Compile Include="Helpers\GoogleApis\IAuthenticationClient.cs" />
     <Compile Include="Helpers\LoggingClass.cs" />
     <Compile Include="Model\DataControllers\DataController.cs" />
     <Compile Include="Model\CaptureInfo.cs" />

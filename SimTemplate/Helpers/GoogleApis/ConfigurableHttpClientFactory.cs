@@ -8,6 +8,8 @@ using System.Threading;
 using log4net;
 using Google.Apis.Http;
 using System.Net.Http;
+using Google.Apis.Util.Store;
+using System.IO;
 
 namespace SimTemplate.Helpers.GoogleApis
 {
@@ -24,7 +26,8 @@ namespace SimTemplate.Helpers.GoogleApis
                 secrets,
                 scopes,
                 user,
-                CancellationToken.None);
+                CancellationToken.None,
+                new FileDataStore("AccessTokens"));
 
             ConfigurableMessageHandler handler = new ConfigurableMessageHandler(new HttpClientHandler());
             ConfigurableHttpClient client = new ConfigurableHttpClient(handler);
@@ -36,8 +39,10 @@ namespace SimTemplate.Helpers.GoogleApis
                 if (!aT.IsFaulted)
                 {
                     // Initialize the client handler
+                    m_Log.Debug("Client handler authenticated successfully. Now initialising.");
                     aT.Result.Initialize(client);
-                    OnGetClientComplete(new GetClientCompleteEventArgs((IConfigurableHttpClient)client));
+                    IAuthenticationClient clientWrapper = new GoogleAuthenticator(client);
+                    OnGetClientComplete(new GetClientCompleteEventArgs(clientWrapper));
                 }
                 else
                 {
