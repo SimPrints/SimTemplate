@@ -27,7 +27,7 @@ namespace SimTemplate.View.MainWindow
         {
             XmlConfigurator.Configure();
             m_Log.Debug("Logging initialised.");
-            m_ViewModel = new TemplateBuilderViewModel(new DatabaseDataController());
+            m_ViewModel = new TemplateBuilderViewModel(new TempApiDataController());
 
             InitializeComponent();
             DataContext = m_ViewModel;

@@ -35,7 +35,7 @@ namespace AutomatedSimTemplateTests.Model
         [TestInitialize]
         public void TestSetup()
         {
-            m_DataController = new DatabaseDataController();
+            m_DataController = new LocalDataController();
             m_InitCompleteArgs = null;
             m_GetCaptureArgs = null;
             m_DataController.InitialisationComplete += DataController_InitialisationComplete;
@@ -87,7 +87,6 @@ namespace AutomatedSimTemplateTests.Model
 
             // Assertions
             Assert.IsNotNull(m_GetCaptureArgs.Capture);
-            Assert.IsFalse(String.IsNullOrEmpty(m_GetCaptureArgs.Capture.HumanId));
             Assert.IsNotNull(m_GetCaptureArgs.Capture.ImageData);
         }
 

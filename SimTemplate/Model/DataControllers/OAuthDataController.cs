@@ -218,13 +218,11 @@ namespace SimTemplate.Model.DataControllers
             {
                 XElement imageLocationEl = captureEl.Element(ELEMENT_IMAGE_LOCATION);
                 XElement dbIdEl = captureEl.Element(ELEMENT_DB_ID);
-                XElement guidEl = captureEl.Element(ELEMENT_GUID);
                 XElement templateEl = captureEl.Element(ELEMENT_TEMPLATE);
 
                 // Assert xml structure is as expected
                 CheckElementNotNull(imageLocationEl, ELEMENT_IMAGE_LOCATION);
                 CheckElementNotNull(dbIdEl, ELEMENT_DB_ID);
-                CheckElementNotNull(guidEl, ELEMENT_GUID);
                 CheckElementNotNull(templateEl, ELEMENT_TEMPLATE);
 
                 // Get info from elements
@@ -242,7 +240,6 @@ namespace SimTemplate.Model.DataControllers
                     throw new TemplateBuilderException(
                         String.Format("Failed to parse capture ID string ({0}) to long", dbIdEl.Value));
                 }
-                string humanId = guidEl.Value;
                 byte[] templateData = null;
                 if (!String.IsNullOrEmpty(templateEl.Value))
                 {
@@ -256,7 +253,7 @@ namespace SimTemplate.Model.DataControllers
                     imageData = webClient.DownloadData(imageLocation);
                 }
 
-                return new CaptureInfo(humanId, dbId, imageData, templateData);
+                return new CaptureInfo(dbId, imageData, templateData);
             }
 
             private static void CheckElementNotNull(XElement el, string tag)

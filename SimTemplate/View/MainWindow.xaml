@@ -160,12 +160,12 @@
             <!--The image being annotated-->
             <Image x:Name="image"
                    Source="{Binding Capture.ImageData}" Stretch="Uniform"
+                   MouseMove="itemsControl_MouseMove"
+                   MouseUp="itemsControl_MouseUp"
                    SizeChanged="image_SizeChanged" />
             <!--The control on which to display the annotations-->
             <ItemsControl x:Name="itemsControl"
                           ItemsSource="{Binding Minutae}"
-                          MouseMove="itemsControl_MouseMove"
-                          MouseUp="itemsControl_MouseUp"
                           Width="{Binding ElementName=image, Path=ActualWidth}"
                           Height="{Binding ElementName=image, Path=ActualHeight}">
                 <!-- Set the 'panel' to be a Canvas for displaying our items -->

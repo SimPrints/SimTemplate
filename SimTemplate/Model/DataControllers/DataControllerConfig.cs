@@ -8,16 +8,16 @@ namespace SimTemplate.Model.DataControllers
 {
     public class DataControllerConfig
     {
-        private readonly string m_DatabasePath;
-        private readonly string m_ImageFilesDirectory;
+        private readonly string m_ApiKey;
+        private readonly string m_UrlRoot;
 
-        public string DatabasePath { get { return m_DatabasePath; } }
-        public string ImageFilesDirectory { get { return m_ImageFilesDirectory; } }
+        public string ApiKey { get { return m_ApiKey; } }
+        public string UrlRoot { get { return m_UrlRoot; } }
 
-        public DataControllerConfig(string databasePath, string imageFilesDirectory)
+        public DataControllerConfig(string apiKey, string urlRoot)
         {
-            m_DatabasePath = databasePath;
-            m_ImageFilesDirectory = imageFilesDirectory;
+            m_ApiKey = apiKey;
+            m_UrlRoot = urlRoot;
         }
     }
 }

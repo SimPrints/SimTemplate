@@ -100,6 +100,10 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -156,14 +160,17 @@
     <Compile Include="Helpers\GoogleApis\GoogleAuthenticator.cs" />
     <Compile Include="Helpers\GoogleApis\IAuthenticationClient.cs" />
     <Compile Include="Helpers\LoggingClass.cs" />
+    <Compile Include="Model\DataControllers\ApiKeyResponse.cs" />
     <Compile Include="Model\DataControllers\DataController.cs" />
     <Compile Include="Model\CaptureInfo.cs" />
     <Compile Include="Helpers\GoogleApis\IConfigurableHttpClientFactory.cs" />
     <Compile Include="Model\DataControllers\DataRequestResult.cs" />
     <Compile Include="Model\DataControllerEventArgs\GetCaptureCompleteEventArgs.cs" />
+    <Compile Include="Model\DataControllers\HumanTemplateResponse.cs" />
     <Compile Include="Model\DataControllers\InitialisationResult.cs" />
     <Compile Include="Model\DataControllers\OAuthDataController.cs" />
     <Compile Include="Model\DataControllerEventArgs\SaveTemplateEventArgs.cs" />
+    <Compile Include="Model\DataControllers\TempApiDataController.cs" />
     <Compile Include="StateMachine\BaseState.cs" />
     <Compile Include="ViewModel\Commands\RelayCommand.cs" />
     <Compile Include="ViewModel\Converters\BooleanToOppositeBooleanConverter.cs" />
@@ -210,7 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Database\CaptureDb.cs" />
-    <Compile Include="Model\DataControllerEventArgs\DatabaseDataController.cs" />
+    <Compile Include="Model\DataControllers\LocalDataController.cs" />
     <Compile Include="Model\DataControllers\DataControllerConfig.cs" />
     <Compile Include="Model\DataControllers\IDataController.cs" />
     <Compile Include="Model\DataControllerEventArgs\InitialisationCompleteEventArgs.cs" />

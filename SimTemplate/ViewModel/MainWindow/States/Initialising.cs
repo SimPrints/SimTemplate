@@ -36,8 +36,8 @@ namespace SimTemplate.ViewModel.MainWindow
 
                 // Initialise the DataController so that we can fetch images.
                 DataControllerConfig config = new DataControllerConfig(
-                    Properties.Settings.Default.SqliteDatabase,
-                    Properties.Settings.Default.ImagesDirectory);
+                    Properties.Settings.Default.ApiKey,
+                    Properties.Settings.Default.RootUrl);
 
                 Outer.m_DataController.BeginInitialise(config);
             }

@@ -96,11 +96,10 @@ namespace SimTemplate.Model.DataControllers
         // Leave implementation of BeginInitialise to inheriting classes.
         public virtual void BeginInitialise(DataControllerConfig config)
         {
-
             Log.Debug("BeginInitialise(...) called.");
             IntegrityCheck.IsNotNull(config, "config");
-            IntegrityCheck.IsNotNullOrEmpty(config.DatabasePath, "config.DatabasePath");
-            IntegrityCheck.IsNotNullOrEmpty(config.ImageFilesDirectory, "config.ImageFilesDirectory");
+            IntegrityCheck.IsNotNullOrEmpty(config.ApiKey, "config.ApiKey");
+            IntegrityCheck.IsNotNullOrEmpty(config.UrlRoot, "config.UrlRoot");
 
             m_Config = config;
             m_TokenSourceLookup.Clear();

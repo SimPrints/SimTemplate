@@ -25,19 +25,19 @@ namespace SimTemplate.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\SimPrints\\Data\\mainDb_yesFMR_noPNG.sqlite")]
-        public string SqliteDatabase {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://datastoreapi.azurewebsites.net")]
+        public string RootUrl {
             get {
-                return ((string)(this["SqliteDatabase"]));
+                return ((string)(this["RootUrl"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\SimPrints\\Images\\Data_Zambia")]
-        public string ImagesDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("c9c9c40b-8444-42e1-9c19-6fc48cd5309b")]
+        public string ApiKey {
             get {
-                return ((string)(this["ImagesDirectory"]));
+                return ((string)(this["ApiKey"]));
             }
         }
     }
