@@ -40,8 +40,9 @@ namespace SimTemplate.Helpers.GoogleApis
                 {
                     // Initialize the client handler
                     m_Log.Debug("Client handler authenticated successfully. Now initialising.");
-                    aT.Result.Initialize(client);
-                    IAuthenticationClient clientWrapper = new GoogleAuthenticator(client);
+                    UserCredential credential = aT.Result;
+                    credential.Initialize(client);
+                    IAuthenticationClient clientWrapper = new GoogleAuthenticator(client, credential);
                     OnGetClientComplete(new GetClientCompleteEventArgs(clientWrapper));
                 }
                 else

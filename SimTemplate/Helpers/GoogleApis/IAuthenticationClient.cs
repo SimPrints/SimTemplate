@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Apis.Auth.OAuth2.Responses;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace SimTemplate.Helpers.GoogleApis
 {
     public interface IAuthenticationClient
     {
+        TokenResponse Token { get; }
+
         //
         // Summary:
         //     Send a GET request to the specified Uri and return the response body as a string

@@ -17,7 +17,6 @@ namespace SemiAutomatedSimTemplateTests.Helpers.GoogleApis
         private IList<AutoResetEvent> m_GetClientCompleteCounter;
 
         private ConfigurableHttpClientFactory m_Factory;
-        private GoogleAuthenticator m_Client;
 
         #region Constants
 
@@ -29,7 +28,9 @@ namespace SemiAutomatedSimTemplateTests.Helpers.GoogleApis
         };
         private static readonly IEnumerable<string> SCOPES = new string[]
         {
+            "openid",
             "profile",
+            "email",
         };
 
         #endregion
@@ -63,12 +64,25 @@ namespace SemiAutomatedSimTemplateTests.Helpers.GoogleApis
             m_Factory.BeginGetClient(
                 CLIENT_SECRETS,
                 SCOPES,
-                "unknownemail@gmail.com");
-            WaitHandle.WaitAll(m_GetClientCompleteCounter.ToArray(), TimeSpan.FromSeconds(5), false);
+                "sjbriggs14@g.com");
+            WaitHandle.WaitAll(m_GetClientCompleteCounter.ToArray(), TimeSpan.FromMinutes(2), false);
 
             // ASSERT:
             Assert.AreEqual(1, m_GetClientCompleteEvents.Count());
             Assert.IsNotNull(m_GetClientCompleteEvents[0].Client);
+
+            // PREPARE:
+            IAuthenticationClient client = m_GetClientCompleteEvents[0].Client;
+
+            // RUN:
+            // Make request to validate the token
+            Task<string> validateTask = client.GetStringAsync(
+                String.Format("https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={0}&id_token={1}",
+                    client.Token.AccessToken, "samIam"));
+            string response = validateTask.Result;
+
+            // ASSERT:
+            Assert.IsFalse(String.IsNullOrEmpty(response));
         }
     }
 }
