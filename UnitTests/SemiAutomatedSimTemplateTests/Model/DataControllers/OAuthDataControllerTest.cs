@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using SimTemplate.Helpers.GoogleApis;
 using SimTemplate.Model;
 using SimTemplate.Model.Database;
-using SimTemplate.Model.DataControllerEventArgs;
+using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.Model.DataControllers;
 
 namespace AutomatedSimTemplateTests.Model

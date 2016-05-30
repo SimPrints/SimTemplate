@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SimTemplate.Helpers;
-using SimTemplate.Model.DataControllerEventArgs;
+using SimTemplate.Model.DataControllers.EventArguments;
 
 namespace SimTemplate.Model.DataControllers
 {

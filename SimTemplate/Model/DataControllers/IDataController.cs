@@ -1,4 +1,4 @@
-﻿using SimTemplate.Model.DataControllerEventArgs;
+﻿using SimTemplate.Model.DataControllers.EventArguments;
 using System;
 using System.Collections.Generic;
 using System.Linq;

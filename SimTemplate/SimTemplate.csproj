@@ -165,11 +165,11 @@
     <Compile Include="Model\CaptureInfo.cs" />
     <Compile Include="Helpers\GoogleApis\IConfigurableHttpClientFactory.cs" />
     <Compile Include="Model\DataControllers\DataRequestResult.cs" />
-    <Compile Include="Model\DataControllerEventArgs\GetCaptureCompleteEventArgs.cs" />
+    <Compile Include="Model\DataControllers\EventArgs\GetCaptureCompleteEventArgs.cs" />
     <Compile Include="Model\DataControllers\HumanTemplateResponse.cs" />
     <Compile Include="Model\DataControllers\InitialisationResult.cs" />
     <Compile Include="Model\DataControllers\OAuthDataController.cs" />
-    <Compile Include="Model\DataControllerEventArgs\SaveTemplateEventArgs.cs" />
+    <Compile Include="Model\DataControllers\EventArgs\SaveTemplateEventArgs.cs" />
     <Compile Include="Model\DataControllers\TempApiDataController.cs" />
     <Compile Include="StateMachine\BaseState.cs" />
     <Compile Include="ViewModel\Commands\RelayCommand.cs" />
@@ -220,7 +220,7 @@
     <Compile Include="Model\DataControllers\LocalDataController.cs" />
     <Compile Include="Model\DataControllers\DataControllerConfig.cs" />
     <Compile Include="Model\DataControllers\IDataController.cs" />
-    <Compile Include="Model\DataControllerEventArgs\InitialisationCompleteEventArgs.cs" />
+    <Compile Include="Model\DataControllers\EventArgs\InitialisationCompleteEventArgs.cs" />
     <Compile Include="Model\Database\PersonDb.cs" />
     <Compile Include="Model\Database\SimPrintsDb.cs" />
     <Compile Include="Model\MinutiaRecord.cs" />

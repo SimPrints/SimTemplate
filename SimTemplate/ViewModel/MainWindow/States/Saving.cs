@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SimTemplate.Helpers;
 using SimTemplate.Model;
 using SimTemplate.Model.Database;
-using SimTemplate.Model.DataControllerEventArgs;
+using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.Model.DataControllers;
 
 namespace SimTemplate.ViewModel.MainWindow

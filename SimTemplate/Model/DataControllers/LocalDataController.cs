@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using SimTemplate.Helpers;
 using SimTemplate.ViewModel.MainWindow;
-using SimTemplate.Model.DataControllerEventArgs;
+using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.Model.Database;
 
 namespace SimTemplate.Model.DataControllers

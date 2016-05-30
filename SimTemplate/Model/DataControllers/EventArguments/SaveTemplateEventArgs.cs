@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Model.DataControllerEventArgs
+namespace SimTemplate.Model.DataControllers.EventArguments
 {
     public class SaveTemplateEventArgs : EventArgs
     {

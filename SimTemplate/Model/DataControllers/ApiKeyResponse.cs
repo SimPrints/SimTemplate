@@ -9,6 +9,6 @@ namespace SimTemplate.Model.DataControllers
 {
     public class ApiKeyResponse
     {
-        public string token { get; set; }
+        public string Token { get; set; }
     }
 }

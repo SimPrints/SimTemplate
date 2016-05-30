@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using SimTemplate.Helpers;
 using SimTemplate.Model.Database;
-using SimTemplate.Model.DataControllerEventArgs;
+using SimTemplate.Model.DataControllers.EventArguments;
 
 namespace SimTemplate.ViewModel.MainWindow
 {

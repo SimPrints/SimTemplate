@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using SimTemplate.Helpers;
 using SimTemplate.Model;
 using SimTemplate.Model.Database;
-using SimTemplate.Model.DataControllerEventArgs;
+using SimTemplate.Model.DataControllers.EventArguments;
 
 namespace SimTemplate.ViewModel.MainWindow
 {

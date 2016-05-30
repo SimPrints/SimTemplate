@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SimTemplate.Helpers;
 using SimTemplate.Model.DataControllers;
 
-namespace SimTemplate.Model.DataControllerEventArgs
+namespace SimTemplate.Model.DataControllers.EventArguments
 {
     public class GetCaptureCompleteEventArgs : EventArgs
     {
