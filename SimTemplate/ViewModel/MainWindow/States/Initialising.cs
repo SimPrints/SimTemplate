@@ -28,7 +28,6 @@ namespace SimTemplate.ViewModel.MainWindow
                 Outer.Minutae = new TrulyObservableCollection<MinutiaRecord>();
                 Outer.InputMinutiaType = MinutiaType.Termination;
                 Outer.FilteredScannerType = ScannerType.None;
-                Outer.IsGetTemplatedCapture = false;
                 Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Load.ico";
 
                 // TODO: provide opportunity to update SQL database location.

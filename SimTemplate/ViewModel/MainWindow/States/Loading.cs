@@ -96,7 +96,7 @@ namespace SimTemplate.ViewModel.MainWindow
             {
                 // Request a capture from the database
                 return Outer.m_DataController
-                    .BeginGetCapture(Outer.FilteredScannerType, Outer.m_IsGetTemplatedCapture);
+                    .BeginGetCapture(Outer.FilteredScannerType);
             }
 
             protected override void OnOperationComplete(GetCaptureCompleteEventArgs e)

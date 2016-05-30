@@ -79,13 +79,13 @@ namespace SimTemplate.Model.DataControllers
 
         #region Private Methods
 
-        protected override void StartCaptureTask(ScannerType scannerType, bool isTemplated, Guid guid, CancellationToken token)
+        protected override void StartCaptureTask(ScannerType scannerType, Guid guid, CancellationToken token)
         {
             m_Log.DebugFormat("Starting task with Guid={0}", guid);
 
             // Make HTTP request
             Task<string> responseText = m_Client.GetStringAsync(
-                SimTemplateServerHelper.GetCaptureRequestUri(scannerType, isTemplated));
+                SimTemplateServerHelper.GetCaptureRequestUri(scannerType));
 
             // When task is complete, raise GetCaptureComplete event
             // Pass the task the cancellation token so that this action may be skipped
@@ -198,10 +198,10 @@ namespace SimTemplate.Model.DataControllers
 
             #region Uris
 
-            public static Uri GetCaptureRequestUri(ScannerType type, bool isTemplated)
+            public static Uri GetCaptureRequestUri(ScannerType type)
             {
-                return new Uri(String.Format("{0}/Capture?scanner={1}&is_templated={2}",
-                    ROOT_URL, type, isTemplated));
+                return new Uri(String.Format("{0}/Capture?scanner={1}",
+                    ROOT_URL, type));
             }
 
             public static Uri SaveTemplateUri(long dbId)

@@ -68,7 +68,7 @@ namespace AutomatedSimTemplateTests.Model
             Assert.AreEqual(1, m_InitialisationComplete.Count());
             Assert.AreEqual(InitialisationResult.Initialised, m_InitialisationComplete[0].Result);
 
-            Guid requestId = m_Controller.BeginGetCapture(ScannerType.None, false);
+            Guid requestId = m_Controller.BeginGetCapture(ScannerType.None);
 
             DateTime start = DateTime.Now;
             while (m_GetCaptureCompleteEvents.Count < 1)

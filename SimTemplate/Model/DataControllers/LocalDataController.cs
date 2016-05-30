@@ -84,14 +84,14 @@ namespace SimTemplate.Model.DataControllers
 
         #region Private Methods
 
-        protected override void StartCaptureTask(ScannerType scannerType, bool isTemplated, Guid guid, CancellationToken token)
+        protected override void StartCaptureTask(ScannerType scannerType, Guid guid, CancellationToken token)
         {
             // Define and run the task, passing in the token.
             Task getCaptureTask = Task.Run(() =>
             {
                 Log.Debug("Get capture task running.");
                 // Get a capture
-                CaptureInfo capture = GetCapture(isTemplated, scannerType, token);
+                CaptureInfo capture = GetCapture(scannerType, token);
                 // Raise GetCaptureComplete event.
                 OnGetCaptureComplete(new GetCaptureCompleteEventArgs(capture, guid, DataRequestResult.Success));
             }, token);
@@ -140,10 +140,10 @@ namespace SimTemplate.Model.DataControllers
             });
         }
 
-        private CaptureInfo GetCapture(bool isTemplated, ScannerType scannerType, CancellationToken token)
+        private CaptureInfo GetCapture(ScannerType scannerType, CancellationToken token)
         {
-            m_Log.DebugFormat("GetCapture(isTemplated={0}, scannerType={1}, token={2}) called",
-                isTemplated, scannerType, token);
+            m_Log.DebugFormat("GetCapture(scannerType={1}, token={2}) called",
+                scannerType, token);
             CaptureInfo captureInfo = null;
             DataRequestResult result = DataRequestResult.None;
             bool isRunning = true;
@@ -154,7 +154,7 @@ namespace SimTemplate.Model.DataControllers
                 token.ThrowIfCancellationRequested();
 
                 // First query the database to get an image file name.
-                CaptureDb captureCandidate = GetCaptureFromDatabase(isTemplated, scannerType);
+                CaptureDb captureCandidate = GetCaptureFromDatabase(scannerType);
 
                 if (captureCandidate != null)
                 {
@@ -219,10 +219,10 @@ namespace SimTemplate.Model.DataControllers
             return threadSafeImages;
         }
 
-        private CaptureDb GetCaptureFromDatabase(bool isTemplated, ScannerType scannerType)
+        private CaptureDb GetCaptureFromDatabase(ScannerType scannerType)
         {
             CaptureDb capture;
-            string withTemplateString = isTemplated ? "NOT NULL" : "NULL";
+            string withTemplateString = "NULL";
             string query;
             if (scannerType == ScannerType.None)
             {

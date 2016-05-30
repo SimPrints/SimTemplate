@@ -80,7 +80,7 @@ namespace AutomatedSimTemplateTests.Model
             ConnectGoodDatabase();
 
             // Call BeginGetCapture
-            Guid guid = m_DataController.BeginGetCapture(ScannerType.None, false);
+            Guid guid = m_DataController.BeginGetCapture(ScannerType.None);
 
             // Wait for the request to complete.
             m_GetCaptureRequestCompleteResetEvent.WaitOne(GET_CAPTURE_TIMEOUT);
@@ -96,7 +96,7 @@ namespace AutomatedSimTemplateTests.Model
             ConnectGoodDatabaseNoMatchingImages();
 
             // Call BeginGetCapture
-            Guid guid = m_DataController.BeginGetCapture(ScannerType.None, false);
+            Guid guid = m_DataController.BeginGetCapture(ScannerType.None);
 
             // Wait for the request to complete.
             m_GetCaptureRequestCompleteResetEvent.WaitOne(GET_CAPTURE_TIMEOUT);

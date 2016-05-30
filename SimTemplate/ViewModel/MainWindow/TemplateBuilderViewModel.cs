@@ -39,8 +39,6 @@ namespace SimTemplate.ViewModel.MainWindow
         private MinutiaType m_InputMinutiaType; // TODO: Justify why enum not boolean?
         private ScannerType m_FilteredScannerType;
         private int? m_SelectedMinutia;
-        // View-driven properties
-        private bool m_IsGetTemplatedCapture;
         // Commands
         private ICommand m_LoadFileCommand;
         private ICommand m_SaveTemplateCommand;
@@ -114,22 +112,6 @@ namespace SimTemplate.ViewModel.MainWindow
                     {
                         m_InputMinutiaType = value;
                         m_StateMgr.State.SetMinutiaType(m_InputMinutiaType);
-                    }
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        public bool IsGetTemplatedCapture
-        {
-            get { return m_IsGetTemplatedCapture; }
-            set
-            {
-                if (value != m_IsGetTemplatedCapture)
-                {
-                    lock (m_StateLock)
-                    {
-                        m_IsGetTemplatedCapture = value;
                     }
                     NotifyPropertyChanged();
                 }

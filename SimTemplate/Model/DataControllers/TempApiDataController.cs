@@ -49,7 +49,7 @@ namespace SimTemplate.Model.DataControllers
                 () => OnInitialisationComplete(new InitialisationCompleteEventArgs(InitialisationResult.Error)));
         }
 
-        protected override void StartCaptureTask(ScannerType scannerType, bool isTemplated, Guid guid, CancellationToken token)
+        protected override void StartCaptureTask(ScannerType scannerType, Guid guid, CancellationToken token)
         {
             // Construct a request for a capture
             RestRequest request = new RestRequest(HUMAN_TEMPLATE_RESOURCE, Method.GET);

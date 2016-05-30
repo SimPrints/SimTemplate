@@ -107,20 +107,6 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
                                 </StackPanel>
-                                <!-- Template status radiobuttons -->
-                                <StackPanel Style="{StaticResource toolbarStackStyle}">
-                                    <Label Style="{StaticResource controlTextStyle}">Template Status:</Label>
-                                    <RadioButton x:Name="getTemplatedCaptureButton" GroupName="isGetTemplatedCapture"
-                                         IsChecked="{Binding Path=IsGetTemplatedCapture}"
-                                         ToolTip="Load a capture that already has a template">
-                                        Templated
-                                    </RadioButton>
-                                    <RadioButton x:Name="getUntemplatedCaptureButton" GroupName="isGetTemplatedCapture"
-                                         IsChecked="{Binding Path=IsGetTemplatedCapture, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
-                                         ToolTip="Load a capture that has not yet got a template">
-                                        Untemplated
-                                    </RadioButton>
-                                </StackPanel>
                             </StackPanel>
                         </Expander>
                     </StackPanel>

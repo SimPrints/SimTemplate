@@ -40,7 +40,7 @@ namespace AutomatedSimTemplateTests.ViewModel.MainWindow
             m_ViewModel.BeginInitialise();
 
             // Assert that ViewModel made no further requests
-            A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._, A<bool>._))
+            A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
                 .MustNotHaveHappened();
             A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
                 .MustHaveHappened(Repeated.Exactly.Once);

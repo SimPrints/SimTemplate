@@ -52,14 +52,14 @@ namespace SimTemplate.Model.DataControllers
             }
         }
 
-        Guid IDataController.BeginGetCapture(ScannerType scannerType, bool isTemplated)
+        Guid IDataController.BeginGetCapture(ScannerType scannerType)
         {
-            Log.DebugFormat("BeginGetCapture(scannterType={0}, isTemplated={1}) called",
-                scannerType, isTemplated);
+            Log.DebugFormat("BeginGetCapture(scannterType={0}) called",
+                scannerType);
             IntegrityCheck.IsNotNull(scannerType);
 
             return StartLogic((Guid guid, CancellationToken token) =>
-                StartCaptureTask(scannerType, isTemplated, guid, token));
+                StartCaptureTask(scannerType, guid, token));
         }
 
         Guid IDataController.BeginSaveTemplate(long dbId, byte[] template)
@@ -144,8 +144,8 @@ namespace SimTemplate.Model.DataControllers
 
         protected DataControllerConfig Config { get { return m_Config; } }
 
-        protected abstract void StartCaptureTask(ScannerType scannerType, bool isTemplated,
-            Guid guid, CancellationToken token);
+        protected abstract void StartCaptureTask(ScannerType scannerType, Guid guid,
+            CancellationToken token);
 
         protected abstract void StartSaveTask(long dbId, byte[] template,
             Guid guid, CancellationToken token);
