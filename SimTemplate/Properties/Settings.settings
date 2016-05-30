@@ -6,7 +6,7 @@
       <Value Profile="(Default)">https://datastoreapi.azurewebsites.net</Value>
     </Setting>
     <Setting Name="ApiKey" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">c9c9c40b-8444-42e1-9c19-6fc48cd5309b</Value>
+      <Value Profile="(Default)">af987398-30c1-43b7-8d66-1854f45b38bc</Value>
     </Setting>
   </Settings>
 </SettingsFile>
