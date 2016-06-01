@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SimTemplate.Model;
-using SimTemplate.Model.Database;
-using SimTemplate.Model.DataControllers.EventArguments;
-using SimTemplate.Model.DataControllers;
+using SimTemplate.ViewModel;
+using SimTemplate.ViewModel.Database;
+using SimTemplate.ViewModel.DataControllers.EventArguments;
+using SimTemplate.ViewModel.DataControllers;
 
 namespace AutomatedSimTemplateTests.Model
 {

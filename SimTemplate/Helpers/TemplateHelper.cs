@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SimTemplate.Helpers;
-using SimTemplate.Model;
+using SimTemplate.ViewModel;
 using SimTemplate.ViewModel.MainWindow;
 
 namespace SimTemplate.Helpers

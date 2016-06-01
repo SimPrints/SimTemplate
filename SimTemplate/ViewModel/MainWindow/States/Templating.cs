@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using SimTemplate.Helpers;
-using SimTemplate.Model;
+using SimTemplate.ViewModel;
 
 namespace SimTemplate.ViewModel.MainWindow
 {
@@ -34,10 +34,6 @@ namespace SimTemplate.ViewModel.MainWindow
                 IntegrityCheck.IsNotNull(Outer.Capture);
 
                 // Ensure UI controls active
-                if (!Outer.IsSaveTemplatePermitted)
-                {
-                    Outer.IsSaveTemplatePermitted = true;
-                }
                 if (!Outer.IsTemplating)
                 {
                     Outer.IsTemplating = true;

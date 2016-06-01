@@ -160,17 +160,17 @@
     <Compile Include="Helpers\GoogleApis\GoogleAuthenticator.cs" />
     <Compile Include="Helpers\GoogleApis\IAuthenticationClient.cs" />
     <Compile Include="Helpers\LoggingClass.cs" />
-    <Compile Include="Model\DataControllers\ApiKeyResponse.cs" />
-    <Compile Include="Model\DataControllers\DataController.cs" />
-    <Compile Include="Model\CaptureInfo.cs" />
+    <Compile Include="Model\ApiKey.cs" />
+    <Compile Include="Model\DataController\DataController.cs" />
+    <Compile Include="ViewModel\CaptureInfo.cs" />
     <Compile Include="Helpers\GoogleApis\IConfigurableHttpClientFactory.cs" />
-    <Compile Include="Model\DataControllers\DataRequestResult.cs" />
-    <Compile Include="Model\DataControllers\EventArguments\GetCaptureCompleteEventArgs.cs" />
-    <Compile Include="Model\DataControllers\HumanTemplateResponse.cs" />
-    <Compile Include="Model\DataControllers\InitialisationResult.cs" />
-    <Compile Include="Model\DataControllers\OAuthDataController.cs" />
-    <Compile Include="Model\DataControllers\EventArguments\SaveTemplateEventArgs.cs" />
-    <Compile Include="Model\DataControllers\TempApiDataController.cs" />
+    <Compile Include="Model\DataController\DataRequestResult.cs" />
+    <Compile Include="Model\DataController\EventArguments\GetCaptureCompleteEventArgs.cs" />
+    <Compile Include="Model\HumanTemplate.cs" />
+    <Compile Include="Model\DataController\InitialisationResult.cs" />
+    <Compile Include="Model\DataController\OAuthDataController.cs" />
+    <Compile Include="Model\DataController\EventArguments\SaveTemplateEventArgs.cs" />
+    <Compile Include="Model\DataController\TempApiDataController.cs" />
     <Compile Include="StateMachine\BaseState.cs" />
     <Compile Include="ViewModel\Commands\RelayCommand.cs" />
     <Compile Include="ViewModel\Converters\BooleanToOppositeBooleanConverter.cs" />
@@ -180,7 +180,7 @@
     <Compile Include="ViewModel\Converters\MultiplyConverter.cs" />
     <Compile Include="ViewModel\Converters\RadToDegConverter.cs" />
     <Compile Include="ViewModel\Converters\ScaleConverter.cs" />
-    <Compile Include="Model\ScannerType.cs" />
+    <Compile Include="ViewModel\ScannerType.cs" />
     <Compile Include="ViewModel\MainWindow\States\TransitioningAsync.cs" />
     <Compile Include="ViewModel\MainWindow\States\Error.cs" />
     <Compile Include="ViewModel\MainWindow\States\Idle.cs" />
@@ -196,7 +196,7 @@
     <Compile Include="ViewModel\MainWindow\States\WaitDirection.cs" />
     <Compile Include="ViewModel\MainWindow\States\WaitLocation.cs" />
     <Compile Include="ViewModel\MainWindow\TemplateBuilderViewModel.cs" />
-    <Compile Include="Model\MinutiaType.cs" />
+    <Compile Include="ViewModel\MinutiaType.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -217,13 +217,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Database\CaptureDb.cs" />
-    <Compile Include="Model\DataControllers\LocalDataController.cs" />
-    <Compile Include="Model\DataControllers\DataControllerConfig.cs" />
-    <Compile Include="Model\DataControllers\IDataController.cs" />
-    <Compile Include="Model\DataControllers\EventArguments\InitialisationCompleteEventArgs.cs" />
+    <Compile Include="Model\DataController\LocalDataController.cs" />
+    <Compile Include="Model\DataController\DataControllerConfig.cs" />
+    <Compile Include="Model\DataController\IDataController.cs" />
+    <Compile Include="Model\DataController\EventArguments\InitialisationCompleteEventArgs.cs" />
     <Compile Include="Model\Database\PersonDb.cs" />
     <Compile Include="Model\Database\SimPrintsDb.cs" />
-    <Compile Include="Model\MinutiaRecord.cs" />
+    <Compile Include="ViewModel\MinutiaRecord.cs" />
     <Compile Include="Helpers\TemplateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

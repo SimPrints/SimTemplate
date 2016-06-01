@@ -8,10 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using SimTemplate.Helpers;
-using SimTemplate.Model;
-using SimTemplate.Model.Database;
+using SimTemplate.ViewModel;
+using SimTemplate.ViewModel.Database;
 using SimTemplate.ViewModel.MainWindow;
-using SimTemplate.Model.DataControllers;
+using SimTemplate.ViewModel.DataControllers;
 
 namespace AutomatedSimTemplateTests.ViewModel.MainWindow
 {

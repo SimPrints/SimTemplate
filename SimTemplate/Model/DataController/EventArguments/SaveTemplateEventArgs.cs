@@ -1,11 +1,11 @@
-﻿using SimTemplate.Model.DataControllers;
+﻿using SimTemplate.ViewModel.DataControllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Model.DataControllers.EventArguments
+namespace SimTemplate.ViewModel.DataControllers.EventArguments
 {
     public class SaveTemplateEventArgs : EventArgs
     {

@@ -5,7 +5,7 @@ using System.Windows;
 using SimTemplate.Helpers;
 using SimTemplate.ViewModel.MainWindow;
 
-namespace SimTemplate.Model
+namespace SimTemplate.ViewModel
 {
     public class MinutiaRecord : INotifyPropertyChanged
     {

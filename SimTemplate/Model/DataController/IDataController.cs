@@ -1,11 +1,11 @@
-﻿using SimTemplate.Model.DataControllers.EventArguments;
+﻿using SimTemplate.ViewModel.DataControllers.EventArguments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Model.DataControllers
+namespace SimTemplate.ViewModel.DataControllers
 {
     public interface IDataController
     {

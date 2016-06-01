@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using SimTemplate.Helpers;
-using SimTemplate.Model;
+using SimTemplate.ViewModel;
 
 namespace SimTemplate.ViewModel.MainWindow
 {

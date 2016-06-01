@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using SimTemplate.Helpers;
-using SimTemplate.Model;
+using SimTemplate.ViewModel;
 
 namespace SimTemplate.ViewModel.MainWindow
 {
@@ -27,6 +27,11 @@ namespace SimTemplate.ViewModel.MainWindow
             public override void OnEnteringState()
             {
                 base.OnEnteringState();
+
+                Outer.PromptText = "Please set minutia angle";
+
+                // Get the minutia that was placed in the previous step
+                IntegrityCheck.AreNotEqual(0, Outer.Minutae.Count());
                 m_Record = Outer.Minutae.Last();
                 IntegrityCheck.IsNotNull(m_Record.Position);
             }

@@ -4,8 +4,8 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using SimTemplate.Helpers;
-using SimTemplate.Model.Database;
-using SimTemplate.Model.DataControllers.EventArguments;
+using SimTemplate.ViewModel.Database;
+using SimTemplate.ViewModel.DataControllers.EventArguments;
 
 namespace SimTemplate.ViewModel.MainWindow
 {

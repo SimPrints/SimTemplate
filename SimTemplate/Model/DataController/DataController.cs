@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SimTemplate.Helpers;
-using SimTemplate.Model.DataControllers.EventArguments;
+using SimTemplate.ViewModel.DataControllers.EventArguments;
 
-namespace SimTemplate.Model.DataControllers
+namespace SimTemplate.ViewModel.DataControllers
 {
     public abstract class DataController : LoggingClass, IDataController
     {

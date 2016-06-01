@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Model.Database
+namespace SimTemplate.ViewModel.Database
 {
     [Database]
     public class SimPrintsDb : DataContext

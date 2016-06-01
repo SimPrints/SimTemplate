@@ -5,9 +5,9 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Model.DataControllers
+namespace SimTemplate.ViewModel
 {
-    public class ApiKeyResponse
+    public class ApiKey
     {
         public string Token { get; set; }
     }

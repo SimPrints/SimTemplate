@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using SimTemplate.Model;
-using SimTemplate.Model.Database;
+using SimTemplate.ViewModel;
+using SimTemplate.ViewModel.Database;
+using SimTemplate.ViewModel.DataControllers.EventArguments;
 
 namespace SimTemplate.ViewModel.MainWindow
 {
@@ -24,6 +25,12 @@ namespace SimTemplate.ViewModel.MainWindow
             public override void SetScannerType(ScannerType type)
             {
                 // Ignore.
+            }
+
+            public override void DataController_GetCaptureComplete(GetCaptureCompleteEventArgs e)
+            {
+                // Ignore.
+                // We may have a race condition on Aborting a get capture request.
             }
         }
     }

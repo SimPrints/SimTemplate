@@ -2,10 +2,10 @@
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using SimTemplate.Helpers;
-using SimTemplate.Model;
-using SimTemplate.Model.Database;
-using SimTemplate.Model.DataControllers.EventArguments;
-using SimTemplate.Model.DataControllers;
+using SimTemplate.ViewModel;
+using SimTemplate.ViewModel.Database;
+using SimTemplate.ViewModel.DataControllers.EventArguments;
+using SimTemplate.ViewModel.DataControllers;
 
 namespace SimTemplate.ViewModel.MainWindow
 {

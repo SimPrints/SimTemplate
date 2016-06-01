@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace SimTemplate.Model
+namespace SimTemplate.ViewModel
 {
     public class CaptureInfo
     {

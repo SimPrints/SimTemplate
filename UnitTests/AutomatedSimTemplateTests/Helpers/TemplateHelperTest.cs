@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using SimTemplate.Helpers;
-using SimTemplate.Model;
+using SimTemplate.ViewModel;
 using SimTemplate.ViewModel.MainWindow;
 
 namespace AutomatedSimTemplateTests.Helpers

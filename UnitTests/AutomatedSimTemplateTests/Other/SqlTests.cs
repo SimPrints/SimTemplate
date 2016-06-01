@@ -7,8 +7,8 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SimTemplate.Model;
-using SimTemplate.Model.Database;
+using SimTemplate.ViewModel;
+using SimTemplate.ViewModel.Database;
 
 namespace AutomatedSimTemplateTests.OTher
 {

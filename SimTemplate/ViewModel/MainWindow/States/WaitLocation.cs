@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using SimTemplate.Helpers;
-using SimTemplate.Model;
+using SimTemplate.ViewModel;
 
 namespace SimTemplate.ViewModel.MainWindow
 {
@@ -16,6 +16,17 @@ namespace SimTemplate.ViewModel.MainWindow
         {
             public WaitLocation(TemplateBuilderViewModel outer) : base(outer)
             { }
+
+            public override void OnEnteringState()
+            {
+                base.OnEnteringState();
+
+                Outer.PromptText = "Please place minutia (or Load, or Save!)";
+
+                // We are only able to save our template while there is at least one minutia in
+                // the template
+                Outer.IsSaveTemplatePermitted = (Outer.Minutae.Count() > 0);
+            }
 
             public override void PositionInput(Point position)
             {

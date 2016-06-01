@@ -6,9 +6,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using SimTemplate.Helpers;
-using SimTemplate.Model.Database;
+using SimTemplate.ViewModel.Database;
 using SimTemplate.ViewModel.MainWindow;
-using SimTemplate.Model.DataControllers;
+using SimTemplate.ViewModel.DataControllers;
 
 namespace SimTemplate.View.MainWindow
 {

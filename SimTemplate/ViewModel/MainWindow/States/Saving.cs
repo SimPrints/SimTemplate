@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SimTemplate.Helpers;
-using SimTemplate.Model;
-using SimTemplate.Model.Database;
-using SimTemplate.Model.DataControllers.EventArguments;
-using SimTemplate.Model.DataControllers;
+using SimTemplate.ViewModel;
+using SimTemplate.ViewModel.Database;
+using SimTemplate.ViewModel.DataControllers.EventArguments;
+using SimTemplate.ViewModel.DataControllers;
 
 namespace SimTemplate.ViewModel.MainWindow
 {
@@ -34,18 +34,12 @@ namespace SimTemplate.ViewModel.MainWindow
             }
 
             protected override object StartAsyncOperation()
-            {
+            {  
+                // We should only be saving if there is information to save
+                IntegrityCheck.AreNotEqual(0, Outer.Minutae.Count());
+
                 // Convert template format.
-                byte[] isoTemplate;
-                if (Outer.Minutae.Count() > 0)
-                {
-                    isoTemplate = TemplateHelper.ToIsoTemplate(Outer.Minutae);
-                }
-                else
-                {
-                    // User has saved 0 minutia, save as 'NULL' in database
-                    isoTemplate = null;
-                }
+                byte[] isoTemplate = TemplateHelper.ToIsoTemplate(Outer.Minutae);
 
                 // Begin the save
                 return Outer.m_DataController.BeginSaveTemplate(
