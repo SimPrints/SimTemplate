@@ -3,14 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:model="clr-namespace:SimTemplate.Model;assembly="
+        xmlns:model="clr-namespace:SimTemplate.ViewModel;assembly="
         xmlns:view="clr-namespace:SimTemplate.View;assembly="
         xmlns:local="clr-namespace:SimTemplate.ViewModel;assembly="
         xmlns:conv="clr-namespace:SimTemplate.ViewModel.Converters;assembly="
         mc:Ignorable="d"
         x:Name="mainWindow"
-        Title="MainWindow" Height="525" Width="525">
+        Title="MainWindow" Height="525" Width="525"
+        ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
         <conv:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
@@ -21,6 +23,13 @@
         <conv:MultiplyConverter x:Key="MultiplyConverter" />
         <conv:ScaleConverter x:Key="ScaleConverter" />
         
+        <!--Colours-->
+        <SolidColorBrush x:Key="simPrintsBlueBrush" Color="#498BCA"/>
+
+        <!--Values-->
+        <sys:Double x:Key="minutiaLineLength">15</sys:Double>
+        <sys:Double x:Key="minutiaDiameter">30</sys:Double>
+
         <!-- Styles -->
         <Style x:Key="baseStyle">
             <Setter Property="TextBlock.FontSize" Value="12" />
@@ -44,6 +53,18 @@
         </Style>
         <Style x:Key="toolsSectionStyle" BasedOn="{StaticResource baseStyle}">
             <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="minutiaShapeStyle">
+            <Setter Property="Shape.Stroke" Value="{StaticResource simPrintsBlueBrush}" />
+            <Setter Property="Shape.StrokeThickness" Value="4" />
+        </Style>
+        <Style x:Key="minutiaLineStyle" BasedOn="{StaticResource minutiaShapeStyle}">
+            <Setter Property="Line.X1" Value="0" />
+            <Setter Property="Line.X2" Value="0" />
+            <Setter Property="Line.Y1" Value="{Binding Source={StaticResource minutiaDiameter},
+                Converter={StaticResource MultiplyConverter},
+                ConverterParameter=0.5}" />
+            <Setter Property="Line.Y2" Value="30" />
         </Style>
         
         <!-- Data Templates -->
@@ -117,13 +138,17 @@
                     <!-- Minutia Type radiobuttons -->
                 <StackPanel Style="{StaticResource toolbarStackStyle}">
                     <TextBlock Style="{StaticResource controlTextStyle}">Minutia Type:</TextBlock>
-                    <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static model:MinutiaType.Termination}}"
+                    <RadioButton IsChecked="{Binding Path=InputMinutiaType,
+                        Converter={StaticResource EnumToBooleanConverter},
+                        ConverterParameter={x:Static model:MinutiaType.Termination}}"
                                  IsEnabled="{Binding Path=IsTemplating}"
                                  GroupName="inputMinutiaType"
                                  ToolTip="Record a termination (T)">
                         Termination
                     </RadioButton>
-                    <RadioButton IsChecked="{Binding Path=InputMinutiaType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static model:MinutiaType.Bifurication}}"
+                    <RadioButton IsChecked="{Binding Path=InputMinutiaType,
+                        Converter={StaticResource EnumToBooleanConverter},
+                        ConverterParameter={x:Static model:MinutiaType.Bifurication}}"
                                  IsEnabled="{Binding Path=IsTemplating}"
                                  GroupName="inputMinutiaType"
                                  ToolTip="Record a bifurication (B)">
@@ -135,12 +160,12 @@
         </ToolBarTray>
         <!-- Guidance Text -->
         <TextBlock x:Name="promptBanner" Text="{Binding Path=PromptText}" DockPanel.Dock="Top"
-                   TextAlignment="Center" FontSize="30" Foreground="Red"
+                   TextAlignment="Center" FontSize="30" Foreground="{StaticResource simPrintsBlueBrush}"
                    Style="{StaticResource baseStyle}"/>
         
         <!-- MAIN CONTENT -->
-        <Grid Margin="0,51,0,0">
-            <!--The image being annotated-->
+        <Grid Margin="10">
+            <!--Status image sometimes shown-->
             <Image x:Name="statusImage"
                    Source="{Binding StatusImage}" Stretch="Uniform" />
             <!--The image being annotated-->
@@ -165,39 +190,46 @@
                     <DataTemplate>
                         <Canvas>
                             <Ellipse x:Name="point"
-                                     Width="5" Height="5"
-                                     Canvas.Top="-2.5"
-                                     Canvas.Left="-2.5"
-                                     Fill="Red" />
+                                     Width="5"
+                                     Height="5"
+                                     Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                Path=Height, Converter={StaticResource MultiplyConverter},
+                                ConverterParameter=-0.5}"
+                                     Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                Path=Width, Converter={StaticResource MultiplyConverter},
+                                ConverterParameter=-0.5}"
+                                     Fill="{StaticResource simPrintsBlueBrush}"
+                                     Style="{StaticResource minutiaShapeStyle}"/>
                             <Ellipse x:Name="ellipse"
-                                     Width="30" Height="30"
-                                     Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Height, Converter={StaticResource MultiplyConverter}, ConverterParameter=-0.5}"
-                                     Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Width, Converter={StaticResource MultiplyConverter}, ConverterParameter=-0.5}"
-                                     Fill="Transparent" Stroke="Black" StrokeThickness="4"
+                                     Width="{StaticResource minutiaDiameter}"
+                                     Height="{StaticResource minutiaDiameter}"
+                                     Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                Path=Height, Converter={StaticResource MultiplyConverter},
+                                ConverterParameter=-0.5}"
+                                     Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                Path=Width, Converter={StaticResource MultiplyConverter},
+                                ConverterParameter=-0.5}"
+                                     Fill="Transparent"
                                      MouseDown="Minutia_MouseDown"
-                                     MouseUp="Minutia_MouseUp" />
-                            <Line X1="0" X2="0"
-                                  Y1="{Binding ElementName=ellipse, Path=Height, Converter={StaticResource MultiplyConverter}, ConverterParameter=0.5}"
-                                  Y2="30"
-                                  Stroke="Black" StrokeThickness="4">
+                                     MouseUp="Minutia_MouseUp"
+                                     Style="{StaticResource minutiaShapeStyle}"/>
+                            <Line Style="{StaticResource minutiaLineStyle}">
                                 <Line.RenderTransform>
                                     <RotateTransform Angle="90"/>
                                 </Line.RenderTransform>
                             </Line>
-                            <Line X1="0" X2="0"
-                                  Y1="{Binding ElementName=ellipse, Path=Height, Converter={StaticResource MultiplyConverter}, ConverterParameter=0.5}"
-                                  Y2="30"
-                                  Stroke="Black" StrokeThickness="4"
-                                  Visibility="{Binding Path=Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:MinutiaType.Bifurication}}">
+                            <Line Style="{StaticResource minutiaLineStyle}"
+                                  Visibility="{Binding Path=Type,
+                                Converter={StaticResource EnumToVisibilityConverter},
+                                ConverterParameter={x:Static model:MinutiaType.Bifurication}}">
                                 <Line.RenderTransform>
                                     <RotateTransform Angle="225"/>
                                 </Line.RenderTransform>
                             </Line>
-                            <Line X1="0" X2="0"
-                                  Y1="{Binding ElementName=ellipse, Path=Height, Converter={StaticResource MultiplyConverter}, ConverterParameter=0.5}"
-                                  Y2="30"
-                                  Stroke="Black" StrokeThickness="4"
-                                  Visibility="{Binding Path=Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:MinutiaType.Bifurication}}">
+                            <Line Style="{StaticResource minutiaLineStyle}"
+                                  Visibility="{Binding Path=Type,
+                                Converter={StaticResource EnumToVisibilityConverter},
+                                ConverterParameter={x:Static model:MinutiaType.Bifurication}}">
                                 <Line.RenderTransform>
                                     <RotateTransform Angle="315"/>
                                 </Line.RenderTransform>
