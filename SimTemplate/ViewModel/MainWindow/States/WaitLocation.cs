@@ -21,7 +21,7 @@ namespace SimTemplate.ViewModel.MainWindow
             {
                 base.OnEnteringState();
 
-                Outer.PromptText = "Please place minutia (or Load, or Save!)";
+                Outer.PromptText = "Please place minutia";
 
                 // We are only able to save our template while there is at least one minutia in
                 // the template

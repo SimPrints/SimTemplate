@@ -164,21 +164,21 @@
                    Style="{StaticResource baseStyle}"/>
         
         <!-- MAIN CONTENT -->
-        <Grid Margin="10">
+        <Grid Margin="20">
             <!--Status image sometimes shown-->
             <Image x:Name="statusImage"
-                   Source="{Binding StatusImage}" Stretch="Uniform" />
+                    Source="{Binding StatusImage}" Stretch="Uniform" />
             <!--The image being annotated-->
             <Image x:Name="image"
-                   Source="{Binding Capture.ImageData}" Stretch="Uniform"
-                   MouseMove="itemsControl_MouseMove"
-                   MouseUp="itemsControl_MouseUp"
-                   SizeChanged="image_SizeChanged" />
+                       Source="{Binding Capture.ImageData}" Stretch="Uniform"
+                       SizeChanged="image_SizeChanged"
+                       MouseMove="itemsControl_MouseMove"
+                       MouseUp="itemsControl_MouseUp"/>
             <!--The control on which to display the annotations-->
             <ItemsControl x:Name="itemsControl"
-                          ItemsSource="{Binding Minutae}"
-                          Width="{Binding ElementName=image, Path=ActualWidth}"
-                          Height="{Binding ElementName=image, Path=ActualHeight}">
+                            ItemsSource="{Binding Minutae}"
+                            Width="{Binding ElementName=image, Path=ActualWidth}"
+                            Height="{Binding ElementName=image, Path=ActualHeight}">
                 <!-- Set the 'panel' to be a Canvas for displaying our items -->
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -190,36 +190,36 @@
                     <DataTemplate>
                         <Canvas>
                             <Ellipse x:Name="point"
-                                     Width="5"
-                                     Height="5"
-                                     Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                        Width="5"
+                                        Height="5"
+                                        Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
                                 Path=Height, Converter={StaticResource MultiplyConverter},
                                 ConverterParameter=-0.5}"
-                                     Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                        Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
                                 Path=Width, Converter={StaticResource MultiplyConverter},
                                 ConverterParameter=-0.5}"
-                                     Fill="{StaticResource simPrintsBlueBrush}"
-                                     Style="{StaticResource minutiaShapeStyle}"/>
+                                        Fill="{StaticResource simPrintsBlueBrush}"
+                                        Style="{StaticResource minutiaShapeStyle}"/>
                             <Ellipse x:Name="ellipse"
-                                     Width="{StaticResource minutiaDiameter}"
-                                     Height="{StaticResource minutiaDiameter}"
-                                     Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                        Width="{StaticResource minutiaDiameter}"
+                                        Height="{StaticResource minutiaDiameter}"
+                                        Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
                                 Path=Height, Converter={StaticResource MultiplyConverter},
                                 ConverterParameter=-0.5}"
-                                     Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                        Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
                                 Path=Width, Converter={StaticResource MultiplyConverter},
                                 ConverterParameter=-0.5}"
-                                     Fill="Transparent"
-                                     MouseDown="Minutia_MouseDown"
-                                     MouseUp="Minutia_MouseUp"
-                                     Style="{StaticResource minutiaShapeStyle}"/>
+                                        Fill="Transparent"
+                                        MouseDown="Minutia_MouseDown"
+                                        MouseUp="Minutia_MouseUp"
+                                        Style="{StaticResource minutiaShapeStyle}"/>
                             <Line Style="{StaticResource minutiaLineStyle}">
                                 <Line.RenderTransform>
                                     <RotateTransform Angle="90"/>
                                 </Line.RenderTransform>
                             </Line>
                             <Line Style="{StaticResource minutiaLineStyle}"
-                                  Visibility="{Binding Path=Type,
+                                    Visibility="{Binding Path=Type,
                                 Converter={StaticResource EnumToVisibilityConverter},
                                 ConverterParameter={x:Static model:MinutiaType.Bifurication}}">
                                 <Line.RenderTransform>
@@ -244,7 +244,7 @@
                         <Setter Property="Canvas.Top">
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource ScaleConverter}"
-                                              Mode="OneWay">
+                                                Mode="OneWay">
                                     <Binding Path="Position.Y" />
                                     <Binding ElementName="mainWindow" Path="Scale.Y" />
                                 </MultiBinding>
@@ -253,7 +253,7 @@
                         <Setter Property="Canvas.Left">
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource ScaleConverter}"
-                                              Mode="OneWay">
+                                                Mode="OneWay">
                                     <Binding Path="Position.X"/>
                                     <Binding ElementName="mainWindow" Path="Scale.X" />
                                 </MultiBinding>

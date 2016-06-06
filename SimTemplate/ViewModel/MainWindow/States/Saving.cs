@@ -8,6 +8,7 @@ using SimTemplate.ViewModel;
 using SimTemplate.ViewModel.Database;
 using SimTemplate.ViewModel.DataControllers.EventArguments;
 using SimTemplate.ViewModel.DataControllers;
+using System.Windows;
 
 namespace SimTemplate.ViewModel.MainWindow
 {
@@ -18,6 +19,8 @@ namespace SimTemplate.ViewModel.MainWindow
             public Saving(TemplateBuilderViewModel outer) : base(outer)
             { }
 
+            #region Overridden Methods
+
             public override void OnEnteringState()
             {
                 base.OnEnteringState();
@@ -26,10 +29,13 @@ namespace SimTemplate.ViewModel.MainWindow
                 Outer.PromptText = "Saving template...";
             }
 
+            public override void PositionUpdate(Point position)
+            {
+                // Ignore a position change when saving.
+            }
+
             public override void DataController_SaveTemplateComplete(SaveTemplateEventArgs e)
             {
-                base.DataController_SaveTemplateComplete(e);
-
                 CheckCompleteAndContinue(e.RequestId, e);
             }
 
@@ -70,6 +76,9 @@ namespace SimTemplate.ViewModel.MainWindow
                 // Save operation complete. Transition to Idle
                 TransitionTo(typeof(Idle));
             }
+
+            #endregion
+
         }
     }
 }
