@@ -94,13 +94,19 @@ namespace SimTemplate.ViewModel.MainWindow
         #endregion
 
         /// <summary>
-        /// Gets the minutae. Bound to the canvas.
+        /// Gets or sets the minutae. Bound to the canvas.
         /// </summary>
+        /// <value>
+        /// The minutae.
+        /// </value>
         public TrulyObservableCollection<MinutiaRecord> Minutae { get; set; }
 
         /// <summary>
-        /// Gets the type of minutia being input.
+        /// Gets or sets the type of minutia being input.
         /// </summary>
+        /// <value>
+        /// The type of the input minutia.
+        /// </value>
         public MinutiaType InputMinutiaType
         {
             get { return m_InputMinutiaType; }
@@ -118,6 +124,12 @@ namespace SimTemplate.ViewModel.MainWindow
             }
         }
 
+        /// <summary>
+        /// Gets a list of scanner type optitons.
+        /// </summary>
+        /// <value>
+        /// The scanner types.
+        /// </value>
         public IEnumerable<ScannerType> ScannerTypes
         {
             get
@@ -127,6 +139,12 @@ namespace SimTemplate.ViewModel.MainWindow
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type of scanner type to filter GET requests for.
+        /// </summary>
+        /// <value>
+        /// The type of scanner to filter.
+        /// </value>
         public ScannerType FilteredScannerType
         {
             get { return m_FilteredScannerType; }
@@ -147,6 +165,9 @@ namespace SimTemplate.ViewModel.MainWindow
         /// <summary>
         /// Gets or sets a value indicating whether the ViewModel is currently templating.
         /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is templating; otherwise, <c>false</c>.
+        /// </value>
         public bool IsTemplating
         {
             get { return m_IsTemplating; }
@@ -160,6 +181,12 @@ namespace SimTemplate.ViewModel.MainWindow
             }
         }
 
+        /// <summary>
+        /// Gets or sets the capture info currently being templated.
+        /// </summary>
+        /// <value>
+        /// The capture.
+        /// </value>
         public CaptureInfo Capture
         {
             get { return m_Capture; }

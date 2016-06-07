@@ -9,6 +9,7 @@ using SimTemplate.Helpers;
 using SimTemplate.ViewModel.Database;
 using SimTemplate.ViewModel.MainWindow;
 using SimTemplate.ViewModel.DataControllers;
+using System.Windows.Controls;
 
 namespace SimTemplate.View.MainWindow
 {
@@ -54,20 +55,20 @@ namespace SimTemplate.View.MainWindow
 
         #region Event Handlers
 
-        private void itemsControl_MouseMove(object sender, MouseEventArgs e)
+        private void templatingCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            Point scaled_pos = e.GetPosition(image);
+            Point scaled_pos = e.GetPosition(sender as IInputElement);
             // Account for image scaling
             Point pos = scaled_pos.InvScale(m_Scale);
             // Pass the pixels of the image 
             m_ViewModel.PositionUpdate(pos);
         }
 
-        private void itemsControl_MouseUp(object sender, MouseButtonEventArgs e)
+        private void templatingCanvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            m_Log.Debug("itemsControl_MouseUp(...) called.");
+            m_Log.Debug("templatingCanvas_MouseUp(...) called.");
 
-            Point scaled_pos = e.GetPosition(image);
+            Point scaled_pos = e.GetPosition(sender as IInputElement);
             // Account for image scaling
             Point pos = scaled_pos.InvScale(m_Scale);
             // Pass the pixels of the image 
@@ -102,7 +103,7 @@ namespace SimTemplate.View.MainWindow
             if (e.ChangedButton == MouseButton.Left)
             {
                 object item = (sender as FrameworkElement).DataContext;
-                int index = itemsControl.Items.IndexOf(item);
+                int index = templatingItemsControl.Items.IndexOf(item);
                 m_ViewModel.StartMove(index);
             }
         }
@@ -114,7 +115,7 @@ namespace SimTemplate.View.MainWindow
             if (e.ChangedButton == MouseButton.Right)
             {
                 object item = (sender as FrameworkElement).DataContext;
-                int index = itemsControl.Items.IndexOf(item);
+                int index = templatingItemsControl.Items.IndexOf(item);
 
                 m_ViewModel.RemoveMinutia(index);
 

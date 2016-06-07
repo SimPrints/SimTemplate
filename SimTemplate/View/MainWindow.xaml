@@ -15,6 +15,7 @@
         ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
+        <!--Converters-->
         <conv:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
         <conv:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
         <conv:BooleanToOppositeBooleanConverter x:Key="BooleanToOppositeBooleanConverter" />
@@ -22,15 +23,17 @@
         <conv:RadToDegConverter x:Key="RadToDegConverter" />
         <conv:MultiplyConverter x:Key="MultiplyConverter" />
         <conv:ScaleConverter x:Key="ScaleConverter" />
-        
-        <!--Colours-->
-        <SolidColorBrush x:Key="simPrintsBlueBrush" Color="#498BCA"/>
+        <conv:NullImageConverter x:Key="NullImageConverter" />
 
         <!--Values-->
         <sys:Double x:Key="minutiaLineLength">15</sys:Double>
-        <sys:Double x:Key="minutiaDiameter">30</sys:Double>
+        <sys:Double x:Key="minutiaDiameter">40</sys:Double>
+        <sys:String x:Key="defaultLoadIcon">"pack://application:,,,/Resources/Icons/Load.ico"</sys:String>
+        <SolidColorBrush x:Key="simPrintsBlueBrush" Color="#498BCA"/>
+        <SolidColorBrush x:Key="minutiaBorderBrush" Color="White"/>
 
         <!-- Styles -->
+        <!-- Toolbar Styles-->
         <Style x:Key="baseStyle">
             <Setter Property="TextBlock.FontSize" Value="12" />
             <Setter Property="TextBlock.FontFamily" Value="Calibri" />
@@ -54,9 +57,14 @@
         <Style x:Key="toolsSectionStyle" BasedOn="{StaticResource baseStyle}">
             <Setter Property="TextBlock.TextAlignment" Value="Center" />
         </Style>
+        <!--Templating Styles-->
+        <Style x:Key="minutiaBorderStyle">
+            <Setter Property="Border.BorderThickness" Value="0,2" />
+            <Setter Property="Border.BorderBrush" Value="{StaticResource minutiaBorderBrush}" />
+        </Style>
         <Style x:Key="minutiaShapeStyle">
             <Setter Property="Shape.Stroke" Value="{StaticResource simPrintsBlueBrush}" />
-            <Setter Property="Shape.StrokeThickness" Value="4" />
+                <Setter Property="Shape.StrokeThickness" Value="6" />
         </Style>
         <Style x:Key="minutiaLineStyle" BasedOn="{StaticResource minutiaShapeStyle}">
             <Setter Property="Line.X1" Value="0" />
@@ -66,7 +74,7 @@
                 ConverterParameter=0.5}" />
             <Setter Property="Line.Y2" Value="30" />
         </Style>
-        
+
         <!-- Data Templates -->
         <DataTemplate x:Key="headerTemplate">
             <TextBlock Text="{Binding}"
@@ -77,13 +85,16 @@
                        Style="{StaticResource toolsSectionStyle}"/>
         </DataTemplate>
     </Window.Resources>
-
+    
+    <!--InputBindings-->
     <Window.InputBindings>
         <KeyBinding Key="t" Command="{Binding TerminationButtonPressCommand}"/>
         <KeyBinding Key="b" Command="{Binding BifuricationButtonPressCommand}"/>
         <KeyBinding Key="Esc" Command="{Binding EscapePressCommand}"/>
     </Window.InputBindings>
-
+    
+    <!---BEGIN WINDOW CONTENT-->
+    <!--Side Panel (Controls)-->
     <DockPanel x:Name="sidePanel">
         <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical"
                      HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -106,7 +117,7 @@
                             ToolTip="Loads the next capture for templating"
                             Style="{StaticResource iconsStyle}"
                             Command="{Binding Path=LoadFileCommand}">
-                                <Image Source="{Binding Path=LoadIcon}" />
+                                <Image Source="{Binding Path=LoadIcon, TargetNullValue={StaticResource defaultLoadIcon}}"/>
                             </Button>
                         </StackPanel>
                         <Expander Name="myExpander" Header="Load Options" 
@@ -167,22 +178,28 @@
         <Grid Margin="20">
             <!--Status image sometimes shown-->
             <Image x:Name="statusImage"
-                    Source="{Binding StatusImage}" Stretch="Uniform" />
+                   Source="{Binding StatusImage, Converter={StaticResource NullImageConverter}}"
+                   Stretch="Uniform"
+                   Panel.ZIndex="2"/>
             <!--The image being annotated-->
             <Image x:Name="image"
-                       Source="{Binding Capture.ImageData}" Stretch="Uniform"
-                       SizeChanged="image_SizeChanged"
-                       MouseMove="itemsControl_MouseMove"
-                       MouseUp="itemsControl_MouseUp"/>
+                   Source="{Binding Capture.ImageData, Converter={StaticResource NullImageConverter}}"
+                   Stretch="Uniform"
+                   SizeChanged="image_SizeChanged"
+                   Panel.ZIndex="0"/>
             <!--The control on which to display the annotations-->
-            <ItemsControl x:Name="itemsControl"
-                            ItemsSource="{Binding Minutae}"
-                            Width="{Binding ElementName=image, Path=ActualWidth}"
-                            Height="{Binding ElementName=image, Path=ActualHeight}">
+            <ItemsControl x:Name="templatingItemsControl"
+                          ItemsSource="{Binding Minutae}"
+                          Width="{Binding ElementName=image, Path=ActualWidth}"
+                          Height="{Binding ElementName=image, Path=ActualHeight}"
+                          Panel.ZIndex="1">
                 <!-- Set the 'panel' to be a Canvas for displaying our items -->
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas x:Name="itemsControlCanvas" />
+                        <Canvas x:Name="templatingCanvas"
+                                MouseMove="templatingCanvas_MouseMove"
+                                MouseUp="templatingCanvas_MouseUp"
+                                Background="Transparent" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <!-- Set Items to be interpreted as Ellipse and Line shapes -->
@@ -200,19 +217,21 @@
                                 ConverterParameter=-0.5}"
                                         Fill="{StaticResource simPrintsBlueBrush}"
                                         Style="{StaticResource minutiaShapeStyle}"/>
-                            <Ellipse x:Name="ellipse"
-                                        Width="{StaticResource minutiaDiameter}"
-                                        Height="{StaticResource minutiaDiameter}"
-                                        Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                Path=Height, Converter={StaticResource MultiplyConverter},
-                                ConverterParameter=-0.5}"
-                                        Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                Path=Width, Converter={StaticResource MultiplyConverter},
-                                ConverterParameter=-0.5}"
-                                        Fill="Transparent"
-                                        MouseDown="Minutia_MouseDown"
-                                        MouseUp="Minutia_MouseUp"
-                                        Style="{StaticResource minutiaShapeStyle}"/>
+                            <Border Style="{StaticResource minutiaBorderStyle}">
+                                <Ellipse x:Name="ellipse"
+                                            Width="{StaticResource minutiaDiameter}"
+                                            Height="{StaticResource minutiaDiameter}"
+                                            Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                    Path=Height, Converter={StaticResource MultiplyConverter},
+                                    ConverterParameter=-0.5}"
+                                            Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                    Path=Width, Converter={StaticResource MultiplyConverter},
+                                    ConverterParameter=-0.5}"
+                                            Fill="Transparent"
+                                            MouseDown="Minutia_MouseDown"
+                                            MouseUp="Minutia_MouseUp"
+                                            Style="{StaticResource minutiaShapeStyle}"/>
+                            </Border>
                             <Line Style="{StaticResource minutiaLineStyle}">
                                 <Line.RenderTransform>
                                     <RotateTransform Angle="90"/>
@@ -239,12 +258,11 @@
                 </ItemsControl.ItemTemplate>
                 <!--Style the container for an item (Ellipse) to fit it in the panel-->
                 <ItemsControl.ItemContainerStyle>
-                    <!--It is necessary to set the TargetType so that XAML compiler knows RenderTransform is a viable setting-->
                     <Style>
                         <Setter Property="Canvas.Top">
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource ScaleConverter}"
-                                                Mode="OneWay">
+                                              Mode="OneWay">
                                     <Binding Path="Position.Y" />
                                     <Binding ElementName="mainWindow" Path="Scale.Y" />
                                 </MultiBinding>
@@ -253,7 +271,7 @@
                         <Setter Property="Canvas.Left">
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource ScaleConverter}"
-                                                Mode="OneWay">
+                                              Mode="OneWay">
                                     <Binding Path="Position.X"/>
                                     <Binding ElementName="mainWindow" Path="Scale.X" />
                                 </MultiBinding>
