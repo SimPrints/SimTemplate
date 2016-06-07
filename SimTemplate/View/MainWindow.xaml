@@ -217,8 +217,7 @@
                                 ConverterParameter=-0.5}"
                                         Fill="{StaticResource simPrintsBlueBrush}"
                                         Style="{StaticResource minutiaShapeStyle}"/>
-                            <Border Style="{StaticResource minutiaBorderStyle}">
-                                <Ellipse x:Name="ellipse"
+                            <Ellipse x:Name="ellipse"
                                             Width="{StaticResource minutiaDiameter}"
                                             Height="{StaticResource minutiaDiameter}"
                                             Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
@@ -231,7 +230,6 @@
                                             MouseDown="Minutia_MouseDown"
                                             MouseUp="Minutia_MouseUp"
                                             Style="{StaticResource minutiaShapeStyle}"/>
-                            </Border>
                             <Line Style="{StaticResource minutiaLineStyle}">
                                 <Line.RenderTransform>
                                     <RotateTransform Angle="90"/>
