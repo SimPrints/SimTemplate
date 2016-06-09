@@ -28,7 +28,7 @@
         <!--Values-->
         <sys:Double x:Key="minutiaLineLength">15</sys:Double>
         <sys:Double x:Key="minutiaDiameter">40</sys:Double>
-        <sys:String x:Key="defaultLoadIcon">"pack://application:,,,/Resources/Icons/Load.ico"</sys:String>
+        <BitmapImage x:Key="defaultLoadIcon" UriSource="pack://application:,,,/Resources/Icons/Load.ico"/>
         <SolidColorBrush x:Key="simPrintsBlueBrush" Color="#498BCA"/>
         <SolidColorBrush x:Key="minutiaBorderBrush" Color="White"/>
 
@@ -117,7 +117,7 @@
                             ToolTip="Loads the next capture for templating"
                             Style="{StaticResource iconsStyle}"
                             Command="{Binding Path=LoadFileCommand}">
-                                <Image Source="{Binding Path=LoadIcon, TargetNullValue={StaticResource defaultLoadIcon}}"/>
+                                <Image Source="{Binding Path=LoadIconOverride, TargetNullValue={StaticResource defaultLoadIcon}}"/>
                             </Button>
                         </StackPanel>
                         <Expander Name="myExpander" Header="Load Options" 

@@ -226,7 +226,7 @@ namespace SimTemplate.ViewModel.MainWindow
             }
         }
 
-        public string LoadIcon
+        public string LoadIconOverride
         {
             get { return m_LoadIcon; }
             set

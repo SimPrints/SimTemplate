@@ -31,7 +31,7 @@ namespace SimTemplate.ViewModel.MainWindow
                 Outer.PromptText = "Loading capture...";
                 // TODO: Find better way of managing resources. Hardcoding strings is dodge...
                 Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Loading.png");
-                Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Cancel.ico";
+                Outer.LoadIconOverride = "pack://application:,,,/Resources/Icons/Cancel.ico";
             }
 
             public override void OnLeavingState()
@@ -40,7 +40,7 @@ namespace SimTemplate.ViewModel.MainWindow
 
                 // Ensure load icon is shown and status image is cleared.
                 Outer.StatusImage = null;
-                Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Load.ico";
+                Outer.LoadIconOverride = null ;
             }
 
             public override void LoadFile()

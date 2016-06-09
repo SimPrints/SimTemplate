@@ -6,6 +6,7 @@ using SimTemplate.ViewModel;
 using SimTemplate.ViewModel.Database;
 using SimTemplate.ViewModel.DataControllers.EventArguments;
 using SimTemplate.ViewModel.DataControllers;
+using System;
 
 namespace SimTemplate.ViewModel.MainWindow
 {
@@ -28,10 +29,8 @@ namespace SimTemplate.ViewModel.MainWindow
                 Outer.Minutae = new TrulyObservableCollection<MinutiaRecord>();
                 Outer.InputMinutiaType = MinutiaType.Termination;
                 Outer.FilteredScannerType = ScannerType.None;
-                Outer.LoadIcon = "pack://application:,,,/Resources/Icons/Load.ico";
 
-                // TODO: provide opportunity to update SQL database location.
-                // TODO: provide opportunity to update image folders.
+                Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Loading.png");
 
                 // Initialise the DataController so that we can fetch images.
                 DataControllerConfig config = new DataControllerConfig(
@@ -39,6 +38,11 @@ namespace SimTemplate.ViewModel.MainWindow
                     Properties.Settings.Default.RootUrl);
 
                 Outer.m_DataController.BeginInitialise(config);
+            }
+
+            public override void OnLeavingState()
+            {
+                Outer.StatusImage = null;
             }
 
             #region Abstract Methods
