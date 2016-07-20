@@ -1,0 +1,183 @@
+﻿<ContentControl x:Class="SimTemplate.View.TemplatingView"
+                x:Name="templatingControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:SimTemplate.View"
+             xmlns:viewModel="clr-namespace:SimTemplate.ViewModels"
+             xmlns:dataTypes="clr-namespace:SimTemplate.DataTypes"
+             xmlns:enums="clr-namespace:SimTemplate.DataTypes.Enums"
+             xmlns:conv="clr-namespace:SimTemplate.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <ContentControl.Resources>
+        <!--Converters-->
+        <conv:BooleanToOppositeBooleanConverter x:Key="BooleanToOppositeBooleanConverter" />
+        <conv:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
+        <conv:RadToDegConverter x:Key="RadToDegConverter" />
+        <conv:MultiplyConverter x:Key="MultiplyConverter" />
+        <conv:ScaleConverter x:Key="ScaleConverter" />
+        <conv:NullImageConverter x:Key="NullImageConverter" />
+
+        <!--Values-->
+        <sys:Double x:Key="minutiaLineLength">15</sys:Double>
+        <sys:Double x:Key="minutiaDotDiameter">5</sys:Double>
+        <sys:Double x:Key="minutiaDiameter">40</sys:Double>
+        <sys:Double x:Key="minutiaThickness">4</sys:Double>
+        <SolidColorBrush x:Key="minutiaBorderBrush" Color="White"/>
+
+        <!--Templating Styles-->
+        <Style x:Key="minutiaShapeStyle">
+            <Setter Property="Shape.Stroke" Value="{StaticResource simPrintsBlueBrush}" />
+            <Setter Property="Shape.StrokeThickness" Value="{StaticResource minutiaThickness}" />
+        </Style>
+        <Style x:Key="minutiaCentredShapeStyle" BasedOn="{StaticResource minutiaShapeStyle}">
+            <Setter Property="Canvas.Top" Value="{Binding
+                RelativeSource={x:Static RelativeSource.Self},
+                Path=Height,
+                Converter={StaticResource MultiplyConverter},
+                ConverterParameter=-0.5}" />
+            <Setter Property="Canvas.Left" Value="{Binding
+                RelativeSource={x:Static RelativeSource.Self},
+                Path=Width,
+                Converter={StaticResource MultiplyConverter},
+                ConverterParameter=-0.5}" />
+        </Style>
+        <Style x:Key="minutiaShapeOutlineStyle" BasedOn="{StaticResource minutiaCentredShapeStyle}">
+            <Setter Property="Shape.Stroke" Value="{StaticResource minutiaBorderBrush}" />
+            <Setter Property="Shape.StrokeThickness" Value="{Binding
+                Source={StaticResource minutiaThickness},
+                Converter={StaticResource MultiplyConverter},
+                ConverterParameter=1.5}" />
+        </Style>
+        <Style x:Key="minutiaLineStyle" BasedOn="{StaticResource minutiaShapeStyle}">
+            <Setter Property="Line.X1" Value="0" />
+            <Setter Property="Line.X2" Value="0" />
+            <Setter Property="Line.Y1" Value="{Binding Source={StaticResource minutiaDiameter},
+                Converter={StaticResource MultiplyConverter},
+                ConverterParameter=0.5}" />
+            <Setter Property="Line.Y2" Value="30" />
+        </Style>
+    </ContentControl.Resources>
+
+
+    <DockPanel x:Name="templatingPanel">
+        <!--Test text-->
+        <TextBlock x:Name="testText" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContentControl}, Path=Scale.X}" />
+        <!-- Guidance Text -->
+        <TextBlock x:Name="promptBanner" Text="{Binding Path=PromptText}" DockPanel.Dock="Top"
+                   TextAlignment="Center" FontSize="30" Foreground="{StaticResource simPrintsBlueBrush}"
+                   Style="{StaticResource baseStyle}"/>
+
+        <!-- MAIN CONTENT -->
+        <Grid Margin="20">
+            <!--Status image sometimes shown-->
+            <Image x:Name="statusImage"
+                   Source="{Binding StatusImage, Converter={StaticResource NullImageConverter}}"
+                   Stretch="Uniform"
+                   Panel.ZIndex="2"/>
+            <!--The image being annotated-->
+            <Image x:Name="image"
+                   Source="{Binding Capture.ImageData, Converter={StaticResource NullImageConverter}}"
+                   Stretch="Uniform"
+                   SizeChanged="image_SizeChanged"
+                   Panel.ZIndex="0"/>
+            <!--The control on which to display the annotations-->
+            <ItemsControl x:Name="templatingItemsControl"
+                          ItemsSource="{Binding Minutae}"
+                          Width="{Binding ElementName=image, Path=ActualWidth}"
+                          Height="{Binding ElementName=image, Path=ActualHeight}"
+                          Panel.ZIndex="1">
+                <!-- Set the 'panel' to be a Canvas for displaying our items -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas x:Name="templatingCanvas"
+                                MouseMove="templatingCanvas_MouseMove"
+                                MouseUp="templatingCanvas_MouseUp"
+                                Background="Transparent" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <!-- Set Items to be interpreted as Ellipse and Line shapes -->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Canvas>
+                            <!--Dot in centre of minutia-->
+                            <Ellipse Width="{Binding Source={StaticResource minutiaDotDiameter}}"
+                                     Height="{Binding Source={StaticResource minutiaDotDiameter}}"
+                                     Fill="{StaticResource minutiaBorderBrush}"
+                                     Style="{StaticResource minutiaCentredShapeStyle}"/>
+                            <!---Ring around minutia-->
+                            <Ellipse Width="{StaticResource minutiaDiameter}"
+                                     Height="{StaticResource minutiaDiameter}"
+                                     Fill="Transparent"
+                                     MouseDown="Minutia_MouseDown"
+                                     MouseUp="Minutia_MouseUp"
+                                     Style="{StaticResource minutiaShapeOutlineStyle}"/>
+                            <Ellipse Width="{StaticResource minutiaDiameter}"
+                                     Height="{StaticResource minutiaDiameter}"
+                                     Fill="Transparent"
+                                     MouseDown="Minutia_MouseDown"
+                                     MouseUp="Minutia_MouseUp"
+                                     Style="{StaticResource minutiaCentredShapeStyle}"/>
+                            <!--Lines indicating Termiation/Bifurication angle-->
+                            <!--Tail (always present)-->
+                            <Line Style="{StaticResource minutiaLineStyle}">
+                                <Line.RenderTransform>
+                                    <RotateTransform Angle="90"/>
+                                </Line.RenderTransform>
+                            </Line>
+                            <!--Prongs (Bifurication only)-->
+                            <Line Style="{StaticResource minutiaLineStyle}"
+                                    Visibility="{Binding Path=Type,
+                                Converter={StaticResource EnumToVisibilityConverter},
+                                ConverterParameter={x:Static enums:MinutiaType.Bifurication}}">
+                                <Line.RenderTransform>
+                                    <RotateTransform Angle="225"/>
+                                </Line.RenderTransform>
+                            </Line>
+                            <Line Style="{StaticResource minutiaLineStyle}"
+                                  Visibility="{Binding Path=Type,
+                                Converter={StaticResource EnumToVisibilityConverter},
+                                ConverterParameter={x:Static enums:MinutiaType.Bifurication}}">
+                                <Line.RenderTransform>
+                                    <RotateTransform Angle="315"/>
+                                </Line.RenderTransform>
+                            </Line>
+                        </Canvas>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <!--Style the container for an item (minutia) to fit it in the panel-->
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Top">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource ScaleConverter}"
+                                              Mode="OneWay">
+                                    <Binding Path="Position.Y" />
+                                    <Binding ElementName="templatingControl" Path="Scale.Y" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Canvas.Left">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource ScaleConverter}"
+                                              Mode="OneWay">
+                                    <Binding Path="Position.X"/>
+                                    <Binding ElementName="templatingControl" Path="Scale.X" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Canvas.RenderTransform">
+                            <Setter.Value>
+                                <RotateTransform Angle="{Binding Angle}"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+        </Grid>
+    </DockPanel>
+</ContentControl>

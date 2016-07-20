@@ -9,10 +9,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SimTemplate.Helpers.GoogleApis;
-using SimTemplate.ViewModel;
-using SimTemplate.ViewModel.Database;
-using SimTemplate.ViewModel.DataControllers.EventArguments;
-using SimTemplate.ViewModel.DataControllers;
+using SimTemplate.Model.DataControllers;
+using SimTemplate.DataTypes.Enums;
+using SimTemplate.Model.DataControllers.EventArguments;
+using SimTemplate.Model.DataControllers.OAuth;
 
 namespace AutomatedSimTemplateTests.Model
 {

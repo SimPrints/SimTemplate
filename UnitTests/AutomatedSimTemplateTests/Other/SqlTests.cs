@@ -1,14 +1,10 @@
 ﻿using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SimTemplate.ViewModel;
-using SimTemplate.ViewModel.Database;
+using SimTemplate.Model.Database;
 
 namespace AutomatedSimTemplateTests.OTher
 {

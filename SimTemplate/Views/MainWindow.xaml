@@ -1,0 +1,149 @@
+﻿<Window x:Class="SimTemplate.View.MainWindow.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimTemplate.View"
+        xmlns:conv="clr-namespace:SimTemplate.Converters"
+        xmlns:viewModels="clr-namespace:SimTemplate.ViewModels"
+        xmlns:views="clr-namespace:SimTemplate.View"
+        xmlns:enums="clr-namespace:SimTemplate.DataTypes.Enums"
+        mc:Ignorable="d"
+        x:Name="mainWindow"
+        Title="MainWindow" Height="525" Width="525"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <!--Child ViewModels-->
+        <DataTemplate DataType="{x:Type viewModels:TemplatingViewModel}">
+            <views:TemplatingView x:Name="m_TemplatingViewModel" />
+        </DataTemplate>
+
+        <!--Converters-->
+        <conv:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
+        <conv:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+
+        <!--Values-->
+        <BitmapImage x:Key="defaultLoadIcon" UriSource="pack://application:,,,/Resources/Icons/Load.ico"/>
+
+        <!-- Styles -->
+        <!-- Toolbar Styles-->
+        <Style x:Key="toolbarStackStyle">
+            <Setter Property="FrameworkElement.Margin" Value="0, 5, 0, 5" />
+        </Style>
+        <Style x:Key="iconsStyle" TargetType="Button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="2.5" />
+        </Style>
+        <Style x:Key="controlTextStyle" BasedOn="{StaticResource baseStyle}">
+            <Setter Property="TextBlock.FontSize" Value="10" />
+        </Style>
+        <Style x:Key="toolsTitleStyle" BasedOn="{StaticResource baseStyle}">
+            <Setter Property="TextBlock.FontWeight" Value="Bold" />
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="toolsSectionStyle" BasedOn="{StaticResource baseStyle}">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
+        
+
+        <!-- Data Templates -->
+        <DataTemplate x:Key="headerTemplate">
+            <TextBlock Text="{Binding}"
+                       Style="{StaticResource toolsTitleStyle}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="sectionTemplate">
+            <TextBlock Text="{Binding}"
+                       Style="{StaticResource toolsSectionStyle}"/>
+        </DataTemplate>
+    </Window.Resources>
+    
+    <!--InputBindings-->
+    <Window.InputBindings>
+        <KeyBinding Key="t" Command="{Binding TerminationButtonPressCommand}"/>
+        <KeyBinding Key="b" Command="{Binding BifuricationButtonPressCommand}"/>
+        <KeyBinding Key="Esc" Command="{Binding EscapePressCommand}"/>
+    </Window.InputBindings>
+    
+    <!---BEGIN WINDOW CONTENT-->
+    <DockPanel x:Name="windowPanel">
+        <!--Side Panel (Controls)-->
+        <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical"
+                     HorizontalAlignment="Center" VerticalAlignment="Stretch">
+            <!-- Data Toolbar -->
+            <ToolBar x:Name="dataToolbar">
+                <GroupBox Header="Data Tools"
+                          HeaderTemplate="{StaticResource headerTemplate}">
+                    <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Vertical">
+                        <!-- Load/Save buttons -->
+                        <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Horizontal">
+                            <Button x:Name="saveTemplate"
+                            VerticalAlignment="Top"
+                            ToolTip="Saves the current template"
+                            Style="{StaticResource iconsStyle}"
+                            Command="{Binding Path=SaveTemplateCommand}">
+                                <Image Source="pack://application:,,,/Resources/Icons/Save.ico" />
+                            </Button>
+                            <Button x:Name="loadFile"
+                            VerticalAlignment="Top"
+                            ToolTip="Loads the next capture for templating"
+                            Style="{StaticResource iconsStyle}"
+                            Command="{Binding Path=LoadFileCommand}">
+                                <Image Source="{Binding Path=LoadIconOverride, TargetNullValue={StaticResource defaultLoadIcon}}"/>
+                            </Button>
+                        </StackPanel>
+                        <Expander Name="myExpander" Header="Load Options" 
+                                  ExpandDirection="Down" IsExpanded="True"
+                                  HeaderTemplate="{StaticResource sectionTemplate}"> 
+                            <StackPanel Orientation="Vertical">
+                                <!-- Scanner type dropdown -->
+                                <StackPanel Style="{StaticResource toolbarStackStyle}">
+                                    <Label Style="{StaticResource controlTextStyle}">Scanner Type:</Label>
+                                    <ComboBox x:Name="scannerTypeComboBox" VerticalAlignment="Top"
+                                    Width="100"
+                                    ItemsSource="{Binding Path=ScannerTypes}"
+                                    SelectedItem="{Binding Path=FilteredScannerType}"
+                                      ToolTip="Load a capture from a specific scanner.">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                </GroupBox>
+                <!-- Templating Group -->
+                <GroupBox Header="Templating Tools"
+                          HeaderTemplate="{StaticResource headerTemplate}">
+                    <!-- Minutia Type radiobuttons -->
+                <StackPanel Style="{StaticResource toolbarStackStyle}">
+                    <TextBlock Style="{StaticResource controlTextStyle}">Minutia Type:</TextBlock>
+                    <RadioButton IsChecked="{Binding Path=TemplatingViewModel.InputMinutiaType,
+                        Converter={StaticResource EnumToBooleanConverter},
+                        ConverterParameter={x:Static enums:MinutiaType.Termination}}"
+                                 IsEnabled="{Binding Path=IsTemplating}"
+                                 GroupName="inputMinutiaType"
+                                 ToolTip="Record a termination (T)">
+                        Termination
+                    </RadioButton>
+                        <RadioButton IsChecked="{Binding Path=TemplatingViewModel.InputMinutiaType,
+                        Converter={StaticResource EnumToBooleanConverter},
+                        ConverterParameter={x:Static enums:MinutiaType.Bifurication}}"
+                                 IsEnabled="{Binding Path=IsTemplating}"
+                                 GroupName="inputMinutiaType"
+                                 ToolTip="Record a bifurication (B)">
+                        Bifurication
+                    </RadioButton>
+                </StackPanel>
+                </GroupBox>
+            </ToolBar>
+        </ToolBarTray>
+
+        <ContentControl x:Name="content" Content="{Binding TemplatingViewModel}" />
+    </DockPanel>
+</Window>

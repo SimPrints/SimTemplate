@@ -2,12 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using SimTemplate.Helpers;
-using SimTemplate.ViewModel;
-using SimTemplate.ViewModel.MainWindow;
+using SimTemplate.DataTypes;
+using SimTemplate.DataTypes.Enums;
 
 namespace AutomatedSimTemplateTests.Helpers
 {
@@ -49,16 +47,16 @@ namespace AutomatedSimTemplateTests.Helpers
         private void TestToIsoTemplate(IEnumerable<MinutiaRecord> minutae, string isoTemplateHex)
         {
             // Get the IsoTemplate
-            byte[] template = TemplateHelper.ToIsoTemplate(minutae);
+            byte[] template = IsoTemplateHelper.ToIsoTemplate(minutae);
             // Convert the IsoTemplate back to a list of minutia (loss of data in casting)
-            IEnumerable<MinutiaRecord> convert_minutae = TemplateHelper.ToMinutae(template);
+            IEnumerable<MinutiaRecord> convert_minutae = IsoTemplateHelper.ToMinutae(template);
 
             // Convert it to Hex for comparison
             string templateHex = BitConverter.ToString(template);
             templateHex = templateHex.Replace("-", String.Empty);
 
             // Assertions
-            CollectionAssert.AreEqual(TemplateHelper.ToByteArray(isoTemplateHex), template);
+            CollectionAssert.AreEqual(IsoTemplateHelper.ToByteArray(isoTemplateHex), template);
             Assert.AreEqual(minutae.Count(), convert_minutae.Count());
             for (int i = 0; i < convert_minutae.Count(); i++)
             {

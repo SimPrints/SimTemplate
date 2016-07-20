@@ -32,12 +32,15 @@ namespace SimTemplate.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("af987398-30c1-43b7-8d66-1854f45b38bc")]
         public string ApiKey {
             get {
                 return ((string)(this["ApiKey"]));
+            }
+            set {
+                this["ApiKey"] = value;
             }
         }
     }

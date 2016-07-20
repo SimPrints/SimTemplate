@@ -2,8 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SimTemplate"
-             StartupUri="View/MainWindow.xaml">
+             xmlns:viewModels="clr-namespace:SimTemplate.ViewModels"
+             StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-         
+        <!--Colors-->
+        <SolidColorBrush x:Key="simPrintsBlueBrush" Color="#498BCA"/>
+        
+        <!--Styles-->
+        <Style x:Key="baseStyle">
+            <Setter Property="TextBlock.FontSize" Value="12" />
+            <Setter Property="TextBlock.FontFamily" Value="Calibri" />
+            <Setter Property="FrameworkElement.Margin" Value="2.5, 0, 0, 2.5" />
+        </Style>
     </Application.Resources>
 </Application>

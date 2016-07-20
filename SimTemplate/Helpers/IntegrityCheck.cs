@@ -11,15 +11,15 @@ namespace SimTemplate.Helpers
     {
         public static readonly ILog m_Log = LogManager.GetLogger(typeof(IntegrityCheck));
 
-        public static TemplateBuilderException Fail(string message)
+        public static SimTemplateException Fail(string message)
         {
             m_Log.Error(message);
-            return new TemplateBuilderException(message);
+            return new SimTemplateException(message);
         }
 
-        public static TemplateBuilderException Fail(string format, params string[] args)
+        public static SimTemplateException Fail(string format, params string[] args)
         {
-            return new TemplateBuilderException(String.Format(format, args));
+            return new SimTemplateException(String.Format(format, args));
         }
 
         #region IsTrue
@@ -215,9 +215,9 @@ namespace SimTemplate.Helpers
 
         #region FailUnexpectedDefault
 
-        public static TemplateBuilderException FailUnexpectedDefault<T>(T value)
+        public static SimTemplateException FailUnexpectedDefault<T>(T value)
         {
-            return new TemplateBuilderException(
+            return new SimTemplateException(
                 String.Format("Unexpected default value: {0}", value));
         }
 

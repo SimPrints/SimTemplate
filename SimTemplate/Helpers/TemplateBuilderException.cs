@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SimTemplate.Helpers
 {
-    public class TemplateBuilderException : Exception
+    public class SimTemplateException : Exception
     {
-        public TemplateBuilderException() : base() { }
-        public TemplateBuilderException(string message) : base(message) { }
-        public TemplateBuilderException(string message, Exception innerException) : base(message, innerException) { }
+        public SimTemplateException() : base() { }
+        public SimTemplateException(string message) : base(message) { }
+        public SimTemplateException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

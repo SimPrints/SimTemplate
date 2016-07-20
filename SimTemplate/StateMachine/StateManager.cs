@@ -6,20 +6,20 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using SimTemplate.Helpers;
-using SimTemplate.ViewModel;
+using SimTemplate.ViewModels;
 
 namespace SimTemplate.StateMachine
 {
-    public class StateManager<T> where T : BaseState
+    public class StateManager<T> where T : State
     {
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(StateManager<T>));
 
-        private BaseViewModel m_ViewModel;
+        private ViewModel m_ViewModel;
         private T m_CurrentState;
         private object m_StateLock = new object();
         private readonly IDictionary<Type, T> m_States;
 
-        public StateManager(BaseViewModel viewModel, Type initialStateType)
+        public StateManager(ViewModel viewModel, Type initialStateType)
         {
             IntegrityCheck.IsNotNull(viewModel);
 
@@ -76,16 +76,19 @@ namespace SimTemplate.StateMachine
         {
             IntegrityCheck.IsTrue(
                 typeof(T).IsAssignableFrom(stateType),
-                "Supplied type not a recognised state");
+                "Supplied type doesn't derive from {0}", typeof(T).Name);
+            IntegrityCheck.IsFalse(
+                stateType.IsAbstract,
+                "Cannot transition to abstract state {0}", stateType.Name);
 
             T state;
             bool isFound = m_States.TryGetValue(stateType, out state);
 
-            IntegrityCheck.IsTrue(isFound, "State {0} not found in m_States", stateType);
+            IntegrityCheck.IsTrue(isFound, "State {0} not found in m_States", stateType.Name);
             IntegrityCheck.IsNotNull(
                 state,
                 "State {0} found in m_States, but value was null",
-                stateType);
+                stateType.Name);
 
             return state;
         }

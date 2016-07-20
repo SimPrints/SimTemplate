@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="SimTemplateInstaller" Language="1033" Version="1.0.0.0" Manufacturer="SimPrints" UpgradeCode="94180c61-b350-4f94-95da-da58d0c145bb">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+  <Product Id="*" Name="SimTemplate" Language="1033" Version="1.0.0.0" Manufacturer="SimPrints"
+           UpgradeCode="94180c61-b350-4f94-95da-da58d0c145bb">
+    <Package Id="*" Keywords="Installer"
+             InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes"/>

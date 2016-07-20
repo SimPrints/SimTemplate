@@ -1,32 +1,31 @@
 ﻿using FakeItEasy;
 using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using SimTemplate.Helpers;
-using SimTemplate.ViewModel;
-using SimTemplate.ViewModel.Database;
-using SimTemplate.ViewModel.MainWindow;
-using SimTemplate.ViewModel.DataControllers;
+using SimTemplate.Model.DataControllers;
+using SimTemplate.DataTypes.Enums;
+using SimTemplate.ViewModels;
+using SimTemplate.DataTypes;
 
 namespace AutomatedSimTemplateTests.ViewModel.MainWindow
 {
     [TestClass]
-    public class TemplateBuilderViewModelTest
+    public class MainWindowViewModelTest
     {
-        private static readonly ILog m_Log = LogManager.GetLogger(typeof(TemplateBuilderViewModelTest));
+        private static readonly ILog m_Log = LogManager.GetLogger(typeof(MainWindowViewModelTest));
+
         IDataController m_DataController;
-        TemplateBuilderViewModel m_ViewModel;
+        ITemplatingViewModel m_TemplatingViewModel;
+
+        MainWindowViewModel m_ViewModel;
 
         [TestInitialize]
         public void TestSetup()
         {
             m_DataController = A.Fake<IDataController>();
-            m_ViewModel = new TemplateBuilderViewModel(m_DataController);
+            m_TemplatingViewModel = A.Fake<ITemplatingViewModel>();
+
+            m_ViewModel = new MainWindowViewModel(m_DataController, m_TemplatingViewModel);
         }
 
 
@@ -39,22 +38,29 @@ namespace AutomatedSimTemplateTests.ViewModel.MainWindow
             m_Log.Debug("Starting test...");
             m_ViewModel.BeginInitialise();
 
-            // Assert that ViewModel made no further requests
-            A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
-                .MustNotHaveHappened();
+            // Assert that ViewModel made only one request to IDataController
             A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
                 .MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
+                .MustNotHaveHappened();
+
+            // Assert that ViewModel made no calls to ITemplatingViewModel
+            A.CallTo(() => m_TemplatingViewModel.BeginTemplating(A<CaptureInfo>._))
+                .MustNotHaveHappened();
+            A.CallTo(() => m_TemplatingViewModel.EscapeAction())
+                .MustNotHaveHappened();
+            A.CallTo(() => m_TemplatingViewModel.QuitTemplating())
+                .MustNotHaveHappened();
+            A.CallTo(() => m_TemplatingViewModel.Capture)
+                .MustNotHaveHappened();
+            A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate())
+                .MustNotHaveHappened();
+            // TODO: Add sets for InputMinutiaType and StatusImage
+            A.CallTo(() => m_TemplatingViewModel.IsSaveTemplatePermitted)
+                .MustNotHaveHappened();
 
             // Assert public state of ViewModel
-            Assert.IsNull(m_ViewModel.Capture);
-            Assert.AreEqual(0, m_ViewModel.Minutae.Count());
             Assert.IsNull(m_ViewModel.Exception);
-        }
-
-        [TestMethod]
-        public void TestTemplating_Save()
-        {
-
         }
     }
 }
