@@ -5,7 +5,7 @@ namespace SimTemplate.ViewModels
 {
     public partial class MainWindowViewModel
     {
-        public class Templating : Initialised
+        public class Templating : MainWindowState
         {
             #region Constructor
 
@@ -40,6 +40,12 @@ namespace SimTemplate.ViewModels
                 // {
                 // }
                 // TransitionTo(typeof(Loading));
+            }
+
+            public override void EscapeAction()
+            {
+                // TODO: Pass escape handling to TemplatingViewModel
+                // Outer.CurrentContentViewModel.EscapeAction();
             }
         }
     }

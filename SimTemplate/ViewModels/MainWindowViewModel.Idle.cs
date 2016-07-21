@@ -12,10 +12,19 @@ namespace SimTemplate.ViewModels
 {
     public partial class MainWindowViewModel
     {
-        public class Idle : Initialised
+        public class Idle : MainWindowState
         {
             public Idle(MainWindowViewModel outer) : base(outer)
             { }
+
+            public override void OnEnteringState()
+            {
+                base.OnEnteringState();
+
+                // Clear status indicators
+                Outer.m_TemplatingViewModel.StatusImage = null;
+                Outer.m_TemplatingViewModel.PromptText = "Ready";
+            }
 
             public override void LoadFile()
             {

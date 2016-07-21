@@ -6,9 +6,8 @@ using SimTemplate.ViewModels;
 
 namespace SimTemplate.StateMachine
 {
-    public abstract class State
+    public abstract class State : LoggingClass
     {
-        private ILog m_Log;
         private ViewModel m_Outer;
 
         #region Constructor
@@ -35,18 +34,6 @@ namespace SimTemplate.StateMachine
         /// Gets the outer class that this state is behaviour for.
         /// </summary>
         protected ViewModel BaseOuter { get { return m_Outer; } }
-
-        protected ILog Log
-        {
-            get
-            {
-                if (m_Log == null)
-                {
-                    m_Log = LogManager.GetLogger(this.GetType());
-                }
-                return m_Log;
-            }
-        }
 
         protected void MethodNotImplemented([CallerMemberName] string caller = null)
         {

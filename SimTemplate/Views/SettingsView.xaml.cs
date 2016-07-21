@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SimTemplate.DataTypes;
+using SimTemplate.ViewModels;
+using SimTemplate.ViewModels.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +21,28 @@ namespace SimTemplate.View
     /// <summary>
     /// Interaction logic for SettingsControl.xaml
     /// </summary>
-    public partial class SettingsControl : UserControl
+    public partial class SettingsView : ContentControl
     {
-        public SettingsControl()
+        private SettingsViewModel m_ViewModel;
+
+        public SettingsView()
         {
             InitializeComponent();
+            DataContextChanged += SettingsView_DataContextChanged;
         }
+
+        #region Event Handlers
+
+        private void SettingsView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            m_ViewModel = e.NewValue as SettingsViewModel;
+            if (m_ViewModel != null)
+            {
+                // ViewModel has just been set as context to a view
+                m_ViewModel.NotifyAllPropertiesChanged();
+            }
+        }
+
+        #endregion
     }
 }

@@ -34,6 +34,22 @@ namespace SimTemplate.ViewModels
 
             public virtual void BeginInitialise() { MethodNotImplemented(); }
 
+            public virtual void SettingsViewModel_SettingsUpdated(string apiKey)
+            {
+                // We always want to reinitialise if the ApiKey is changed
+
+                // Update the user setting and save the change
+                Properties.Settings.Default.ApiKey = apiKey;
+                Properties.Settings.Default.Save();
+
+                // ReInitialise
+                if (Outer.IsTemplating)
+                {
+                    Outer.m_TemplatingViewModel.QuitTemplating();
+                }
+                TransitionTo(typeof(Initialising));
+            }
+
             #endregion
 
             #region Event Handlers

@@ -28,7 +28,9 @@ namespace SimTemplate.View.MainWindow
 #else
                 new TempApiDataController(),
 #endif
-                new TemplatingViewModel());
+                new TemplatingViewModel(),
+                new SettingsViewModel());
+
 
             InitializeComponent();
             DataContext = m_ViewModel;

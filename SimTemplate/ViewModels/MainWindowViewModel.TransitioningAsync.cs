@@ -9,12 +9,14 @@ namespace SimTemplate.ViewModels
 {
     public partial class MainWindowViewModel
     {
-        public abstract class TransitioningAsync<T> : Initialised where T : EventArgs
+        public abstract class TransitioningAsync<T> : MainWindowState where T : EventArgs
         {
             private object m_Identifier;
 
             public TransitioningAsync(MainWindowViewModel outer) : base(outer)
             { }
+
+            #region Overriden Public Methods
 
             public override void OnEnteringState()
             {
@@ -23,6 +25,17 @@ namespace SimTemplate.ViewModels
                 m_Identifier = StartAsyncOperation();
                 IntegrityCheck.IsNotNull(m_Identifier);
             }
+
+            public override void SettingsViewModel_SettingsUpdated(string apiKey)
+            {
+                // First abort our asynchronous request
+                AbortAsyncOperation(m_Identifier);
+
+                // Now update the settings as normal
+                base.SettingsViewModel_SettingsUpdated(apiKey);
+            }
+
+            #endregion
 
             protected object Identifier { get { return m_Identifier; } }
 
@@ -38,9 +51,15 @@ namespace SimTemplate.ViewModels
                 }
             }
 
+            #region Abstract Methods
+
             protected abstract object StartAsyncOperation();
 
+            protected abstract void AbortAsyncOperation(object identifier);
+
             protected abstract void OnOperationComplete(T e);
+
+            #endregion
         }
     }
 }

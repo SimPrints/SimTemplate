@@ -19,6 +19,9 @@
         <DataTemplate DataType="{x:Type viewModels:TemplatingViewModel}">
             <views:TemplatingView x:Name="m_TemplatingViewModel" />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+            <views:SettingsView x:Name="m_SettingsViewModel" />
+        </DataTemplate>
 
         <!--Converters-->
         <conv:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
@@ -74,6 +77,19 @@
                      HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <!-- Data Toolbar -->
             <ToolBar x:Name="dataToolbar">
+                <GroupBox Header="General"
+                          HeaderTemplate="{StaticResource headerTemplate}">
+                    <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Vertical">
+                        <!--Settings button-->
+                        <Button x:Name="settingsButton"
+                            VerticalAlignment="Top"
+                            ToolTip="Opens general settings"
+                            Style="{StaticResource iconsStyle}"
+                            Command="{Binding Path=ToggleSettingsCommand}">
+                            <Image Source="pack://application:,,,/Resources/Icons/Settings.ico" />
+                        </Button>
+                    </StackPanel>
+                </GroupBox>
                 <GroupBox Header="Data Tools"
                           HeaderTemplate="{StaticResource headerTemplate}">
                     <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Vertical">
@@ -144,6 +160,6 @@
             </ToolBar>
         </ToolBarTray>
 
-        <ContentControl x:Name="content" Content="{Binding TemplatingViewModel}" />
+        <ContentControl x:Name="content" Content="{Binding CurrentContentViewModel}" />
     </DockPanel>
 </Window>

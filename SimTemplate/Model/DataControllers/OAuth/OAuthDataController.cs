@@ -23,8 +23,6 @@ namespace SimTemplate.Model.DataControllers.OAuth
 {
     public class OAuthDataController : DataController
     {
-        private static readonly ILog m_Log = LogManager.GetLogger(typeof(OAuthDataController));
-
         #region Constants
 
         // TODO: Secret in environment variable or json file (FileStream)
@@ -50,18 +48,6 @@ namespace SimTemplate.Model.DataControllers.OAuth
             m_ClientFactory.GetClientComplete += ClientFactory_GetClientComplete;
         }
 
-        #region IDataController
-
-        public override void BeginInitialise(DataControllerConfig config)
-        {
-            base.BeginInitialise(config);
-
-            // TODO: determine if it is possible to leave the user field empty
-            m_ClientFactory.BeginGetClient(APP_SECRETS, API_CONTEXTS, "");
-        }
-
-        #endregion
-
         #region Event Handlers
 
         private void ClientFactory_GetClientComplete(object sender, GetClientCompleteEventArgs e)
@@ -81,9 +67,15 @@ namespace SimTemplate.Model.DataControllers.OAuth
 
         #region Private Methods
 
+        protected override void StartInitialiseTask(DataControllerConfig config, Guid guid, CancellationToken token)
+        {
+            // TODO: determine if it is possible to leave the user field empty
+            m_ClientFactory.BeginGetClient(APP_SECRETS, API_CONTEXTS, "");
+        }
+
         protected override void StartCaptureTask(ScannerType scannerType, Guid guid, CancellationToken token)
         {
-            m_Log.DebugFormat("Starting task with Guid={0}", guid);
+            Log.DebugFormat("Starting task with Guid={0}", guid);
 
             // Make HTTP request
             Task<string> responseText = m_Client.GetStringAsync(
@@ -109,7 +101,7 @@ namespace SimTemplate.Model.DataControllers.OAuth
                         }
                         catch (SimTemplateException ex)
                         {
-                            m_Log.Error("Failed to process xml response:", ex);
+                            Log.Error("Failed to process xml response:", ex);
                             OnGetCaptureComplete(
                                 new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.Failed));
                         }
@@ -117,7 +109,7 @@ namespace SimTemplate.Model.DataControllers.OAuth
                     else if (gCT.IsFaulted)
                     {
                         // An exception was thrown during the request.
-                        m_Log.Error("GetCapture task failed: " + gCT.Exception.Message, gCT.Exception);
+                        Log.Error("GetCapture task failed: " + gCT.Exception.Message, gCT.Exception);
                         OnGetCaptureComplete(
                             new GetCaptureCompleteEventArgs(null, guid, DataRequestResult.TaskFailed));
                     }
@@ -150,7 +142,7 @@ namespace SimTemplate.Model.DataControllers.OAuth
                     else if (sTT.IsFaulted)
                     {
                         // An exception was thrown during the request.
-                        m_Log.Error("Save Template task failed: " + sTT.Exception.Message, sTT.Exception);
+                        Log.Error("Save Template task failed: " + sTT.Exception.Message, sTT.Exception);
                         OnSaveTemplateComplete(
                             new SaveTemplateEventArgs(guid, DataRequestResult.TaskFailed));
                     }

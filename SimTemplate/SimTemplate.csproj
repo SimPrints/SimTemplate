@@ -154,21 +154,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\BooleanToBorderColour.cs" />
+    <Compile Include="DataTypes\Settings.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
-    <Compile Include="Helpers\GoogleApis\ConfigurableHttpClientFactory.cs" />
-    <Compile Include="Helpers\GoogleApis\GetClientCompleteEventArgs.cs" />
-    <Compile Include="Helpers\GoogleApis\GoogleAuthenticator.cs" />
-    <Compile Include="Helpers\GoogleApis\IAuthenticationClient.cs" />
     <Compile Include="Helpers\LoggingClass.cs" />
     <Compile Include="Model\DataControllers\TempApi\ApiKey.cs" />
     <Compile Include="Model\DataControllers\DataController.cs" />
     <Compile Include="DataTypes\CaptureInfo.cs" />
-    <Compile Include="Helpers\GoogleApis\IConfigurableHttpClientFactory.cs" />
     <Compile Include="Model\DataControllers\DataRequestResult.cs" />
     <Compile Include="Model\DataControllers\EventArguments\GetCaptureCompleteEventArgs.cs" />
     <Compile Include="Model\DataControllers\TempApi\HumanTemplate.cs" />
     <Compile Include="Model\DataControllers\InitialisationResult.cs" />
-    <Compile Include="Model\DataControllers\OAuth\OAuthDataController.cs" />
     <Compile Include="Model\DataControllers\EventArguments\SaveTemplateEventArgs.cs" />
     <Compile Include="Model\DataControllers\TempApi\TempApiDataController.cs" />
     <Compile Include="StateMachine\State.cs" />
@@ -182,15 +178,17 @@
     <Compile Include="Converters\RadToDegConverter.cs" />
     <Compile Include="Converters\ScaleConverter.cs" />
     <Compile Include="DataTypes\Enums\ScannerType.cs" />
+    <Compile Include="ViewModels\CustomEventArgs\SettingsUpdatedEventArgs.cs" />
+    <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\ITemplatingViewModel.cs" />
-    <Compile Include="ViewModels\MainWindowState.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.MainWindowState.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.TransitioningAsync.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.Error.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.Idle.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.Loading.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.Initialised.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.Initialising.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\TemplatingViewModel.Initialised.cs" />
     <Compile Include="ViewModels\TemplatingViewModel.MovingMinutia.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.Saving.cs" />
@@ -286,7 +284,9 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\Cancel.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Settings.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

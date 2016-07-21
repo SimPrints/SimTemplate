@@ -21,6 +21,13 @@ namespace SimTemplate.ViewModels
 
             #region Overriden Methods
 
+            public override void BeginInitialise()
+            {
+                // If we are already initialised then ignore this call
+                // If the ApiKey is changed we don't want to lose any work we've been doing
+                // Ignore.
+            }
+
             public override void BeginTemplating(CaptureInfo capture)
             {
                 // Prepare to start templating.

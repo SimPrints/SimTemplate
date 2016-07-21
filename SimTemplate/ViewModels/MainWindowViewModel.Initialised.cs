@@ -12,12 +12,6 @@ namespace SimTemplate.ViewModels
     {
         public abstract class Initialised : MainWindowState
         {
-            #region Constants
-
-            private const int MAX_INVALID_FILES = 10;
-
-            #endregion
-
             public Initialised(MainWindowViewModel outer) : base(outer)
             { }
 

@@ -22,7 +22,7 @@ namespace SimTemplate.ViewModels
             public Loading(MainWindowViewModel outer) : base(outer)
             { }
 
-            #region Overriden Abstract Methods
+            #region Overriden Public Methods
 
             public override void OnEnteringState()
             {
@@ -73,11 +73,18 @@ namespace SimTemplate.ViewModels
 
             #endregion
 
+            #region TransitioningAsync Methods
+
             protected override object StartAsyncOperation()
             {
                 // Request a capture from the database
                 return Outer.m_DataController
                     .BeginGetCapture(Outer.FilteredScannerType);
+            }
+
+            protected override void AbortAsyncOperation(object identifier)
+            {
+                Outer.m_DataController.AbortRequest((Guid)identifier);
             }
 
             protected override void OnOperationComplete(GetCaptureCompleteEventArgs e)
@@ -118,6 +125,8 @@ namespace SimTemplate.ViewModels
                         throw IntegrityCheck.FailUnexpectedDefault(e.Result);
                 }
             }
+
+            #endregion
         }
     }
 }

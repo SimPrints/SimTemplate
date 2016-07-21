@@ -16,6 +16,7 @@ namespace AutomatedSimTemplateTests.ViewModel.MainWindow
 
         IDataController m_DataController;
         ITemplatingViewModel m_TemplatingViewModel;
+        ISettingsViewModel m_SettingsViewModel;
 
         MainWindowViewModel m_ViewModel;
 
@@ -24,8 +25,12 @@ namespace AutomatedSimTemplateTests.ViewModel.MainWindow
         {
             m_DataController = A.Fake<IDataController>();
             m_TemplatingViewModel = A.Fake<ITemplatingViewModel>();
+            m_SettingsViewModel = A.Fake<ISettingsViewModel>();
 
-            m_ViewModel = new MainWindowViewModel(m_DataController, m_TemplatingViewModel);
+            m_ViewModel = new MainWindowViewModel(
+                m_DataController,
+                m_TemplatingViewModel,
+                m_SettingsViewModel);
         }
 
 

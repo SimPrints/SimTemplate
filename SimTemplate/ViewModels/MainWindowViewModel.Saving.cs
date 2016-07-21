@@ -18,7 +18,7 @@ namespace SimTemplate.ViewModels
             public Saving(MainWindowViewModel outer) : base(outer)
             { }
 
-            #region Overridden Methods
+            #region Overridden Public Methods
 
             public override void OnEnteringState()
             {
@@ -28,10 +28,9 @@ namespace SimTemplate.ViewModels
                 Outer.m_TemplatingViewModel.PromptText = "Saving template...";
             }
 
-            public override void DataController_SaveTemplateComplete(SaveTemplateEventArgs e)
-            {
-                CheckCompleteAndContinue(e.RequestId, e);
-            }
+            #endregion
+
+            #region TransitioningAsync Methods
 
             protected override object StartAsyncOperation()
             {
@@ -42,6 +41,20 @@ namespace SimTemplate.ViewModels
                 return Outer.m_DataController.BeginSaveTemplate(
                     Outer.m_TemplatingViewModel.Capture.DbId,
                     isoTemplate);
+            }
+
+            protected override void AbortAsyncOperation(object identifier)
+            {
+                Outer.m_DataController.AbortRequest((Guid)identifier);
+            }
+
+            #endregion
+
+            #region Event Handlers
+
+            public override void DataController_SaveTemplateComplete(SaveTemplateEventArgs e)
+            {
+                CheckCompleteAndContinue(e.RequestId, e);
             }
 
             protected override void OnOperationComplete(SaveTemplateEventArgs e)

@@ -46,6 +46,11 @@ namespace SimTemplate.View
         private void TemplatingView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             m_ViewModel = e.NewValue as TemplatingViewModel;
+            if (m_ViewModel != null)
+            {
+                // ViewModel has just been set as context to a view
+                m_ViewModel.NotifyAllPropertiesChanged();
+            }
         }
 
         private void templatingCanvas_MouseMove(object sender, MouseEventArgs e)

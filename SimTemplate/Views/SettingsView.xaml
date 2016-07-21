@@ -1,12 +1,51 @@
-﻿<UserControl x:Class="SimTemplate.View.SettingsControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SimTemplate.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
-    </Grid>
-</UserControl>
+﻿<ContentControl x:Class="SimTemplate.View.SettingsView"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                xmlns:local="clr-namespace:SimTemplate.View"
+                mc:Ignorable="d" 
+                xmlns:conv="clr-namespace:SimTemplate.Converters"
+                d:DesignHeight="300" d:DesignWidth="300">
+    <ContentControl.Resources>
+        <Style x:Key="settingTitleStyle" BasedOn="{StaticResource baseStyle}">
+            <Setter Property="TextElement.FontWeight" Value="Bold" />
+        </Style>
+        <Style x:Key="validationTextStyle" BasedOn="{StaticResource baseStyle}">
+            <Setter Property="TextElement.FontSize" Value="10" />
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+        </Style>
+
+        <!--Converters-->
+        <conv:BooleanToBorderColour x:Key="BooleanToBorderColour" />
+    </ContentControl.Resources>
+
+
+    <StackPanel Margin="20,20"
+                Orientation="Vertical"
+                VerticalAlignment="Center"
+                TextBlock.TextAlignment="Center">
+        <TextBlock TextWrapping="Wrap"
+                   FontWeight="Bold"
+                   FontSize="15"
+                   Margin="0,0,0,50">
+            WARNING: Changing these settings will cause any unsaved work to be lost.
+        </TextBlock>
+        <TextBlock Style="{StaticResource settingTitleStyle}">
+            API Key:
+        </TextBlock>
+        <TextBlock Style="{StaticResource validationTextStyle}"
+                   Foreground="{Binding Path=IsApiKeyValid, Converter={StaticResource BooleanToBorderColour}}">
+            Hex characters of the form xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        </TextBlock>
+        <Border BorderBrush="{Binding Path=IsApiKeyValid, Converter={StaticResource BooleanToBorderColour}}"
+                 BorderThickness="2">
+            <TextBox x:Name="apiTextInput"
+                     Text="{Binding Path=ApiKey, UpdateSourceTrigger=PropertyChanged}" />
+        </Border>
+        <Button Width="60" Command="{Binding Path=UpdateSettingsCommand}"
+                Margin="0,50,0,0">
+            Update
+        </Button>
+    </StackPanel>
+</ContentControl>

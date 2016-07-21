@@ -22,11 +22,42 @@ namespace SimTemplate.Model.DataControllers
 
         #region IDataController
 
-        #region Implemented
-
         public DataController()
         {
             m_TokenSourceLookup = new Dictionary<Guid, CancellationTokenSource>();
+        }
+
+        Guid IDataController.BeginInitialise(DataControllerConfig config)
+        {
+            Log.Debug("BeginInitialise(...) called.");
+            IntegrityCheck.IsNotNull(config, "config");
+            IntegrityCheck.IsNotNullOrEmpty(config.ApiKey, "config.ApiKey");
+            IntegrityCheck.IsNotNullOrEmpty(config.UrlRoot, "config.UrlRoot");
+
+            m_Config = config;
+            m_TokenSourceLookup.Clear();
+
+            return StartLogic((Guid guid, CancellationToken token) =>
+                StartInitialiseTask(config, guid, token));
+        }
+
+        Guid IDataController.BeginGetCapture(ScannerType scannerType)
+        {
+            Log.DebugFormat("BeginGetCapture(scannterType={0}) called",
+                scannerType);
+            IntegrityCheck.IsNotNull(scannerType);
+
+            return StartLogic((Guid guid, CancellationToken token) =>
+                StartCaptureTask(scannerType, guid, token));
+        }
+
+        Guid IDataController.BeginSaveTemplate(long dbId, byte[] template)
+        {
+            Log.DebugFormat("BeginGetCapture(dbId={0}, template={1}) called",
+                dbId, template);
+
+            return StartLogic((Guid guid, CancellationToken token) =>
+                StartSaveTask(dbId, template, guid, token));
         }
 
         void IDataController.AbortRequest(Guid guid)
@@ -53,25 +84,6 @@ namespace SimTemplate.Model.DataControllers
             }
         }
 
-        Guid IDataController.BeginGetCapture(ScannerType scannerType)
-        {
-            Log.DebugFormat("BeginGetCapture(scannterType={0}) called",
-                scannerType);
-            IntegrityCheck.IsNotNull(scannerType);
-
-            return StartLogic((Guid guid, CancellationToken token) =>
-                StartCaptureTask(scannerType, guid, token));
-        }
-
-        Guid IDataController.BeginSaveTemplate(long dbId, byte[] template)
-        {
-            Log.DebugFormat("BeginGetCapture(dbId={0}, template={1}) called",
-                dbId, template);
-
-            return StartLogic((Guid guid, CancellationToken token) =>
-                StartSaveTask(dbId, template, guid, token));
-        }
-
         event EventHandler<InitialisationCompleteEventArgs> IDataController.InitialisationComplete
         {
             add { m_InitialisationComplete += value; }
@@ -89,24 +101,6 @@ namespace SimTemplate.Model.DataControllers
             add { m_SaveTemplateComplete += value; }
             remove { m_SaveTemplateComplete -= value; }
         }
-
-        #endregion
-
-        #region Abstract/Virtual
-
-        // Leave implementation of BeginInitialise to inheriting classes.
-        public virtual void BeginInitialise(DataControllerConfig config)
-        {
-            Log.Debug("BeginInitialise(...) called.");
-            IntegrityCheck.IsNotNull(config, "config");
-            IntegrityCheck.IsNotNullOrEmpty(config.ApiKey, "config.ApiKey");
-            IntegrityCheck.IsNotNullOrEmpty(config.UrlRoot, "config.UrlRoot");
-
-            m_Config = config;
-            m_TokenSourceLookup.Clear();
-        }
-
-        #endregion
 
         #endregion
 
@@ -145,8 +139,11 @@ namespace SimTemplate.Model.DataControllers
 
         protected DataControllerConfig Config { get { return m_Config; } }
 
-        protected abstract void StartCaptureTask(ScannerType scannerType, Guid guid,
-            CancellationToken token);
+        protected abstract void StartInitialiseTask(DataControllerConfig config,
+            Guid guid, CancellationToken token);
+
+        protected abstract void StartCaptureTask(ScannerType scannerType,
+            Guid guid, CancellationToken token);
 
         protected abstract void StartSaveTask(long dbId, byte[] template,
             Guid guid, CancellationToken token);

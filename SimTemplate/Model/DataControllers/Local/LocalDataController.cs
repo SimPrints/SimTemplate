@@ -31,8 +31,6 @@ namespace SimTemplate.Model.DataControllers.Local
 
         #endregion
 
-        private static readonly ILog m_Log = LogManager.GetLogger(typeof(LocalDataController));
-
         private SimPrintsDb m_Database;
         private InitialisationResult m_State;
         private IEnumerable<string> m_ImageFiles;
@@ -46,44 +44,49 @@ namespace SimTemplate.Model.DataControllers.Local
 
         #endregion
 
-        #region IDataController
+        #region Private Methods
 
-        /// <summary>
-        /// Connects the controller to the SQLite database using the provided configuration.
-        /// </summary>
-        /// <param name="config">The configuration.</param>
-        /// <param name="progress"></param>
-        public override void BeginInitialise(DataControllerConfig config)
+        protected override void StartInitialiseTask(DataControllerConfig config, Guid guid, CancellationToken token)
         {
-            base.BeginInitialise(config);
-
-            // Connect to SQlite.
-            SQLiteConnection dbConnection = new SQLiteConnection(
+            // Define and run the task, passing in the token.
+            Task initialiseTask = Task.Run(() =>
+            {
+                Log.Debug("Initialise task running.");
+                // Connect to SQlite.
+                SQLiteConnection dbConnection = new SQLiteConnection(
                 String.Format(CONNECTION_STRING, SQLITE_DATABASE));
 
-            // Set the LINQ data context to the database connection.
-            m_Database = new SimPrintsDb(dbConnection);
+                // Set the LINQ data context to the database connection.
+                m_Database = new SimPrintsDb(dbConnection);
 
-            // Obtain image files on local machine, to be matched with database entries.
-            m_ImageFiles = GetImageFiles(IMAGES_FILE_PATH);
-            if (m_ImageFiles != null &&
-                m_ImageFiles.Count() > 0)
-            {
-                m_State = InitialisationResult.Initialised;
-            }
-            else
-            {
-                m_Log.Error("Failed to get image files.");
-                m_State = InitialisationResult.Error;
-            }
+                // Obtain image files on local machine, to be matched with database entries.
+                m_ImageFiles = GetImageFiles(IMAGES_FILE_PATH);
+                if (m_ImageFiles != null &&
+                    m_ImageFiles.Count() > 0)
+                {
+                    m_State = InitialisationResult.Initialised;
+                }
+                else
+                {
+                    Log.Error("Failed to get image files.");
+                    m_State = InitialisationResult.Error;
+                }
 
-            OnInitialisationComplete(
-                new InitialisationCompleteEventArgs(m_State));
+                OnInitialisationComplete(
+                    new InitialisationCompleteEventArgs(m_State, guid, DataRequestResult.Success));
+            }, token);
+
+            // Raise the GetCaptureComplete event in the case where the Task faults.
+            initialiseTask.ContinueWith((Task t) =>
+            {
+                if (t.IsFaulted)
+                {
+                    Log.Error("Failed initialise controller: " + t.Exception.Message, t.Exception);
+                    OnInitialisationComplete(new InitialisationCompleteEventArgs(
+                        InitialisationResult.Uninitialised, guid, DataRequestResult.TaskFailed));
+                }
+            });
         }
-
-        #endregion
-
-        #region Private Methods
 
         protected override void StartCaptureTask(ScannerType scannerType, Guid guid, CancellationToken token)
         {
@@ -112,7 +115,7 @@ namespace SimTemplate.Model.DataControllers.Local
         {
             Task saveTask = Task.Run(() =>
             {
-                m_Log.Debug("Save task running.");
+                Log.Debug("Save task running.");
 
                 CaptureDb capture = (from c in m_Database.Captures
                                      where c.Id == dbId
@@ -126,7 +129,7 @@ namespace SimTemplate.Model.DataControllers.Local
                 }
                 else
                 {
-                    m_Log.WarnFormat("Failed to find capture wtih DbId={0}. Not saving template", dbId);
+                    Log.WarnFormat("Failed to find capture wtih DbId={0}. Not saving template", dbId);
                 }
             }, token);
 
@@ -135,7 +138,7 @@ namespace SimTemplate.Model.DataControllers.Local
             {
                 if (t.IsFaulted)
                 {
-                    m_Log.Error("Failed to save template: " + t.Exception.Message, t.Exception);
+                    Log.Error("Failed to save template: " + t.Exception.Message, t.Exception);
                     OnSaveTemplateComplete(new SaveTemplateEventArgs(guid, DataRequestResult.TaskFailed));
                 }
             });
@@ -143,7 +146,7 @@ namespace SimTemplate.Model.DataControllers.Local
 
         private CaptureInfo GetCapture(ScannerType scannerType, CancellationToken token)
         {
-            m_Log.DebugFormat("GetCapture(scannerType={1}, token={2}) called",
+            Log.DebugFormat("GetCapture(scannerType={0}, token={1}) called",
                 scannerType, token);
             CaptureInfo captureInfo = null;
             DataRequestResult result = DataRequestResult.None;
@@ -165,7 +168,7 @@ namespace SimTemplate.Model.DataControllers.Local
                     if (isFound)
                     {
                         // Matching file found.
-                        m_Log.DebugFormat("Matching file found for capture={0}", captureCandidate.HumanId);
+                        Log.DebugFormat("Matching file found for capture={0}", captureCandidate.HumanId);
                         isRunning = false;
                         captureInfo = new CaptureInfo(
                             captureCandidate.Id,
@@ -179,7 +182,7 @@ namespace SimTemplate.Model.DataControllers.Local
                         attempts++;
                         if (attempts > MAX_OPEN_FILE_ATTEMPTS)
                         {
-                            m_Log.WarnFormat("Exceeded maximum number of file searches (attempts={0})",
+                            Log.WarnFormat("Exceeded maximum number of file searches (attempts={0})",
                                 attempts);
                             isRunning = false;
                             result = DataRequestResult.Failed;
@@ -189,7 +192,7 @@ namespace SimTemplate.Model.DataControllers.Local
                 else
                 {
                     // Queries are not returning any more candidates, give up immediately.
-                    m_Log.Warn("No candidate filename obtained from the database");
+                    Log.Warn("No candidate filename obtained from the database");
                     result = DataRequestResult.Failed;
                     break;
                 }
@@ -198,7 +201,7 @@ namespace SimTemplate.Model.DataControllers.Local
             return captureInfo;
         }
 
-        private static IEnumerable<string> GetImageFiles(string directory)
+        private IEnumerable<string> GetImageFiles(string directory)
         {
             ConcurrentBag<string> threadSafeImages = null;
             if (Directory.Exists(directory))
@@ -213,7 +216,7 @@ namespace SimTemplate.Model.DataControllers.Local
             }
             else
             {
-                m_Log.ErrorFormat(
+                Log.ErrorFormat(
                     "Supplied directory for image files does not exist ({0})",
                     directory);
             }
@@ -250,7 +253,7 @@ namespace SimTemplate.Model.DataControllers.Local
                 if (File.Exists(filepath))
                 {
                     // The file exists.
-                    m_Log.DebugFormat("An image file was found for image: {0}.", filepath);
+                    Log.DebugFormat("An image file was found for image: {0}.", filepath);
                     try
                     {
                         imageData = File.ReadAllBytes(filepath);
@@ -258,19 +261,19 @@ namespace SimTemplate.Model.DataControllers.Local
                     }
                     catch (NotSupportedException ex)
                     {
-                        m_Log.WarnFormat("Failed to read image file: {0}", ex);
+                        Log.WarnFormat("Failed to read image file: {0}", ex);
                     }
                 }
                 else
                 {
-                    m_Log.WarnFormat(
+                    Log.WarnFormat(
                         "File {0} found in candidate files on local machine but file no longer exists.",
                         name);
                 }
             }
             else
             {
-                m_Log.WarnFormat("Found no image file containing {0}", name);
+                Log.WarnFormat("Found no image file containing {0}", name);
             }
             return isSuccessful;
         }

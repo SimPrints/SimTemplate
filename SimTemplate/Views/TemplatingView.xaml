@@ -15,7 +15,6 @@
     
     <ContentControl.Resources>
         <!--Converters-->
-        <conv:BooleanToOppositeBooleanConverter x:Key="BooleanToOppositeBooleanConverter" />
         <conv:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
         <conv:RadToDegConverter x:Key="RadToDegConverter" />
         <conv:MultiplyConverter x:Key="MultiplyConverter" />

@@ -15,7 +15,7 @@ namespace SimTemplate.Model.DataControllers
         /// </summary>
         /// <param name="config">The configuration.</param>
         /// <param name="progress">The progress.</param>
-        void BeginInitialise(DataControllerConfig config);
+        Guid BeginInitialise(DataControllerConfig config);
 
         /// <summary>
         /// Gets an untemplated capture from the database.
@@ -26,18 +26,18 @@ namespace SimTemplate.Model.DataControllers
         Guid BeginGetCapture(ScannerType scannerType);
 
         /// <summary>
-        /// Cancels the capture requeset with the corresponding Guid.
-        /// </summary>
-        /// <param name="guid">The unique identifier of the request.</param>
-        void AbortRequest(Guid guid);
-
-        /// <summary>
         /// Saves the template to the database.
         /// </summary>
         /// <param name="dbId">The capture's primary key in the database.</param>
         /// <param name="template">The template in ISO standard form.</param>
         /// <returns>unique identifier for the request</returns>
         Guid BeginSaveTemplate(long dbId, byte[] template);
+
+        /// <summary>
+        /// Cancels the capture requeset with the corresponding Guid.
+        /// </summary>
+        /// <param name="guid">The unique identifier of the request.</param>
+        void AbortRequest(Guid guid);
 
         /// <summary>
         /// Occurs when initialisation is complete.
