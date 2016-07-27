@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.ViewModels;
 using System.Windows;
 using SimTemplate.Model.DataControllers.EventArguments;

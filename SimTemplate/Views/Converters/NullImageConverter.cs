@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace SimTemplate.Converters
+namespace SimTemplate.Views.Converters
 {
     public class NullImageConverter : IValueConverter
     {

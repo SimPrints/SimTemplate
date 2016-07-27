@@ -1,16 +1,12 @@
-﻿using log4net;
-using SimTemplate.DataTypes.Enums;
-using SimTemplate.Helpers;
+﻿using SimTemplate.DataTypes.Enums;
+using SimTemplate.Utilities;
 using SimTemplate.Model.DataControllers;
 using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.StateMachine;
 using SimTemplate.ViewModels.Commands;
-using SimTemplate.ViewModels.CustomEventArgs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace SimTemplate.ViewModels
@@ -21,15 +17,16 @@ namespace SimTemplate.ViewModels
     public partial class MainWindowViewModel : ViewModel
     {
         // State machine members
-        private StateManager<MainWindowState> m_StateMgr;
-        private object m_StateLock;
+        private readonly StateManager<MainWindowState> m_StateMgr;
+        private readonly object m_StateLock;
+
+        private readonly IWindowService m_WindowService;
 
         // Child ViewModels
         private readonly ITemplatingViewModel m_TemplatingViewModel;
         private readonly ISettingsViewModel m_SettingsViewModel;
 
         // ViewModel-driven members
-        private ViewModel m_CurrentContentViewModel;
         private readonly IDataController m_DataController;
         private string m_LoadIcon;
         private SimTemplateException m_Exception;
@@ -50,7 +47,8 @@ namespace SimTemplate.ViewModels
         public MainWindowViewModel(
             IDataController dataController,
             ITemplatingViewModel templatingViewModel,
-            ISettingsViewModel settingsViewModel)
+            ISettingsViewModel settingsViewModel, // TODO: Swap for a SettingsViewModelFactory
+            IWindowService windowService)
         {
             IntegrityCheck.IsNotNull(dataController);
             IntegrityCheck.IsNotNull(templatingViewModel);
@@ -59,10 +57,7 @@ namespace SimTemplate.ViewModels
             m_DataController = dataController;
             m_TemplatingViewModel = templatingViewModel;
             m_SettingsViewModel = settingsViewModel;
-
-            // Set current content view model
-            // TODO: Is this wrong?
-            m_CurrentContentViewModel = (ViewModel)m_TemplatingViewModel;
+            m_WindowService = windowService;
 
             // Initialise the state machine
             m_StateMgr = new StateManager<MainWindowState>(this, typeof(Uninitialised));
@@ -73,7 +68,6 @@ namespace SimTemplate.ViewModels
             m_DataController.InitialisationComplete += DataController_InitialisationComplete;
             m_DataController.GetCaptureComplete += DataController_GetCaptureComplete;
             m_DataController.SaveTemplateComplete += DataController_SaveTemplateComplete;
-            m_SettingsViewModel.SettingsUpdated += SettingsViewModel_SettingsUpdated;
         }
 
         #endregion
@@ -109,20 +103,24 @@ namespace SimTemplate.ViewModels
             }
         }
 
-        private void ToggleSettings()
+        private void OpenSettings()
         {
-            Log.Debug("ToggleSettings() called.");
-            if (m_CurrentContentViewModel.Equals(m_TemplatingViewModel))
+            Log.Debug("OpenSettings() called.");
+
+            // Refresh the view model with latest settings
+            // TODO: Create a new SettingsViewModel (using a factory) rather than refresh
+            m_SettingsViewModel.Refresh();
+            // Present opportunity to change settings
+            m_WindowService.ShowDialog(m_SettingsViewModel);
+
+            if (m_SettingsViewModel.Result == ViewModelStatus.Complete)
             {
-                // Update settings before showing the view
-                m_SettingsViewModel.Refresh();
-                CurrentContentViewModel = (ViewModel)m_SettingsViewModel;
+                // Settings were updated, we must re-initialise the DataController
+                lock (m_StateLock)
+                {
+                    m_StateMgr.TransitionTo(typeof(Initialising));
+                }
             }
-            else
-            {
-                CurrentContentViewModel = (ViewModel)m_TemplatingViewModel;
-            }
-            
         }
 
         #endregion
@@ -196,19 +194,6 @@ namespace SimTemplate.ViewModels
             }
         }
 
-        public ViewModel CurrentContentViewModel
-        {
-            get { return m_CurrentContentViewModel; }
-            set
-            {
-                if (value != m_CurrentContentViewModel)
-                {
-                    m_CurrentContentViewModel = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
         #endregion
 
         #region Commands
@@ -244,26 +229,22 @@ namespace SimTemplate.ViewModels
 
         #region Private Methods
 
-        private bool IsSettingsOpen { get { return (m_CurrentContentViewModel == m_SettingsViewModel); } }
-
         private void InitialiseCommands()
         {
             m_LoadFileCommand = new RelayCommand(
-                x => LoadFile(),
-                x => !IsSettingsOpen);
+                x => LoadFile());
             m_SaveTemplateCommand = new RelayCommand(
                 x => SaveTemplate(),
-                x => (!IsSettingsOpen && m_TemplatingViewModel.IsSaveTemplatePermitted));
+                x => m_TemplatingViewModel.IsSaveTemplatePermitted);
             m_TerminationButtonPressCommand = new RelayCommand(
                 x => m_TemplatingViewModel.InputMinutiaType = MinutiaType.Termination,
-                x => (!IsSettingsOpen && IsTemplating));
+                x => IsTemplating);
             m_BifuricationButtonPressCommand = new RelayCommand(
                 x => m_TemplatingViewModel.InputMinutiaType = MinutiaType.Bifurication,
-                x => (!IsSettingsOpen && IsTemplating));
+                x => IsTemplating);
             m_EscapePressCommand = new RelayCommand(
-                x => EscapeAction(),
-                x => !IsSettingsOpen);
-            m_ToggleSettingsCommand = new RelayCommand(x => ToggleSettings());
+                x => EscapeAction());
+            m_ToggleSettingsCommand = new RelayCommand(x => OpenSettings());
         }
 
         #endregion
@@ -301,17 +282,6 @@ namespace SimTemplate.ViewModels
             lock (m_StateLock)
             {
                 m_StateMgr.State.DataController_SaveTemplateComplete(e);
-            }
-        }
-
-        private void SettingsViewModel_SettingsUpdated(object sender, SettingsUpdatedEventArgs e)
-        {
-            Log.DebugFormat(
-                "SettingsViewModel_SettingsUpdated(ApiKey={0}",
-                e.ApiKey);
-            lock (m_StateLock)
-            {
-                m_StateMgr.State.SettingsViewModel_SettingsUpdated(e.ApiKey);
             }
         }
 

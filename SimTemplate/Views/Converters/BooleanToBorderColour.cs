@@ -1,4 +1,4 @@
-﻿using SimTemplate.Helpers;
+﻿using SimTemplate.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace SimTemplate.Converters
+namespace SimTemplate.Views.Converters
 {
     public class BooleanToBorderColour : IValueConverter
     {

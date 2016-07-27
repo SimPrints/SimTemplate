@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Helpers
+namespace SimTemplate.Utilities
 {
     public class SimTemplateException : Exception
     {

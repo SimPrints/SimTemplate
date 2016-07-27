@@ -4,7 +4,7 @@ using System.Linq;
 using SimTemplate.DataTypes;
 using SimTemplate.DataTypes.Enums;
 
-namespace SimTemplate.Helpers
+namespace SimTemplate.Utilities
 {
     /// <summary>
     /// A static helper class for converting between TemplateBuilder's MinutiaRecord class and the

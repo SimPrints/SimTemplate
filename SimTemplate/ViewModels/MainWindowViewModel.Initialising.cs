@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using System;
 using SimTemplate.DataTypes.Collections;
 using SimTemplate.DataTypes.Enums;

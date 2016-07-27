@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace SimTemplate.Helpers
+namespace SimTemplate.Utilities
 {
     public static class PointExtensions
     {

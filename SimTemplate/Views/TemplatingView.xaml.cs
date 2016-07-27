@@ -1,5 +1,5 @@
 ﻿using log4net;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.ViewModels;
 using System;
 using System.ComponentModel;
@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
-namespace SimTemplate.View
+namespace SimTemplate.Views
 {
     /// <summary>
     /// Interaction logic for TemplatingView.xaml

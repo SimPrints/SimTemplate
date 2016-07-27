@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.Model.Database;
 using SimTemplate.DataTypes.Enums;

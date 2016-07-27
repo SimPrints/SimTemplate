@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.DataTypes.Enums;
 

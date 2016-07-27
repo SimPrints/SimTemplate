@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.ViewModels;
 
 namespace SimTemplate.StateMachine
@@ -16,7 +16,7 @@ namespace SimTemplate.StateMachine
 
         private ViewModel m_ViewModel;
         private T m_CurrentState;
-        private object m_StateLock = new object();
+        private object m_TransitionLock = new object();
         private readonly IDictionary<Type, T> m_States;
 
         public StateManager(ViewModel viewModel, Type initialStateType)
@@ -65,7 +65,7 @@ namespace SimTemplate.StateMachine
                 m_Log.InfoFormat("State transition: [null]->{0}", newState.Name);
             }
 
-            lock (m_StateLock)
+            lock (m_TransitionLock)
             {
                 m_CurrentState = newState;
             }

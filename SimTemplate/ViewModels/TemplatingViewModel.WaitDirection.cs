@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.ViewModels;
 using SimTemplate.DataTypes;
 using SimTemplate.DataTypes.Enums;

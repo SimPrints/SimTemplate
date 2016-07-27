@@ -6,6 +6,7 @@ using SimTemplate.Model.DataControllers;
 using SimTemplate.DataTypes.Enums;
 using SimTemplate.ViewModels;
 using SimTemplate.DataTypes;
+using SimTemplate.Utilities;
 
 namespace AutomatedSimTemplateTests.ViewModel.MainWindow
 {
@@ -17,6 +18,7 @@ namespace AutomatedSimTemplateTests.ViewModel.MainWindow
         IDataController m_DataController;
         ITemplatingViewModel m_TemplatingViewModel;
         ISettingsViewModel m_SettingsViewModel;
+        IWindowService m_WindowService;
 
         MainWindowViewModel m_ViewModel;
 
@@ -26,11 +28,13 @@ namespace AutomatedSimTemplateTests.ViewModel.MainWindow
             m_DataController = A.Fake<IDataController>();
             m_TemplatingViewModel = A.Fake<ITemplatingViewModel>();
             m_SettingsViewModel = A.Fake<ISettingsViewModel>();
+            m_WindowService = A.Fake<IWindowService>();
 
             m_ViewModel = new MainWindowViewModel(
                 m_DataController,
                 m_TemplatingViewModel,
-                m_SettingsViewModel);
+                m_SettingsViewModel,
+                m_WindowService);
         }
 
 

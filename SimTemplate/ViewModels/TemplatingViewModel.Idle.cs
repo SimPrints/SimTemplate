@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using SimTemplate.DataTypes;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 
 namespace SimTemplate.ViewModels
 {

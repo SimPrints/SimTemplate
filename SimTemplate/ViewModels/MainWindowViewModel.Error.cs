@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.DataTypes.Enums;
 

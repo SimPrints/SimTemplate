@@ -39,6 +39,16 @@
   <PropertyGroup>
     <StartupObject>SimTemplate.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TempApi|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\TempApi\</OutputPath>
+    <DefineConstants>TRACE;TEMP_API</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
@@ -154,10 +164,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\BooleanToBorderColour.cs" />
-    <Compile Include="DataTypes\Settings.cs" />
-    <Compile Include="Helpers\EnumHelper.cs" />
-    <Compile Include="Helpers\LoggingClass.cs" />
+    <Compile Include="DataTypes\Enums\ViewModelStatus.cs" />
+    <Compile Include="ViewModels\IDialogViewModel.cs" />
+    <Compile Include="Views\Converters\BooleanToBorderColour.cs" />
+    <Compile Include="Utilities\DialogCloser.cs" />
+    <Compile Include="Utilities\EnumHelper.cs" />
+    <Compile Include="Utilities\IWindowService.cs" />
+    <Compile Include="Utilities\LoggingClass.cs" />
     <Compile Include="Model\DataControllers\TempApi\ApiKey.cs" />
     <Compile Include="Model\DataControllers\DataController.cs" />
     <Compile Include="DataTypes\CaptureInfo.cs" />
@@ -168,17 +181,18 @@
     <Compile Include="Model\DataControllers\EventArguments\SaveTemplateEventArgs.cs" />
     <Compile Include="Model\DataControllers\TempApi\TempApiDataController.cs" />
     <Compile Include="StateMachine\State.cs" />
+    <Compile Include="Utilities\WindowService.cs" />
     <Compile Include="ViewModels\Commands\RelayCommand.cs" />
-    <Compile Include="Converters\BooleanToOppositeBooleanConverter.cs" />
-    <Compile Include="Converters\NullImageConverter.cs" />
-    <Compile Include="Converters\EnumToBooleanConverter.cs" />
-    <Compile Include="Converters\EnumToDescriptionConverter.cs" />
-    <Compile Include="Converters\EnumToVisibilityConverter.cs" />
-    <Compile Include="Converters\MultiplyConverter.cs" />
-    <Compile Include="Converters\RadToDegConverter.cs" />
-    <Compile Include="Converters\ScaleConverter.cs" />
+    <Compile Include="Views\Converters\BooleanToOppositeBooleanConverter.cs" />
+    <Compile Include="Views\Converters\NullImageConverter.cs" />
+    <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="Views\Converters\EnumToDescriptionConverter.cs" />
+    <Compile Include="Views\Converters\EnumToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\MultiplyConverter.cs" />
+    <Compile Include="Views\Converters\RadToDegConverter.cs" />
+    <Compile Include="Views\Converters\ViewModelStatusToDialogResultConverter.cs" />
+    <Compile Include="Views\Converters\ScaleConverter.cs" />
     <Compile Include="DataTypes\Enums\ScannerType.cs" />
-    <Compile Include="ViewModels\CustomEventArgs\SettingsUpdatedEventArgs.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\ITemplatingViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.MainWindowState.cs" />
@@ -202,6 +216,7 @@
     <Compile Include="ViewModels\TemplatingViewModel.cs" />
     <Compile Include="DataTypes\Enums\MinutiaType.cs" />
     <Compile Include="ViewModels\TemplatingViewModel.Idle.cs" />
+    <Compile Include="ViewModels\ValidationRules\ApiValidationRule.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -210,16 +225,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\IntegrityCheck.cs" />
-    <Compile Include="Helpers\PointExtensions.cs" />
-    <Compile Include="Helpers\TemplateBuilderException.cs" />
+    <Compile Include="Utilities\IntegrityCheck.cs" />
+    <Compile Include="Utilities\PointExtensions.cs" />
+    <Compile Include="Utilities\TemplateBuilderException.cs" />
     <Compile Include="DataTypes\Collections\TrulyObservableCollection.cs" />
-    <Compile Include="Helpers\UIHelper.cs" />
+    <Compile Include="Utilities\UIHelper.cs" />
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TemplatingView.xaml.cs">
       <DependentUpon>TemplatingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowDialogView.xaml.cs">
+      <DependentUpon>WindowDialogView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +251,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\WindowDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Database\CaptureDb.cs" />
@@ -243,7 +265,7 @@
     <Compile Include="Model\Database\PersonDb.cs" />
     <Compile Include="Model\Database\SimPrintsDb.cs" />
     <Compile Include="DataTypes\MinutiaRecord.cs" />
-    <Compile Include="Helpers\IsoTemplateHelper.cs" />
+    <Compile Include="Utilities\IsoTemplateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

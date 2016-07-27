@@ -11,7 +11,7 @@ using RestSharp;
 using log4net;
 using SimTemplate.DataTypes.Enums;
 using SimTemplate.DataTypes;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 
 namespace SimTemplate.Model.DataControllers.TempApi
 {

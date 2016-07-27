@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.Helpers
+namespace SimTemplate.Utilities
 {
     public static class EnumHelper
     {

@@ -4,22 +4,22 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
+using SimTemplate.ViewModels;
 
-namespace SimTemplate.Converters
+namespace SimTemplate.Views.Converters
 {
-    public class RadToDegConverter : IValueConverter
+    public class EnumToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double rad = (double)value;
-            return rad * (180.0 / Math.PI);
+            return value.Equals(parameter) ? Visibility.Visible : Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double deg = (double)value;
-            return Math.PI * deg / 180.0;
+            return value.Equals(Visibility.Visible) ? parameter : Binding.DoNothing;
         }
     }
 }

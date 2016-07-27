@@ -1,16 +1,13 @@
-﻿using SimTemplate.ViewModels.CustomEventArgs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SimTemplate.DataTypes.Enums;
 
 namespace SimTemplate.ViewModels
 {
     public interface ISettingsViewModel
     {
-        void Refresh();
+        string ApiKey { get; }
 
-        event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
+        ViewModelStatus Result { get; }
+
+        void Refresh();
     }
 }

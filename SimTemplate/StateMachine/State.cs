@@ -1,7 +1,7 @@
 ﻿using log4net;
 using System;
 using System.Runtime.CompilerServices;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.ViewModels;
 
 namespace SimTemplate.StateMachine

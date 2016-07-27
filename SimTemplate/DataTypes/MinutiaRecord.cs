@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.DataTypes.Enums;
 
 namespace SimTemplate.DataTypes

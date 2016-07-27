@@ -1,18 +1,18 @@
-﻿<ContentControl x:Class="SimTemplate.View.TemplatingView"
+﻿<ContentControl x:Class="SimTemplate.Views.TemplatingView"
                 x:Name="templatingControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:local="clr-namespace:SimTemplate.View"
-             xmlns:viewModel="clr-namespace:SimTemplate.ViewModels"
-             xmlns:dataTypes="clr-namespace:SimTemplate.DataTypes"
-             xmlns:enums="clr-namespace:SimTemplate.DataTypes.Enums"
-             xmlns:conv="clr-namespace:SimTemplate.Converters"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                xmlns:local="clr-namespace:SimTemplate.Views"
+                xmlns:viewModel="clr-namespace:SimTemplate.ViewModels"
+                xmlns:dataTypes="clr-namespace:SimTemplate.DataTypes"
+                xmlns:enums="clr-namespace:SimTemplate.DataTypes.Enums"
+                xmlns:conv="clr-namespace:SimTemplate.Views.Converters"
+                mc:Ignorable="d" 
+                d:DesignHeight="300" d:DesignWidth="300">
+
     <ContentControl.Resources>
         <!--Converters-->
         <conv:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />

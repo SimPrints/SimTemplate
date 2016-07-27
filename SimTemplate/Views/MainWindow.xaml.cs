@@ -4,8 +4,9 @@ using System.Windows;
 using SimTemplate.Model.DataControllers.TempApi;
 using SimTemplate.ViewModels;
 using SimTemplate.Model.DataControllers.Local;
+using SimTemplate.Utilities;
 
-namespace SimTemplate.View.MainWindow
+namespace SimTemplate.Views.MainWindow
 {
     /// <summary>
     /// Interaction logic for MainWindowView.xaml
@@ -29,7 +30,8 @@ namespace SimTemplate.View.MainWindow
                 new TempApiDataController(),
 #endif
                 new TemplatingViewModel(),
-                new SettingsViewModel());
+                new SettingsViewModel(),
+                new WindowService());
 
 
             InitializeComponent();

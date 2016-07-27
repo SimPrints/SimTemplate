@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Windows.Input;
 using SimTemplate.ViewModels.Commands;
-using System.Text.RegularExpressions;
-using SimTemplate.ViewModels.CustomEventArgs;
+using System.ComponentModel;
+using SimTemplate.Utilities;
+using SimTemplate.DataTypes.Enums;
 
 namespace SimTemplate.ViewModels
 {
-    public partial class SettingsViewModel : ViewModel, ISettingsViewModel
+    public partial class SettingsViewModel : ViewModel, ISettingsViewModel, IDialogViewModel, IDataErrorInfo
     {
+        private const string TITLE = "Settings";
+
         // Commands
         private ICommand m_UpdateSettingsCommand;
 
@@ -15,22 +18,20 @@ namespace SimTemplate.ViewModels
         private string m_ApiKey;
 
         // ViewModel-Driven Properties
-        private bool m_IsApiKeyValid;
-
-        // Events
-        private event EventHandler<SettingsUpdatedEventArgs> m_SettingsUpdated;
+        private ViewModelStatus m_Result;
 
         #region Constructor
 
         public SettingsViewModel()
         {
-            ((ISettingsViewModel)this).Refresh();
             InitialiseCommands();
         }
 
         #endregion
 
         #region Directly Bound Properties
+
+        public string Title { get { return TITLE; } }
 
         public string ApiKey
         {
@@ -41,48 +42,41 @@ namespace SimTemplate.ViewModels
                 {
                     m_ApiKey = value;
                     NotifyPropertyChanged();
-                    // Validate value
-                    IsApiKeyValid = ValidateApiKey(m_ApiKey);
                 }
             }
         }
 
-        public bool IsApiKeyValid
+        public ViewModelStatus Result
         {
-            get { return m_IsApiKeyValid; }
+            get { return m_Result; }
             set
             {
-                if (m_IsApiKeyValid != value)
+                if (m_Result != value)
                 {
-                    m_IsApiKeyValid = value;
+                    m_Result = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
-        public bool IsUpdateSettingsPermitted
-        {
-            get
-            {
-                return (m_ApiKey != Properties.Settings.Default.ApiKey) && m_IsApiKeyValid;
-            }
-        }
-
         #endregion
 
-        #region CommandCallbacks
+        #region Command Methods
 
         private void UpdateSettings()
         {
             Log.Debug("UpdateSettings() called");
+            // Update settings
+            Properties.Settings.Default.ApiKey = m_ApiKey;
+            Properties.Settings.Default.Save();
+            Result = ViewModelStatus.Complete;
+        }
 
-            if (IsApiKeyValid)
+        private bool IsUpdateSettingsPermitted
+        {
+            get
             {
-                OnSettingsUpdated(new SettingsUpdatedEventArgs(m_ApiKey));
-            }
-            else
-            {
-                Log.DebugFormat("ApiKey invalid: {0}", m_ApiKey);
+                return (m_ApiKey != Properties.Settings.Default.ApiKey);
             }
         }
 
@@ -94,17 +88,45 @@ namespace SimTemplate.ViewModels
 
         #endregion
 
+        #region IDataErrorInfo Members
+
+        public string Error
+        {
+            get { return String.Empty; }
+        }
+
+        public string this[string property]
+        {
+            get
+            {
+                String errorMessage = String.Empty;
+                switch (property)
+                {
+                    case "ApiKey":
+                        Guid result;
+                        bool isValid = Guid.TryParse(ApiKey, out result);
+                        if (!isValid)
+                        {
+                            errorMessage = "API Key be a valid 32 character GUID";
+                        }
+
+                        break;
+
+                    default:
+                        throw IntegrityCheck.FailUnexpectedDefault(property);
+                }
+                return errorMessage;
+            }
+        }
+
+        #endregion
+
         #region ISettingsViewModel
 
         void ISettingsViewModel.Refresh()
         {
-            ApiKey = Properties.Settings.Default.ApiKey;
-        }
-
-        event EventHandler<SettingsUpdatedEventArgs> ISettingsViewModel.SettingsUpdated
-        {
-            add { m_SettingsUpdated += value; }
-            remove { m_SettingsUpdated -= value; }
+            m_ApiKey = Properties.Settings.Default.ApiKey;
+            m_Result = ViewModelStatus.Running;
         }
 
         #endregion
@@ -116,21 +138,6 @@ namespace SimTemplate.ViewModels
             m_UpdateSettingsCommand = new RelayCommand(
                 x => UpdateSettings(),
                 x => IsUpdateSettingsPermitted);
-        }
-
-        private bool ValidateApiKey(string apiKey)
-        {
-            Regex rg = new Regex(@"^[a-z\-0-9]*$");
-            return rg.IsMatch(apiKey);
-        }
-
-        private void OnSettingsUpdated(SettingsUpdatedEventArgs e)
-        {
-            EventHandler<SettingsUpdatedEventArgs> temp = m_SettingsUpdated;
-            if (temp != null)
-            {
-                temp.Invoke(this, e);
-            }
         }
 
         #endregion

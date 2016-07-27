@@ -1,4 +1,4 @@
-﻿using SimTemplate.Helpers;
+﻿using SimTemplate.Utilities;
 using SimTemplate.DataTypes.Enums;
 
 namespace SimTemplate.ViewModels

@@ -11,7 +11,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.StateMachine;
 using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.DataTypes.Enums;

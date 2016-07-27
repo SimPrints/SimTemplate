@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.ViewModels;
 using SimTemplate.StateMachine;
 using SimTemplate.ViewModels.Commands;
@@ -177,11 +177,10 @@ namespace SimTemplate.ViewModels
         void ITemplatingViewModel.QuitTemplating()
         {
             Capture = null;
-            Minutae.Clear();
-            //App.Current.Dispatcher.Invoke(new Action(() =>
-            //{
-            //    Minutae.Clear();
-            //}));
+            App.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                Minutae.Clear();
+            }));
         }
 
         #endregion

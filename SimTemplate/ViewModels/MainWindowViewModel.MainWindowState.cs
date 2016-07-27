@@ -1,5 +1,5 @@
 ﻿using SimTemplate.DataTypes.Enums;
-using SimTemplate.Helpers;
+using SimTemplate.Utilities;
 using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.StateMachine;
 using System;
