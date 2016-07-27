@@ -104,6 +104,7 @@ namespace SimTemplate.ViewModels
             }
         }
 
+        // TODO: Move this out
         public Uri StatusImage
         {
             get { return m_StatusImage; }
@@ -117,6 +118,7 @@ namespace SimTemplate.ViewModels
             }
         }
 
+        // TODO: Move this out
         public string PromptText
         {
             get { return m_PromptText; }

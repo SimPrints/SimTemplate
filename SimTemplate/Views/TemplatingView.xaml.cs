@@ -17,47 +17,32 @@ namespace SimTemplate.Views
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(TemplatingView));
 
         private TemplatingViewModel m_ViewModel;
-        private Vector m_Scale;
 
         public TemplatingView()
         {
-            m_Scale = new Vector(1, 2);
             InitializeComponent();
             DataContextChanged += TemplatingView_DataContextChanged;
         }
 
-        public TemplatingViewModel ViewModel { get { return m_ViewModel; } }
-
-        public Vector Scale
-        {
-            get { return m_Scale; }
-            set
-            {
-                if (value != m_Scale)
-                {
-                    m_Scale = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
+        private Vector Scale { get; set; }
 
         #region Event Handlers
 
         private void TemplatingView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             m_ViewModel = e.NewValue as TemplatingViewModel;
-            if (m_ViewModel != null)
-            {
-                // ViewModel has just been set as context to a view
-                m_ViewModel.NotifyAllPropertiesChanged();
-            }
+            //if (m_ViewModel != null)
+            //{
+            //    // ViewModel has just been set as context to a view
+            //    m_ViewModel.NotifyAllPropertiesChanged();
+            //}
         }
 
         private void templatingCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             Point scaled_pos = e.GetPosition(sender as IInputElement);
             // Account for image scaling
-            Point pos = scaled_pos.InvScale(m_Scale);
+            Point pos = scaled_pos.InvScale(Scale);
             // Pass the pixels of the image 
             m_ViewModel.PositionUpdate(pos);
         }
@@ -68,7 +53,7 @@ namespace SimTemplate.Views
 
             Point scaled_pos = e.GetPosition(sender as IInputElement);
             // Account for image scaling
-            Point pos = scaled_pos.InvScale(m_Scale);
+            Point pos = scaled_pos.InvScale(Scale);
             // Pass the pixels of the image 
             m_ViewModel.PositionInput(pos);
         }
@@ -82,7 +67,7 @@ namespace SimTemplate.Views
                 // Image has been resized.
                 // Get scaling in each dimension.
                 double scaleX = e.NewSize.Width / image.Source.Width;
-                double scaleY = e.NewSize.Height / image.Source.Width;
+                double scaleY = e.NewSize.Height / image.Source.Height;
                 // Check that scaling factor is equal for each dimension.
                 Scale = new Vector(scaleX, scaleY);
             }
@@ -127,7 +112,7 @@ namespace SimTemplate.Views
         {
             Point scaled_pos = e.GetPosition(image);
             // Account for image scaling
-            Point pos = scaled_pos.InvScale(m_Scale);
+            Point pos = scaled_pos.InvScale(Scale);
             // Pass the pixels of the image 
             m_ViewModel.MoveMinutia(pos);
         }

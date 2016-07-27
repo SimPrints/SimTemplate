@@ -23,13 +23,14 @@ namespace SimTemplate.Views.Converters
                 }
             }
             double val = (double)values[0];
-            double scale = (double)values[1];
-            return val * scale + offset;
+            double trueHeight = (double)values[1];
+            double scaledHeight = (double)values[2];
+            return val * scaledHeight / trueHeight + offset;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            return null;
+            return new[] { Binding.DoNothing, Binding.DoNothing, Binding.DoNothing };
         }
     }
 }
