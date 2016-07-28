@@ -29,9 +29,6 @@ namespace SimTemplate.ViewModels
 
         // ViewModel-Driven Properties
         private ViewModelStatus m_Result;
-        private IDictionary<string, SettingCompare> settings;
-        private string m_CurrentApiKey;
-        private string m_CurrentRootUrl;
 
         #region Constructor
 
@@ -101,14 +98,6 @@ namespace SimTemplate.ViewModels
             Result = ViewModelStatus.Complete;
         }
 
-        private bool IsUpdateSettingsPermitted
-        {
-            get
-            {
-                return (!m_ApiKey.AreEqual() || !m_RootUrl.AreEqual());
-            }
-        }
-
         #endregion
 
         #region Commands
@@ -173,9 +162,7 @@ namespace SimTemplate.ViewModels
 
         private void InitialiseCommands()
         {
-            m_UpdateSettingsCommand = new RelayCommand(
-                x => UpdateSettings(),
-                x => IsUpdateSettingsPermitted);
+            m_UpdateSettingsCommand = new RelayCommand(x => UpdateSettings());
         }
 
         #endregion
