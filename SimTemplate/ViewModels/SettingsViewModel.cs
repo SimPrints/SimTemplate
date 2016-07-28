@@ -14,16 +14,22 @@ namespace SimTemplate.ViewModels
         // Commands
         private ICommand m_UpdateSettingsCommand;
 
+        // Dependencies
+        private readonly ISettingsManager m_Validator;
+
         // View-Driven Properties
         private string m_ApiKey;
+        private string m_RootUrl;
 
         // ViewModel-Driven Properties
         private ViewModelStatus m_Result;
 
         #region Constructor
 
-        public SettingsViewModel()
+        public SettingsViewModel(ISettingsManager validator)
         {
+            m_Validator = validator;
+
             InitialiseCommands();
         }
 
@@ -41,6 +47,19 @@ namespace SimTemplate.ViewModels
                 if (m_ApiKey != value)
                 {
                     m_ApiKey = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string RootUrl
+        {
+            get { return m_RootUrl; }
+            set
+            {
+                if (m_RootUrl != value)
+                {
+                    m_RootUrl = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -103,13 +122,17 @@ namespace SimTemplate.ViewModels
                 switch (property)
                 {
                     case "ApiKey":
-                        Guid result;
-                        bool isValid = Guid.TryParse(ApiKey, out result);
-                        if (!isValid)
+                        if (m_Validator.ValidateQuerySetting(Setting.ApiKey, m_ApiKey))
                         {
-                            errorMessage = "API Key be a valid 32 character GUID";
+                            errorMessage = m_Validator.SettingHelpText(Setting.ApiKey);
                         }
+                        break;
 
+                    case "RootUrl":
+                        if (m_Validator.ValidateQuerySetting(Setting.RootUrl, m_RootUrl))
+                        {
+                            errorMessage = m_Validator.SettingHelpText(Setting.RootUrl);
+                        }
                         break;
 
                     default:
@@ -126,6 +149,7 @@ namespace SimTemplate.ViewModels
         void ISettingsViewModel.Refresh()
         {
             m_ApiKey = Properties.Settings.Default.ApiKey;
+            m_RootUrl = Properties.Settings.Default.RootUrl;
             m_Result = ViewModelStatus.Running;
         }
 

@@ -64,7 +64,13 @@
         </TextBlock>
         <TextBox x:Name="apiKeyTextInput"
                  Text="{Binding Path=ApiKey, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-        
+
+        <TextBlock Style="{StaticResource settingTitleStyle}">
+            Root URL:
+        </TextBlock>
+        <TextBox x:Name="rootUrlText"
+                 Text="{Binding Path=RootUrl, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
         <!--DIALOG BUTTONS-->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <!--Update button-->

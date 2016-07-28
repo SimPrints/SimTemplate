@@ -164,7 +164,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataTypes\Enums\Setting.cs" />
     <Compile Include="DataTypes\Enums\ViewModelStatus.cs" />
+    <Compile Include="Utilities\ISettingsManager.cs" />
+    <Compile Include="Utilities\SettingsManager.cs" />
     <Compile Include="ViewModels\IDialogViewModel.cs" />
     <Compile Include="Views\Converters\BooleanToBorderColour.cs" />
     <Compile Include="Utilities\DialogCloser.cs" />
@@ -216,7 +219,6 @@
     <Compile Include="ViewModels\TemplatingViewModel.cs" />
     <Compile Include="DataTypes\Enums\MinutiaType.cs" />
     <Compile Include="ViewModels\TemplatingViewModel.Idle.cs" />
-    <Compile Include="ViewModels\ValidationRules\ApiValidationRule.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

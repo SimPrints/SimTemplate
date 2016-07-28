@@ -8,6 +8,8 @@ using SimTemplate.DataTypes.Enums;
 using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.Model.DataControllers;
 using SimTemplate.DataTypes;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SimTemplate.ViewModels
 {
@@ -34,6 +36,13 @@ namespace SimTemplate.ViewModels
                 // Indicate that we are initialising
                 Outer.m_TemplatingViewModel.PromptText = "Initialising...";
                 Outer.m_TemplatingViewModel.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Loading.png");
+
+                // Check that our current settings are valid
+                if(!Outer.m_SettingsManager.ValidateCurrentSettings())
+                {
+                    // Prompt the user to update the settings
+                    Outer.OpenSettings();
+                }
             }
 
             public override void OnLeavingState()
@@ -69,8 +78,8 @@ namespace SimTemplate.ViewModels
             {
                 // Initialise the DataController so that we can fetch images.
                 DataControllerConfig config = new DataControllerConfig(
-                    Properties.Settings.Default.ApiKey,
-                    Properties.Settings.Default.RootUrl);
+                    (string)Outer.m_SettingsManager.GetSetting(Setting.ApiKey),
+                    (String)Outer.m_SettingsManager.GetSetting(Setting.RootUrl));
                 return Outer.m_DataController.BeginInitialise(config);
             }
 

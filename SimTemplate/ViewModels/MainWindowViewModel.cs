@@ -20,6 +20,9 @@ namespace SimTemplate.ViewModels
         private readonly StateManager<MainWindowState> m_StateMgr;
         private readonly object m_StateLock;
 
+        // Dependencies
+        private readonly IDataController m_DataController;
+        private readonly ISettingsManager m_SettingsManager;
         private readonly IWindowService m_WindowService;
 
         // Child ViewModels
@@ -27,7 +30,6 @@ namespace SimTemplate.ViewModels
         private readonly ISettingsViewModel m_SettingsViewModel;
 
         // ViewModel-driven members
-        private readonly IDataController m_DataController;
         private string m_LoadIcon;
         private SimTemplateException m_Exception;
 
@@ -44,19 +46,25 @@ namespace SimTemplate.ViewModels
 
         #region Constructor
 
+        // TODO: Swap SettingsViewModel for a SettingsViewModelFactory
         public MainWindowViewModel(
             IDataController dataController,
             ITemplatingViewModel templatingViewModel,
-            ISettingsViewModel settingsViewModel, // TODO: Swap for a SettingsViewModelFactory
+            ISettingsViewModel settingsViewModel,
+            ISettingsManager settingsManager,
             IWindowService windowService)
         {
             IntegrityCheck.IsNotNull(dataController);
             IntegrityCheck.IsNotNull(templatingViewModel);
+            IntegrityCheck.IsNotNull(settingsViewModel);
+            IntegrityCheck.IsNotNull(settingsManager);
+            IntegrityCheck.IsNotNull(windowService);
 
             // Save arguments
             m_DataController = dataController;
             m_TemplatingViewModel = templatingViewModel;
             m_SettingsViewModel = settingsViewModel;
+            m_SettingsManager = settingsManager;
             m_WindowService = windowService;
 
             // Initialise the state machine

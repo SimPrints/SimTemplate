@@ -1,10 +1,13 @@
 ﻿using log4net;
 using log4net.Config;
 using System.Windows;
-using SimTemplate.Model.DataControllers.TempApi;
 using SimTemplate.ViewModels;
-using SimTemplate.Model.DataControllers.Local;
 using SimTemplate.Utilities;
+#if DEBUG
+using SimTemplate.Model.DataControllers.Local;
+#else
+using SimTemplate.Model.DataControllers.TempApi;
+#endif
 
 namespace SimTemplate.Views.MainWindow
 {
@@ -23,6 +26,8 @@ namespace SimTemplate.Views.MainWindow
         {
             XmlConfigurator.Configure();
             m_Log.Debug("Logging initialised.");
+
+            ISettingsManager settingsMgr = new SettingsManager();
             m_ViewModel = new MainWindowViewModel(
 #if DEBUG
                 new LocalDataController(),
@@ -30,16 +35,22 @@ namespace SimTemplate.Views.MainWindow
                 new TempApiDataController(),
 #endif
                 new TemplatingViewModel(),
-                new SettingsViewModel(),
+                new SettingsViewModel(settingsMgr),
+                settingsMgr,
                 new WindowService());
-
 
             InitializeComponent();
             DataContext = m_ViewModel;
 
+            Loaded += MainWindowView_Loaded;
+        }
+
+        #endregion
+
+        private void MainWindowView_Loaded(object sender, RoutedEventArgs e)
+        {
             m_ViewModel.BeginInitialise();
         }
 
-#endregion
     }
 }
