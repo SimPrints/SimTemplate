@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SimTemplate.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="RootUrl" Type="System.String" Scope="Application">
+    <Setting Name="RootUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://datastoreapi.azurewebsites.net</Value>
     </Setting>
     <Setting Name="ApiKey" Type="System.String" Scope="User">

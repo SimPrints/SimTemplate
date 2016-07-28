@@ -78,8 +78,8 @@ namespace SimTemplate.ViewModels
             {
                 // Initialise the DataController so that we can fetch images.
                 DataControllerConfig config = new DataControllerConfig(
-                    (string)Outer.m_SettingsManager.GetSetting(Setting.ApiKey),
-                    (String)Outer.m_SettingsManager.GetSetting(Setting.RootUrl));
+                    (string)Outer.m_SettingsManager.GetCurrentSetting(Setting.ApiKey),
+                    (String)Outer.m_SettingsManager.GetCurrentSetting(Setting.RootUrl));
                 return Outer.m_DataController.BeginInitialise(config);
             }
 

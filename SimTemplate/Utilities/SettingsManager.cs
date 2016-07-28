@@ -16,6 +16,7 @@ namespace SimTemplate.Utilities
                     Setting.ApiKey,
                     new SettingInfo(
                         () => { return Properties.Settings.Default.ApiKey; },
+                        (object newValue) => { Properties.Settings.Default.ApiKey = (string)newValue; },
                         ValidateApiKey,
                         "Must be a valid, 32 character GUID")
                 },
@@ -23,6 +24,7 @@ namespace SimTemplate.Utilities
                     Setting.RootUrl,
                     new SettingInfo(
                         () => { return Properties.Settings.Default.RootUrl; },
+                        (object newValue) => { Properties.Settings.Default.RootUrl = (string)newValue; },
                         ValidateRootUrl,
                         "Must be a valid URL")
                 },
@@ -30,7 +32,7 @@ namespace SimTemplate.Utilities
 
         #region ISettingsValidator
 
-        object ISettingsManager.GetSetting(Setting setting)
+        object ISettingsManager.GetCurrentSetting(Setting setting)
         {
             CheckSupportedSetting(setting);
             return SETTINGS_LOOKUP[setting].GetCurrentValue();
@@ -56,10 +58,21 @@ namespace SimTemplate.Utilities
             return SETTINGS_LOOKUP[setting].Validate(queryValue);
         }
 
-        string ISettingsManager.SettingHelpText(Setting setting)
+        string ISettingsManager.ValidationHelpText(Setting setting)
         {
             CheckSupportedSetting(setting);
             return SETTINGS_LOOKUP[setting].ValidationText;
+        }
+
+        bool ISettingsManager.UpdateSetting(Setting setting, object newValue)
+        {
+            CheckSupportedSetting(setting);
+            return SETTINGS_LOOKUP[setting].SetNewValue(newValue);
+        }
+
+        void ISettingsManager.SaveSettings()
+        {
+            Properties.Settings.Default.Save();
         }
 
         #endregion
@@ -83,7 +96,7 @@ namespace SimTemplate.Utilities
             string apiKeyText = apikey as string;
             
             Guid result;
-            return !Guid.TryParse(apiKeyText, out result);
+            return Guid.TryParse(apiKeyText, out result);
         }
 
         private static bool ValidateRootUrl(object rootUrl)
@@ -100,10 +113,21 @@ namespace SimTemplate.Utilities
         public class SettingInfo
         {
             private readonly Func<object> m_GetSettingMethod;
+            private readonly Action<object> m_SetSettingMethod;
             private readonly Func<object, bool> m_ValidateSettingMethod;
             private readonly string m_ValidationText;
 
             public object GetCurrentValue() { return m_GetSettingMethod.Invoke(); }
+
+            public bool SetNewValue(object newValue)
+            {
+                bool isValid = m_ValidateSettingMethod(newValue);
+                if (isValid)
+                {
+                    m_SetSettingMethod.Invoke(newValue);
+                }
+                return isValid;
+            }
 
             public bool Validate(object value) { return m_ValidateSettingMethod.Invoke(value); }
 
@@ -111,10 +135,12 @@ namespace SimTemplate.Utilities
 
             public SettingInfo(
                 Func<object> getSettingMethod,
+                Action<object> setSettingMethod,
                 Func<object, bool> validateSettingMethod,
                 string validationText)
             {
                 m_GetSettingMethod = getSettingMethod;
+                m_SetSettingMethod = setSettingMethod;
                 m_ValidateSettingMethod = validateSettingMethod;
                 m_ValidationText = validationText;
             }

@@ -4,10 +4,16 @@ using SimTemplate.ViewModels.Commands;
 using System.ComponentModel;
 using SimTemplate.Utilities;
 using SimTemplate.DataTypes.Enums;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SimTemplate.ViewModels
 {
-    public partial class SettingsViewModel : ViewModel, ISettingsViewModel, IDialogViewModel, IDataErrorInfo
+    public partial class SettingsViewModel :
+        ViewModel,
+        ISettingsViewModel,
+        IDialogViewModel,
+        IDataErrorInfo
     {
         private const string TITLE = "Settings";
 
@@ -15,20 +21,23 @@ namespace SimTemplate.ViewModels
         private ICommand m_UpdateSettingsCommand;
 
         // Dependencies
-        private readonly ISettingsManager m_Validator;
+        private readonly ISettingsManager m_SettingsManager;
 
         // View-Driven Properties
-        private string m_ApiKey;
-        private string m_RootUrl;
+        private SettingCompare m_ApiKey;
+        private SettingCompare m_RootUrl;
 
         // ViewModel-Driven Properties
         private ViewModelStatus m_Result;
+        private IDictionary<string, SettingCompare> settings;
+        private string m_CurrentApiKey;
+        private string m_CurrentRootUrl;
 
         #region Constructor
 
-        public SettingsViewModel(ISettingsManager validator)
+        public SettingsViewModel(ISettingsManager settingsManager)
         {
-            m_Validator = validator;
+            m_SettingsManager = settingsManager;
 
             InitialiseCommands();
         }
@@ -41,12 +50,12 @@ namespace SimTemplate.ViewModels
 
         public string ApiKey
         {
-            get { return m_ApiKey; }
+            get { return (string)m_ApiKey.QueryValue; }
             set
             {
-                if (m_ApiKey != value)
+                if (!m_ApiKey.QueryValue.Equals(value))
                 {
-                    m_ApiKey = value;
+                    m_ApiKey.QueryValue = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -54,12 +63,12 @@ namespace SimTemplate.ViewModels
 
         public string RootUrl
         {
-            get { return m_RootUrl; }
+            get { return (string)m_RootUrl.QueryValue; }
             set
             {
-                if (m_RootUrl != value)
+                if (!m_RootUrl.QueryValue.Equals(value))
                 {
-                    m_RootUrl = value;
+                    m_RootUrl.QueryValue = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -86,8 +95,9 @@ namespace SimTemplate.ViewModels
         {
             Log.Debug("UpdateSettings() called");
             // Update settings
-            Properties.Settings.Default.ApiKey = m_ApiKey;
-            Properties.Settings.Default.Save();
+            m_SettingsManager.UpdateSetting(Setting.ApiKey, m_ApiKey);
+            m_SettingsManager.UpdateSetting(Setting.RootUrl, m_RootUrl);
+            m_SettingsManager.SaveSettings();
             Result = ViewModelStatus.Complete;
         }
 
@@ -95,7 +105,7 @@ namespace SimTemplate.ViewModels
         {
             get
             {
-                return (m_ApiKey != Properties.Settings.Default.ApiKey);
+                return (!m_ApiKey.AreEqual() || !m_RootUrl.AreEqual());
             }
         }
 
@@ -122,16 +132,20 @@ namespace SimTemplate.ViewModels
                 switch (property)
                 {
                     case "ApiKey":
-                        if (m_Validator.ValidateQuerySetting(Setting.ApiKey, m_ApiKey))
+                        if (!m_SettingsManager.ValidateQuerySetting(
+                            Setting.ApiKey,
+                            m_ApiKey.QueryValue))
                         {
-                            errorMessage = m_Validator.SettingHelpText(Setting.ApiKey);
+                            errorMessage = m_SettingsManager.ValidationHelpText(Setting.ApiKey);
                         }
                         break;
 
                     case "RootUrl":
-                        if (m_Validator.ValidateQuerySetting(Setting.RootUrl, m_RootUrl))
+                        if (!m_SettingsManager.ValidateQuerySetting(
+                            Setting.RootUrl,
+                            m_RootUrl.QueryValue))
                         {
-                            errorMessage = m_Validator.SettingHelpText(Setting.RootUrl);
+                            errorMessage = m_SettingsManager.ValidationHelpText(Setting.RootUrl);
                         }
                         break;
 
@@ -148,8 +162,8 @@ namespace SimTemplate.ViewModels
 
         void ISettingsViewModel.Refresh()
         {
-            m_ApiKey = Properties.Settings.Default.ApiKey;
-            m_RootUrl = Properties.Settings.Default.RootUrl;
+            m_ApiKey = new SettingCompare(m_SettingsManager.GetCurrentSetting(Setting.ApiKey));
+            m_RootUrl = new SettingCompare(m_SettingsManager.GetCurrentSetting(Setting.RootUrl));
             m_Result = ViewModelStatus.Running;
         }
 
@@ -165,5 +179,30 @@ namespace SimTemplate.ViewModels
         }
 
         #endregion
+
+        public class SettingCompare
+        {
+            private readonly object m_CurrentValue;
+            private object m_QueryValue;
+
+            public SettingCompare(object currentValue)
+            {
+                m_CurrentValue = currentValue;
+                m_QueryValue = currentValue;
+            }
+
+            public object CurrentValue { get { return m_CurrentValue; } }
+
+            public object QueryValue
+            {
+                get { return m_QueryValue; }
+                set { m_QueryValue = value; }
+            }
+
+            public bool AreEqual()
+            {
+                return m_CurrentValue.Equals(m_QueryValue);
+            }
+        }
     }
 }

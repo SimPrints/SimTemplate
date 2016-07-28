@@ -23,12 +23,15 @@ namespace SimTemplate.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://datastoreapi.azurewebsites.net")]
         public string RootUrl {
             get {
                 return ((string)(this["RootUrl"]));
+            }
+            set {
+                this["RootUrl"] = value;
             }
         }
         
