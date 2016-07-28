@@ -33,13 +33,13 @@ namespace SimTemplate.ViewModels
         // Parent-driven properties
         private CaptureInfo m_Capture;
         private MinutiaType m_InputMinutiaType;
-        private string m_PromptText;
-        private Uri m_StatusImage; // TODO: This is not really templating related...it should be moved
 
         // ViewModel-driven properties
 
         // View and ViewModel-driven properties
         private int? m_SelectedMinutia;
+
+        private event EventHandler<UserActionRequiredEventArgs> m_UserActionRequired;
 
         #region Constructor
 
@@ -104,34 +104,6 @@ namespace SimTemplate.ViewModels
             }
         }
 
-        // TODO: Move this out
-        public Uri StatusImage
-        {
-            get { return m_StatusImage; }
-            set
-            {
-                if (value != m_StatusImage)
-                {
-                    m_StatusImage = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        // TODO: Move this out
-        public string PromptText
-        {
-            get { return m_PromptText; }
-            set
-            {
-                if (value != m_PromptText)
-                {
-                    m_PromptText = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
         #endregion
 
         #region ITemplatingViewModel
@@ -154,7 +126,7 @@ namespace SimTemplate.ViewModels
 
         void ITemplatingViewModel.EscapeAction()
         {
-            lock(m_StateLock)
+            lock (m_StateLock)
             {
                 m_StateMgr.State.EscapeAction();
             }
@@ -170,7 +142,7 @@ namespace SimTemplate.ViewModels
 
         byte[] ITemplatingViewModel.FinaliseTemplate()
         {
-            lock(m_StateLock)
+            lock (m_StateLock)
             {
                 return m_StateMgr.State.FinaliseTemplate();
             }
@@ -183,6 +155,12 @@ namespace SimTemplate.ViewModels
             {
                 Minutae.Clear();
             }));
+        }
+
+        public event EventHandler<UserActionRequiredEventArgs> UserActionRequired
+        {
+            add { m_UserActionRequired += value; }
+            remove { m_UserActionRequired -= value; }
         }
 
         #endregion
@@ -258,6 +236,15 @@ namespace SimTemplate.ViewModels
         }
 
         #endregion
+        
+        private void OnUserActionRequired(UserActionRequiredEventArgs e)
+        {
+            EventHandler<UserActionRequiredEventArgs> temp = m_UserActionRequired;
+            if (temp != null)
+            {
+                temp.Invoke(this, e);
+            }
+        }
 
     }
 }

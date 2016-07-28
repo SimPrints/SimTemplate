@@ -34,8 +34,8 @@ namespace SimTemplate.ViewModels
                 Outer.m_TemplatingViewModel.BeginInitialise();
 
                 // Indicate that we are initialising
-                Outer.m_TemplatingViewModel.PromptText = "Initialising...";
-                Outer.m_TemplatingViewModel.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Loading.png");
+                Outer.PromptText = "Initialising...";
+                Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Loading.png");
 
                 // Check that our current settings are valid
                 if(!Outer.m_SettingsManager.ValidateCurrentSettings())
@@ -47,7 +47,7 @@ namespace SimTemplate.ViewModels
 
             public override void OnLeavingState()
             {
-                Outer.m_TemplatingViewModel.StatusImage = null;
+                Outer.StatusImage = null;
             }
 
             public override void LoadFile()

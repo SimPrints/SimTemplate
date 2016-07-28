@@ -25,7 +25,7 @@ namespace SimTemplate.ViewModels
                 base.OnEnteringState();
 
                 // Indicate that we are saving
-                Outer.m_TemplatingViewModel.PromptText = "Saving template...";
+                Outer.PromptText = "Saving template...";
             }
 
             #endregion
@@ -62,15 +62,15 @@ namespace SimTemplate.ViewModels
                 switch (e.Result)
                 {
                     case DataRequestResult.Success:
-                        Outer.m_TemplatingViewModel.PromptText = "Saved successfully";
+                        Outer.PromptText = "Saved successfully";
                         break;
 
                     case DataRequestResult.Failed:
-                        Outer.m_TemplatingViewModel.PromptText = "Server failed to save";
+                        Outer.PromptText = "Server failed to save";
                         break;
 
                     case DataRequestResult.TaskFailed:
-                        Outer.m_TemplatingViewModel.PromptText = "Application failed to save";
+                        Outer.PromptText = "Application failed to save";
                         break;
 
                     default:

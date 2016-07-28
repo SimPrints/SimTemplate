@@ -169,6 +169,7 @@
     <Compile Include="Utilities\ISettingsManager.cs" />
     <Compile Include="Utilities\SettingsManager.cs" />
     <Compile Include="ViewModels\IDialogViewModel.cs" />
+    <Compile Include="ViewModels\UserActionRequiredEventArgs.cs" />
     <Compile Include="Views\Converters\BooleanToBorderColour.cs" />
     <Compile Include="Utilities\DialogCloser.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />

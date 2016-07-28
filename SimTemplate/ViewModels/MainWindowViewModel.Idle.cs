@@ -22,8 +22,8 @@ namespace SimTemplate.ViewModels
                 base.OnEnteringState();
 
                 // Clear status indicators
-                Outer.m_TemplatingViewModel.StatusImage = null;
-                Outer.m_TemplatingViewModel.PromptText = "Ready";
+                Outer.StatusImage = null;
+                Outer.PromptText = "Ready";
             }
 
             public override void LoadFile()

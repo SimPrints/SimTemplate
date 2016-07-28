@@ -28,7 +28,7 @@ namespace SimTemplate.ViewModels
             {
                 base.OnEnteringState();
 
-                Outer.PromptText = "Please set minutia angle";
+                Outer.OnUserActionRequired(new UserActionRequiredEventArgs("Please set minutia angle"));
 
                 // Get the minutia that was placed in the previous step
                 IntegrityCheck.AreNotEqual(0, Outer.Minutae.Count());

@@ -103,7 +103,7 @@
                         </StackPanel>
                         <Expander Name="myExpander" Header="Load Options" 
                                   ExpandDirection="Down" IsExpanded="True"
-                                  HeaderTemplate="{StaticResource sectionTemplate}"> 
+                                  HeaderTemplate="{StaticResource sectionTemplate}">
                             <StackPanel Orientation="Vertical">
                                 <!-- Scanner type dropdown -->
                                 <StackPanel Style="{StaticResource toolbarStackStyle}">
@@ -128,29 +128,46 @@
                 <GroupBox Header="Templating Tools"
                           HeaderTemplate="{StaticResource headerTemplate}">
                     <!-- Minutia Type radiobuttons -->
-                <StackPanel Style="{StaticResource toolbarStackStyle}">
-                    <TextBlock Style="{StaticResource controlTextStyle}">Minutia Type:</TextBlock>
-                    <RadioButton IsChecked="{Binding Path=TemplatingViewModel.InputMinutiaType,
+                    <StackPanel Style="{StaticResource toolbarStackStyle}">
+                        <TextBlock Style="{StaticResource controlTextStyle}">Minutia Type:</TextBlock>
+                        <RadioButton IsChecked="{Binding Path=TemplatingViewModel.InputMinutiaType,
                         Converter={StaticResource EnumToBooleanConverter},
                         ConverterParameter={x:Static enums:MinutiaType.Termination}}"
                                  IsEnabled="{Binding Path=IsTemplating}"
                                  GroupName="inputMinutiaType"
                                  ToolTip="Record a termination (T)">
-                        Termination
-                    </RadioButton>
+                            Termination
+                        </RadioButton>
                         <RadioButton IsChecked="{Binding Path=TemplatingViewModel.InputMinutiaType,
                         Converter={StaticResource EnumToBooleanConverter},
                         ConverterParameter={x:Static enums:MinutiaType.Bifurication}}"
                                  IsEnabled="{Binding Path=IsTemplating}"
                                  GroupName="inputMinutiaType"
                                  ToolTip="Record a bifurication (B)">
-                        Bifurication
-                    </RadioButton>
-                </StackPanel>
+                            Bifurication
+                        </RadioButton>
+                    </StackPanel>
                 </GroupBox>
             </ToolBar>
         </ToolBarTray>
 
-        <ContentControl x:Name="content" Content="{Binding TemplatingViewModel}" />
+        <DockPanel x:Name="templatingPanel">
+            <!-- Guidance Text -->
+            <TextBlock x:Name="promptBanner" Text="{Binding Path=PromptText}" DockPanel.Dock="Top"
+                   TextAlignment="Center" FontSize="30" Foreground="{StaticResource simPrintsBlueBrush}"
+                   Style="{StaticResource baseStyle}"/>
+
+            <!-- MAIN CONTENT -->
+            <Grid Margin="20">
+                <!--Status image sometimes shown-->
+                <Image x:Name="statusImage"
+                   Source="{Binding StatusImage, Converter={StaticResource NullImageConverter}}"
+                   Stretch="Uniform"
+                   Panel.ZIndex="2"/>
+                
+                <!--Templating content (if applicable)-->
+                <ContentControl x:Name="content" Content="{Binding TemplatingViewModel}" />
+            </Grid>
+        </DockPanel>
     </DockPanel>
 </Window>

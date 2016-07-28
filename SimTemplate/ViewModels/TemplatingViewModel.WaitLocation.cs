@@ -29,7 +29,7 @@ namespace SimTemplate.ViewModels
             {
                 base.OnEnteringState();
 
-                Outer.PromptText = "Please place minutia";
+                Outer.OnUserActionRequired(new UserActionRequiredEventArgs("Please place minutia"));
             }
 
             #region View Methods

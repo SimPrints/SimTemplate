@@ -18,8 +18,8 @@ namespace SimTemplate.ViewModels
                 base.OnEnteringState();
 
                 // Indicate we have errored
-                Outer.m_TemplatingViewModel.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Error.png");
-                Outer.m_TemplatingViewModel.PromptText = "Fault";
+                Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Error.png");
+                Outer.PromptText = "Fault";
 
                 // Clear UI
                 Outer.m_TemplatingViewModel.QuitTemplating();

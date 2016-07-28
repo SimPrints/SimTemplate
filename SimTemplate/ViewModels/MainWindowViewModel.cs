@@ -32,6 +32,8 @@ namespace SimTemplate.ViewModels
         // ViewModel-driven members
         private string m_LoadIcon;
         private SimTemplateException m_Exception;
+        private string m_PromptText;
+        private Uri m_StatusImage;
 
         // View-driven members
         private ScannerType m_FilteredScannerType;
@@ -76,6 +78,7 @@ namespace SimTemplate.ViewModels
             m_DataController.InitialisationComplete += DataController_InitialisationComplete;
             m_DataController.GetCaptureComplete += DataController_GetCaptureComplete;
             m_DataController.SaveTemplateComplete += DataController_SaveTemplateComplete;
+            m_TemplatingViewModel.UserActionRequired += TemplatingViewModel_UserActionRequired;
         }
 
         #endregion
@@ -134,6 +137,32 @@ namespace SimTemplate.ViewModels
         #endregion
 
         #region Directly Bound Properties
+
+        public Uri StatusImage
+        {
+            get { return m_StatusImage; }
+            set
+            {
+                if (value != m_StatusImage)
+                {
+                    m_StatusImage = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string PromptText
+        {
+            get { return m_PromptText; }
+            set
+            {
+                if (value != m_PromptText)
+                {
+                    m_PromptText = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public ITemplatingViewModel TemplatingViewModel
         {
@@ -291,6 +320,11 @@ namespace SimTemplate.ViewModels
             {
                 m_StateMgr.State.DataController_SaveTemplateComplete(e);
             }
+        }
+
+        private void TemplatingViewModel_UserActionRequired(object sender, UserActionRequiredEventArgs e)
+        {
+            PromptText = e.PromptText;
         }
 
         #endregion

@@ -34,22 +34,6 @@ namespace SimTemplate.ViewModels
         void EscapeAction();
 
         /// <summary>
-        /// Sets the prompt text.
-        /// </summary>
-        /// <value>
-        /// The prompt text.
-        /// </value>
-        string PromptText { set; }
-
-        /// <summary>
-        /// Sets the status image.
-        /// </summary>
-        /// <value>
-        /// The status image.
-        /// </value>
-        Uri StatusImage { set; }
-
-        /// <summary>
         /// Begins templating with the provided capture.
         /// </summary>
         /// <param name="capture">The capture.</param>
@@ -73,5 +57,7 @@ namespace SimTemplate.ViewModels
         /// Quits templating without finalising.
         /// </summary>
         void QuitTemplating();
+
+        event EventHandler<UserActionRequiredEventArgs> UserActionRequired;
     }
 }
