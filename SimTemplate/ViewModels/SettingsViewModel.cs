@@ -6,6 +6,7 @@ using SimTemplate.Utilities;
 using SimTemplate.DataTypes.Enums;
 using System.Collections;
 using System.Collections.Generic;
+using SimTemplate.ViewModels.Interfaces;
 
 namespace SimTemplate.ViewModels
 {

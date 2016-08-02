@@ -27,9 +27,9 @@ namespace SimTemplate.StateMachine
 
             // Instantiate all concrete states into a list for transitioning to.
             m_States = new Dictionary<Type, T>();
-            foreach (Type type in
-                Assembly.GetAssembly(typeof(T)).GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
+            foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes()
+                .Where(myType =>
+                myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
             {
                 m_States.Add(type, (T)Activator.CreateInstance(type, m_ViewModel));
             }

@@ -1,6 +1,6 @@
 ﻿using SimTemplate.DataTypes.Enums;
 
-namespace SimTemplate.ViewModels
+namespace SimTemplate.ViewModels.Interfaces
 {
     public interface ISettingsViewModel
     {

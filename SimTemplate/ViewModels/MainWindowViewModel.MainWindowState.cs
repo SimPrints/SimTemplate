@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimTemplate.ViewModels.Interfaces;
 
 namespace SimTemplate.ViewModels
 {
@@ -14,13 +15,24 @@ namespace SimTemplate.ViewModels
     {
         public class MainWindowState : State
         {
+            protected readonly Activity m_StateActivity;
+
             #region Constructor
 
-            public MainWindowState(ViewModel outer) : base(outer)
+            public MainWindowState(ViewModel outer, Activity stateActivity) : base(outer)
             {
+                m_StateActivity = stateActivity;
             }
 
             #endregion
+
+            public override void OnEnteringState()
+            {
+                base.OnEnteringState();
+
+                Outer.CurrentActivity = m_StateActivity;
+                Outer.OnActivityChanged(new ActivityChangedEventArgs(m_StateActivity));
+            }
 
             #region Virtual Methods
 
@@ -34,16 +46,13 @@ namespace SimTemplate.ViewModels
 
             public virtual void BeginInitialise() { MethodNotImplemented(); }
 
-            public virtual void SettingsViewModel_SettingsUpdated(string apiKey)
+            public virtual void SettingsUpdated()
             {
-                // We always want to reinitialise if the ApiKey is changed
-                // ReInitialise
-                if (Outer.IsTemplating)
-                {
-                    Outer.m_TemplatingViewModel.QuitTemplating();
-                }
+                // Ultimately, whatever state we're in, we will reinitialise
                 TransitionTo(typeof(Initialising));
             }
+
+            public virtual void Reinitialise() { MethodNotImplemented(); }
 
             #endregion
 

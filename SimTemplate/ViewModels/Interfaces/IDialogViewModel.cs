@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimTemplate.ViewModels
+namespace SimTemplate.ViewModels.Interfaces
 {
     public interface IDialogViewModel
     {

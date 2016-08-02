@@ -14,7 +14,7 @@ namespace SimTemplate.ViewModels
     {
         public class Idle : MainWindowState
         {
-            public Idle(MainWindowViewModel outer) : base(outer)
+            public Idle(MainWindowViewModel outer) : base(outer, Activity.Idle)
             { }
 
             public override void OnEnteringState()
@@ -22,7 +22,6 @@ namespace SimTemplate.ViewModels
                 base.OnEnteringState();
 
                 // Clear status indicators
-                Outer.StatusImage = null;
                 Outer.PromptText = "Ready";
             }
 

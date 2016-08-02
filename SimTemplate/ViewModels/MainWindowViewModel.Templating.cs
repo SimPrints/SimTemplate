@@ -9,7 +9,7 @@ namespace SimTemplate.ViewModels
         {
             #region Constructor
 
-            public Templating(MainWindowViewModel outer) : base(outer)
+            public Templating(MainWindowViewModel outer) : base(outer, Activity.Templating)
             { }
 
             #endregion

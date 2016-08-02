@@ -7,6 +7,7 @@ using SimTemplate.DataTypes.Enums;
 using SimTemplate.ViewModels;
 using SimTemplate.DataTypes;
 using SimTemplate.Utilities;
+using SimTemplate.ViewModels.Interfaces;
 
 namespace AutomatedSimTemplateTests.ViewModel.MainWindow
 {
@@ -48,7 +49,7 @@ namespace AutomatedSimTemplateTests.ViewModel.MainWindow
             //A.CallTo(() => m_DataController.Initialise(A<DataControllerConfig>._))
             //    .Invokes(() => )
             m_Log.Debug("Starting test...");
-            m_ViewModel.BeginInitialise();
+            ((IMainWindowViewModel)m_ViewModel).BeginInitialise();
 
             // Assert that ViewModel made only one request to IDataController
             A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))

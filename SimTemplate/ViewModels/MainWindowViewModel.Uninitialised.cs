@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimTemplate.DataTypes.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,8 @@ namespace SimTemplate.ViewModels
     {
         public class Uninitialised : MainWindowState
         {
-            public Uninitialised(MainWindowViewModel outer) : base(outer)
+            public Uninitialised(MainWindowViewModel outer)
+                : base(outer, Activity.Uninitialised)
             { }
 
             public override void BeginInitialise()

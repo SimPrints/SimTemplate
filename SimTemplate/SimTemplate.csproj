@@ -130,6 +130,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.101.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
@@ -164,13 +165,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataTypes\Enums\Activity.cs" />
     <Compile Include="DataTypes\Enums\Setting.cs" />
     <Compile Include="DataTypes\Enums\ViewModelStatus.cs" />
     <Compile Include="Utilities\ISettingsManager.cs" />
     <Compile Include="Utilities\SettingsManager.cs" />
-    <Compile Include="ViewModels\IDialogViewModel.cs" />
-    <Compile Include="ViewModels\UserActionRequiredEventArgs.cs" />
-    <Compile Include="Views\Converters\BooleanToBorderColour.cs" />
+    <Compile Include="ViewModels\Interfaces\ActivityChangedEventArgs.cs" />
+    <Compile Include="ViewModels\Interfaces\IDialogViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IMainWindowViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\UserActionRequiredEventArgs.cs" />
     <Compile Include="Utilities\DialogCloser.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\IWindowService.cs" />
@@ -187,7 +190,10 @@
     <Compile Include="StateMachine\State.cs" />
     <Compile Include="Utilities\WindowService.cs" />
     <Compile Include="ViewModels\Commands\RelayCommand.cs" />
+    <Compile Include="Views\Converters\ActivityToLoadIconConverter.cs" />
+    <Compile Include="Views\Converters\ActivityToStatusImageConverter.cs" />
     <Compile Include="Views\Converters\BooleanToOppositeBooleanConverter.cs" />
+    <Compile Include="Views\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\NullImageConverter.cs" />
     <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
     <Compile Include="Views\Converters\EnumToDescriptionConverter.cs" />
@@ -197,8 +203,8 @@
     <Compile Include="Views\Converters\ViewModelStatusToDialogResultConverter.cs" />
     <Compile Include="Views\Converters\ScaleConverter.cs" />
     <Compile Include="DataTypes\Enums\ScannerType.cs" />
-    <Compile Include="ViewModels\ISettingsViewModel.cs" />
-    <Compile Include="ViewModels\ITemplatingViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISettingsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ITemplatingViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.MainWindowState.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.TransitioningAsync.cs" />
@@ -285,6 +291,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

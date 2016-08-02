@@ -8,6 +8,7 @@ using SimTemplate.ViewModels;
 using System.Windows;
 using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.Model.DataControllers;
+using SimTemplate.DataTypes.Enums;
 
 namespace SimTemplate.ViewModels
 {
@@ -15,7 +16,7 @@ namespace SimTemplate.ViewModels
     {
         private class Saving : TransitioningAsync<SaveTemplateEventArgs>
         {
-            public Saving(MainWindowViewModel outer) : base(outer)
+            public Saving(MainWindowViewModel outer) : base(outer, Activity.Transitioning)
             { }
 
             #region Overridden Public Methods

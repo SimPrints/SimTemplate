@@ -15,10 +15,10 @@
 
     <ContentControl.Resources>
         <!--Converters-->
-        <conv:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
         <conv:RadToDegConverter x:Key="RadToDegConverter" />
         <conv:MultiplyConverter x:Key="MultiplyConverter" />
         <conv:ScaleConverter x:Key="ScaleConverter" />
+        <conv:NullImageConverter x:Key="NullImageConverter" />
 
         <!--Values-->
         <sys:Double x:Key="minutiaLineLength">15</sys:Double>

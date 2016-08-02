@@ -1,4 +1,5 @@
 ﻿using SimTemplate.ViewModels;
+using SimTemplate.ViewModels.Interfaces;
 using SimTemplate.Views;
 using System;
 using System.Collections.Generic;

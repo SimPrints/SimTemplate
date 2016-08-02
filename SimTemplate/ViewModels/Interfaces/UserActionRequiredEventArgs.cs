@@ -1,6 +1,6 @@
 using System;
 
-namespace SimTemplate.ViewModels
+namespace SimTemplate.ViewModels.Interfaces
 {
 	public class UserActionRequiredEventArgs : EventArgs
 	{

@@ -10,16 +10,28 @@
         xmlns:enums="clr-namespace:SimTemplate.DataTypes.Enums"
         mc:Ignorable="d"
         x:Name="mainWindow"
-        Title="MainWindow" Height="525" Width="525"
+        Title="MainWindow"
+        Height="525"
+        Width="525"
         ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
+        <!--Images-->
+        <!--Icons-->
+        <ImageSource x:Key="loadIcon">/Resources/Icons/Load.ico</ImageSource>
+        <ImageSource x:Key="saveIcon" >/Resources/Icons/Save.ico</ImageSource>
+        <ImageSource x:Key="cancelIcon" >/Resources/Icons/Cancel.ico</ImageSource>
+        <ImageSource x:Key="settingsIcon" >/Resources/Icons/Settings.ico</ImageSource>
+        <!--Status Images-->
+        <ImageSource x:Key="errorStatus" >/Resources/StatusImages/Error.png</ImageSource>
+        <ImageSource x:Key="loadingStatus" >/Resources/StatusImages/Loading.png</ImageSource>
+
         <!--Converters-->
         <conv:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
         <conv:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
-
-        <!--Values-->
-        <BitmapImage x:Key="defaultLoadIcon" UriSource="pack://application:,,,/Resources/Icons/Load.ico"/>
+        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <conv:ActivityToStatusImageConverter x:Key="ActivityToStatusImageConverter" />
+        <conv:ActivityToLoadIconConverter x:Key="ActivityToLoadIconConverter" />
 
         <!-- Styles -->
         <!-- Toolbar Styles-->
@@ -45,12 +57,10 @@
 
         <!-- Data Templates -->
         <DataTemplate x:Key="headerTemplate">
-            <TextBlock Text="{Binding}"
-                       Style="{StaticResource toolsTitleStyle}"/>
+            <TextBlock Text="{Binding}" Style="{StaticResource toolsTitleStyle}"/>
         </DataTemplate>
         <DataTemplate x:Key="sectionTemplate">
-            <TextBlock Text="{Binding}"
-                       Style="{StaticResource toolsSectionStyle}"/>
+            <TextBlock Text="{Binding}" Style="{StaticResource toolsSectionStyle}"/>
         </DataTemplate>
     </Window.Resources>
     
@@ -64,12 +74,13 @@
     <!---BEGIN WINDOW CONTENT-->
     <DockPanel x:Name="windowPanel">
         <!--Side Panel (Controls)-->
-        <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical"
-                     HorizontalAlignment="Center" VerticalAlignment="Stretch">
+        <ToolBarTray DockPanel.Dock="Left"
+                     Orientation="Vertical"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Stretch">
             <!-- Data Toolbar -->
             <ToolBar x:Name="dataToolbar">
-                <GroupBox Header="General"
-                          HeaderTemplate="{StaticResource headerTemplate}">
+                <GroupBox Header="General" HeaderTemplate="{StaticResource headerTemplate}">
                     <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Vertical">
                         <!--Settings button-->
                         <Button x:Name="settingsButton"
@@ -77,42 +88,44 @@
                             ToolTip="Opens general settings"
                             Style="{StaticResource iconsStyle}"
                             Command="{Binding Path=ToggleSettingsCommand}">
-                            <Image Source="pack://application:,,,/Resources/Icons/Settings.ico" />
+                            <Image Source="{StaticResource settingsIcon}" />
                         </Button>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Data Tools"
-                          HeaderTemplate="{StaticResource headerTemplate}">
+                <GroupBox Header="Data Tools" HeaderTemplate="{StaticResource headerTemplate}">
                     <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Vertical">
                         <!-- Load/Save buttons -->
                         <StackPanel Style="{StaticResource toolbarStackStyle}" Orientation="Horizontal">
                             <Button x:Name="saveTemplate"
-                            VerticalAlignment="Top"
-                            ToolTip="Saves the current template"
-                            Style="{StaticResource iconsStyle}"
-                            Command="{Binding Path=SaveTemplateCommand}">
-                                <Image Source="pack://application:,,,/Resources/Icons/Save.ico" />
+                                    VerticalAlignment="Top"
+                                    ToolTip="Saves the current template"
+                                    Style="{StaticResource iconsStyle}"
+                                    Command="{Binding Path=SaveTemplateCommand}">
+                                <Image Source="{StaticResource saveIcon}" />
                             </Button>
                             <Button x:Name="loadFile"
-                            VerticalAlignment="Top"
-                            ToolTip="Loads the next capture for templating"
-                            Style="{StaticResource iconsStyle}"
-                            Command="{Binding Path=LoadFileCommand}">
-                                <Image Source="{Binding Path=LoadIconOverride, TargetNullValue={StaticResource defaultLoadIcon}}"/>
+                                    VerticalAlignment="Top"
+                                    ToolTip="Loads the next capture for templating"
+                                    Style="{StaticResource iconsStyle}"
+                                    Command="{Binding Path=LoadFileCommand}">
+                                <Image />
                             </Button>
                         </StackPanel>
-                        <Expander Name="myExpander" Header="Load Options" 
-                                  ExpandDirection="Down" IsExpanded="True"
+                        <Expander Name="myExpander"
+                                  Header="Load Options" 
+                                  ExpandDirection="Down"
+                                  IsExpanded="True"
                                   HeaderTemplate="{StaticResource sectionTemplate}">
                             <StackPanel Orientation="Vertical">
                                 <!-- Scanner type dropdown -->
                                 <StackPanel Style="{StaticResource toolbarStackStyle}">
                                     <Label Style="{StaticResource controlTextStyle}">Scanner Type:</Label>
-                                    <ComboBox x:Name="scannerTypeComboBox" VerticalAlignment="Top"
-                                    Width="100"
-                                    ItemsSource="{Binding Path=ScannerTypes}"
-                                    SelectedItem="{Binding Path=FilteredScannerType}"
-                                      ToolTip="Load a capture from a specific scanner.">
+                                    <ComboBox x:Name="scannerTypeComboBox" 
+                                              VerticalAlignment="Top"
+                                              Width="100"
+                                              ItemsSource="{Binding Path=ScannerTypes}"
+                                              SelectedItem="{Binding Path=FilteredScannerType}"
+                                              ToolTip="Load a capture from a specific scanner.">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
@@ -125,25 +138,24 @@
                     </StackPanel>
                 </GroupBox>
                 <!-- Templating Group -->
-                <GroupBox Header="Templating Tools"
-                          HeaderTemplate="{StaticResource headerTemplate}">
+                <GroupBox Header="Templating Tools" HeaderTemplate="{StaticResource headerTemplate}">
                     <!-- Minutia Type radiobuttons -->
                     <StackPanel Style="{StaticResource toolbarStackStyle}">
                         <TextBlock Style="{StaticResource controlTextStyle}">Minutia Type:</TextBlock>
                         <RadioButton IsChecked="{Binding Path=TemplatingViewModel.InputMinutiaType,
                         Converter={StaticResource EnumToBooleanConverter},
                         ConverterParameter={x:Static enums:MinutiaType.Termination}}"
-                                 IsEnabled="{Binding Path=IsTemplating}"
-                                 GroupName="inputMinutiaType"
-                                 ToolTip="Record a termination (T)">
+                                     IsEnabled="{Binding Path=IsTemplating}"
+                                     GroupName="inputMinutiaType"
+                                     ToolTip="Record a termination (T)">
                             Termination
                         </RadioButton>
                         <RadioButton IsChecked="{Binding Path=TemplatingViewModel.InputMinutiaType,
                         Converter={StaticResource EnumToBooleanConverter},
                         ConverterParameter={x:Static enums:MinutiaType.Bifurication}}"
-                                 IsEnabled="{Binding Path=IsTemplating}"
-                                 GroupName="inputMinutiaType"
-                                 ToolTip="Record a bifurication (B)">
+                                     IsEnabled="{Binding Path=IsTemplating}"
+                                     GroupName="inputMinutiaType"
+                                     ToolTip="Record a bifurication (B)">
                             Bifurication
                         </RadioButton>
                     </StackPanel>
@@ -153,21 +165,32 @@
 
         <DockPanel x:Name="templatingPanel">
             <!-- Guidance Text -->
-            <TextBlock x:Name="promptBanner" Text="{Binding Path=PromptText}" DockPanel.Dock="Top"
-                   TextAlignment="Center" FontSize="30" Foreground="{StaticResource simPrintsBlueBrush}"
-                   Style="{StaticResource baseStyle}"/>
+            <TextBlock x:Name="promptBanner"
+                       Text="{Binding Path=PromptText}"
+                       DockPanel.Dock="Top"
+                       TextAlignment="Center"
+                       FontSize="30"
+                       Foreground="{StaticResource simPrintsBlueBrush}"
+                       Style="{StaticResource baseStyle}"/>
 
             <!-- MAIN CONTENT -->
             <Grid Margin="20">
                 <!--Status image sometimes shown-->
                 <Image x:Name="statusImage"
-                   Source="{Binding StatusImage, Converter={StaticResource NullImageConverter}}"
-                   Stretch="Uniform"
-                   Panel.ZIndex="2"/>
+                       Stretch="Uniform"
+                       Panel.ZIndex="2" />
                 
                 <!--Templating content (if applicable)-->
                 <ContentControl x:Name="content" Content="{Binding TemplatingViewModel}" />
             </Grid>
+            <!--Reinitialise button (if applicable)-->
+            <Button DockPanel.Dock="Bottom"
+                    Command="{Binding ReinitialiseCommand}"
+                    Visibility="{Binding CurrentActivity,
+                Converter={StaticResource EnumToVisibilityConverter},
+                ConverterParameter={x:Static enums:Activity.Fault}}">
+                Re-Initialise
+            </Button>
         </DockPanel>
     </DockPanel>
 </Window>

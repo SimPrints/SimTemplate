@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SimTemplate.Utilities;
+using SimTemplate.DataTypes.Enums;
 
 namespace SimTemplate.ViewModels
 {
@@ -13,7 +14,8 @@ namespace SimTemplate.ViewModels
         {
             private object m_Identifier;
 
-            public TransitioningAsync(MainWindowViewModel outer) : base(outer)
+            public TransitioningAsync(MainWindowViewModel outer, Activity stateActivity) :
+                base(outer, stateActivity)
             { }
 
             #region Overriden Public Methods
@@ -24,15 +26,6 @@ namespace SimTemplate.ViewModels
 
                 m_Identifier = StartAsyncOperation();
                 IntegrityCheck.IsNotNull(m_Identifier);
-            }
-
-            public override void SettingsViewModel_SettingsUpdated(string apiKey)
-            {
-                // First abort our asynchronous request
-                AbortAsyncOperation(m_Identifier);
-
-                // Now update the settings as normal
-                base.SettingsViewModel_SettingsUpdated(apiKey);
             }
 
             #endregion

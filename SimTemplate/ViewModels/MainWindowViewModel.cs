@@ -8,13 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media;
+using SimTemplate.ViewModels.Interfaces;
 
 namespace SimTemplate.ViewModels
 {
     // TODO: Could make generic method that takes:
     // where T1 : ViewModel, ITemplatingViewModel
     // where T2 : ViewModel, ISettingsViewModel
-    public partial class MainWindowViewModel : ViewModel
+    public partial class MainWindowViewModel : ViewModel, IMainWindowViewModel
     {
         // State machine members
         private readonly StateManager<MainWindowState> m_StateMgr;
@@ -30,10 +32,9 @@ namespace SimTemplate.ViewModels
         private readonly ISettingsViewModel m_SettingsViewModel;
 
         // ViewModel-driven members
-        private string m_LoadIcon;
+        private Activity m_CurrentActivity;
         private SimTemplateException m_Exception;
         private string m_PromptText;
-        private Uri m_StatusImage;
 
         // View-driven members
         private ScannerType m_FilteredScannerType;
@@ -45,6 +46,9 @@ namespace SimTemplate.ViewModels
         private ICommand m_BifuricationButtonPressCommand;
         private ICommand m_EscapePressCommand;
         private ICommand m_ToggleSettingsCommand;
+        private ICommand m_ReinitialiseCommand;
+
+        private event EventHandler<ActivityChangedEventArgs> m_ActivityChanged;
 
         #region Constructor
 
@@ -85,71 +89,19 @@ namespace SimTemplate.ViewModels
 
         public SimTemplateException Exception { get { return m_Exception; } }
 
-        #region Command Callbacks
+        #region IMainWindowViewModel
 
-        private void LoadFile()
+        void IMainWindowViewModel.BeginInitialise()
         {
-            Log.Debug("LoadFile() called.");
+            Log.Debug("BeginInitialise() called.");
             lock (m_StateLock)
             {
-                m_StateMgr.State.LoadFile();
+
+                m_StateMgr.State.BeginInitialise();
             }
         }
-
-        private void SaveTemplate()
-        {
-            Log.Debug("SaveTemplate() called.");
-            lock (m_StateLock)
-            {
-                m_StateMgr.State.SaveTemplate();
-            }
-        }
-
-        private void EscapeAction()
-        {
-            Log.Debug("EscapeAction() called.");
-            lock (m_StateLock)
-            {
-                m_StateMgr.State.EscapeAction();
-            }
-        }
-
-        private void OpenSettings()
-        {
-            Log.Debug("OpenSettings() called.");
-
-            // Refresh the view model with latest settings
-            // TODO: Create a new SettingsViewModel (using a factory) rather than refresh
-            m_SettingsViewModel.Refresh();
-            // Present opportunity to change settings
-            m_WindowService.ShowDialog(m_SettingsViewModel);
-
-            if (m_SettingsViewModel.Result == ViewModelStatus.Complete)
-            {
-                // Settings were updated, we must re-initialise the DataController
-                lock (m_StateLock)
-                {
-                    m_StateMgr.TransitionTo(typeof(Initialising));
-                }
-            }
-        }
-
-        #endregion
 
         #region Directly Bound Properties
-
-        public Uri StatusImage
-        {
-            get { return m_StatusImage; }
-            set
-            {
-                if (value != m_StatusImage)
-                {
-                    m_StatusImage = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
 
         public string PromptText
         {
@@ -207,6 +159,7 @@ namespace SimTemplate.ViewModels
             }
         }
 
+        // TODO: Replace this with single enum indicating state, and use converter
         /// <summary>
         /// Gets or sets a value indicating whether the ViewModel is currently templating.
         /// </summary>
@@ -218,14 +171,14 @@ namespace SimTemplate.ViewModels
             get { return (m_StateMgr.State.GetType() == typeof(Templating)); }
         }
 
-        public string LoadIconOverride
+        public Activity CurrentActivity
         {
-            get { return m_LoadIcon; }
+            get { return m_CurrentActivity; }
             set
             {
-                if (value != m_LoadIcon)
+                if (m_CurrentActivity != value)
                 {
-                    m_LoadIcon = value;
+                    m_CurrentActivity = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -262,6 +215,16 @@ namespace SimTemplate.ViewModels
 
         public ICommand ToggleSettingsCommand { get { return m_ToggleSettingsCommand; } }
 
+        public ICommand ReinitialiseCommand { get { return m_ReinitialiseCommand; } }
+
+        #endregion
+
+        event EventHandler<ActivityChangedEventArgs> IMainWindowViewModel.ActivityChanged
+        {
+            add { m_ActivityChanged += value; }
+            remove { m_ActivityChanged -= value; }
+        }
+
         #endregion
 
         #region Private Methods
@@ -282,7 +245,70 @@ namespace SimTemplate.ViewModels
             m_EscapePressCommand = new RelayCommand(
                 x => EscapeAction());
             m_ToggleSettingsCommand = new RelayCommand(x => OpenSettings());
+            m_ReinitialiseCommand = new RelayCommand(x => Reinitialise());
         }
+
+        #region Command Callbacks
+
+        private void LoadFile()
+        {
+            Log.Debug("LoadFile() called.");
+            lock (m_StateLock)
+            {
+                m_StateMgr.State.LoadFile();
+            }
+        }
+
+        private void SaveTemplate()
+        {
+            Log.Debug("SaveTemplate() called.");
+            lock (m_StateLock)
+            {
+                m_StateMgr.State.SaveTemplate();
+            }
+        }
+
+        private void EscapeAction()
+        {
+            Log.Debug("EscapeAction() called.");
+            lock (m_StateLock)
+            {
+                m_StateMgr.State.EscapeAction();
+            }
+        }
+
+        private void OpenSettings()
+        {
+            Log.Debug("OpenSettings() called.");
+
+            // Refresh the view model with latest settings
+            // TODO: Create a new SettingsViewModel (using a factory) rather than refresh
+            m_SettingsViewModel.Refresh();
+            // Present opportunity to change settings
+            m_WindowService.ShowDialog(m_SettingsViewModel);
+
+            if (m_SettingsViewModel.Result == ViewModelStatus.Complete)
+            {
+                // Settings were updated, we must re-initialise the DataController
+                Log.Debug("Settings updated");
+                lock (m_StateLock)
+                {
+                    m_StateMgr.State.SettingsUpdated();
+                }
+            }
+        }
+
+        private void Reinitialise()
+        {
+            Log.Debug("Reinitialise() called.");
+
+            lock (m_StateLock)
+            {
+                m_StateMgr.State.Reinitialise();
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -329,15 +355,14 @@ namespace SimTemplate.ViewModels
 
         #endregion
 
-        #region Public Methods
+        #region Event Helpers
 
-        public void BeginInitialise()
+        private void OnActivityChanged(ActivityChangedEventArgs e)
         {
-            Log.Debug("BeginInitialise() called.");
-            lock (m_StateLock)
+            EventHandler<ActivityChangedEventArgs> temp = m_ActivityChanged;
+            if (m_ActivityChanged != null)
             {
-
-                m_StateMgr.State.BeginInitialise();
+                m_ActivityChanged.Invoke(this, e);
             }
         }
 

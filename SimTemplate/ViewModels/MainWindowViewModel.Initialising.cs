@@ -18,7 +18,7 @@ namespace SimTemplate.ViewModels
         public class Initialising : TransitioningAsync<InitialisationCompleteEventArgs>
         {
             public Initialising(MainWindowViewModel outer)
-                : base(outer)
+                : base(outer, Activity.Transitioning)
             { }
 
             #region Overriden Public Methods
@@ -35,7 +35,6 @@ namespace SimTemplate.ViewModels
 
                 // Indicate that we are initialising
                 Outer.PromptText = "Initialising...";
-                Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Loading.png");
 
                 // Check that our current settings are valid
                 if(!Outer.m_SettingsManager.ValidateCurrentSettings())
@@ -43,11 +42,6 @@ namespace SimTemplate.ViewModels
                     // Prompt the user to update the settings
                     Outer.OpenSettings();
                 }
-            }
-
-            public override void OnLeavingState()
-            {
-                Outer.StatusImage = null;
             }
 
             public override void LoadFile()

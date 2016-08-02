@@ -3,6 +3,10 @@ using log4net.Config;
 using System.Windows;
 using SimTemplate.ViewModels;
 using SimTemplate.Utilities;
+using SimTemplate.ViewModels.Interfaces;
+using SimTemplate.DataTypes.Enums;
+using System.Windows.Media;
+using System;
 #if DEBUG
 using SimTemplate.Model.DataControllers.Local;
 #else
@@ -18,7 +22,7 @@ namespace SimTemplate.Views.MainWindow
     {
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(MainWindowView));
 
-        private readonly MainWindowViewModel m_ViewModel;
+        private readonly IMainWindowViewModel m_ViewModel;
 
         #region Constructor
 
@@ -43,14 +47,64 @@ namespace SimTemplate.Views.MainWindow
             DataContext = m_ViewModel;
 
             Loaded += MainWindowView_Loaded;
+            m_ViewModel.ActivityChanged += ViewModel_ActivityChanged;
         }
 
         #endregion
+
+        #region Event Handlers
 
         private void MainWindowView_Loaded(object sender, RoutedEventArgs e)
         {
             m_ViewModel.BeginInitialise();
         }
+
+        private void ViewModel_ActivityChanged(object sender, ActivityChangedEventArgs e)
+        {
+            // Set the Status Image
+            ImageSource statusImageSource;
+            switch (e.NewActivity)
+            {
+                case Activity.Fault:
+                    statusImageSource = (ImageSource)mainWindow.Resources["errorStatus"];
+                    break;
+
+                case Activity.Loading:
+                case Activity.Transitioning:
+                    statusImageSource = (ImageSource)mainWindow.Resources["loadingStatus"];
+                    break;
+
+                case Activity.Templating:
+                case Activity.Idle:
+                // TODO: uninitialised image?
+                case Activity.Uninitialised:
+                    statusImageSource = null;
+                    break;
+
+                default:
+                    throw IntegrityCheck.FailUnexpectedDefault(e.NewActivity);
+            }
+
+            // Load File icon
+            ImageSource loadFileIcon;
+            if (e.NewActivity == Activity.Loading)
+            {
+                loadFileIcon = (ImageSource)mainWindow.Resources["cancelIcon"];
+            }
+            else
+            {
+                loadFileIcon = (ImageSource)mainWindow.Resources["loadIcon"];
+            }
+
+            // Update UI on UI thread
+            App.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                statusImage.Source = statusImageSource;
+                ((System.Windows.Controls.Image)loadFile.Content).Source = loadFileIcon;
+            }));
+        }
+
+        #endregion
 
     }
 }

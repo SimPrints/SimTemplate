@@ -27,6 +27,6 @@
 
         <!--Converters-->
         <conv:ViewModelStatusToDialogResultConverter x:Key="ViewModelResultToDialogResultConverter" />
-        <conv:NullImageConverter x:Key="NullImageConverter" />
+        <conv:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
     </Application.Resources>
 </Application>

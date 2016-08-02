@@ -1,4 +1,5 @@
 ﻿using SimTemplate.DataTypes.Enums;
+using SimTemplate.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,14 +14,25 @@ namespace SimTemplate.Views.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            ViewModelStatus status = (ViewModelStatus)value;
+
             bool? dialogResult = false;
-            if (value.Equals(ViewModelStatus.Running))
+            switch (status)
             {
-                dialogResult = null;
-            }
-            else if (value.Equals(ViewModelStatus.Complete))
-            {
-                dialogResult = true;
+                case ViewModelStatus.NoChange:
+                    dialogResult = false;
+                    break;
+
+                case ViewModelStatus.Running:
+                    dialogResult = null;
+                    break;
+
+                case ViewModelStatus.Complete:
+                    dialogResult = true;
+                    break;
+
+                default:
+                    throw IntegrityCheck.FailUnexpectedDefault(status);
             }
             return dialogResult;
         }

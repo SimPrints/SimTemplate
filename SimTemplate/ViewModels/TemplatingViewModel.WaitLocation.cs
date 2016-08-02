@@ -9,6 +9,7 @@ using SimTemplate.Utilities;
 using SimTemplate.ViewModels;
 using SimTemplate.DataTypes;
 using SimTemplate.DataTypes.Enums;
+using SimTemplate.ViewModels.Interfaces;
 
 namespace SimTemplate.ViewModels
 {

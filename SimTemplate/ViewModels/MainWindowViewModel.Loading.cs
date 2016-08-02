@@ -19,7 +19,7 @@ namespace SimTemplate.ViewModels
     {
         public class Loading : TransitioningAsync<GetCaptureCompleteEventArgs>
         {
-            public Loading(MainWindowViewModel outer) : base(outer)
+            public Loading(MainWindowViewModel outer) : base(outer, Activity.Loading)
             { }
 
             #region Overriden Public Methods
@@ -30,18 +30,7 @@ namespace SimTemplate.ViewModels
 
                 // Indicate that we are loading
                 Outer.PromptText = "Loading capture...";
-                // TODO: Find better way of managing resources. Hardcoding strings is dodge...
-                Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Loading.png");
-                Outer.LoadIconOverride = "pack://application:,,,/Resources/Icons/Cancel.ico";
-            }
-
-            public override void OnLeavingState()
-            {
-                base.OnLeavingState();
-
-                // Ensure load icon is shown and status image is cleared.
-                Outer.StatusImage = null;
-                Outer.LoadIconOverride = null ;
+                //Outer.LoadIconOverride = Properties.Resources.Load;
             }
 
             public override void LoadFile()
@@ -91,7 +80,6 @@ namespace SimTemplate.ViewModels
             {
                 // We have recieved a response from our request.
                 // Indicate we are no longer loading.
-                Outer.StatusImage = null;
 
                 switch (e.Result)
                 {

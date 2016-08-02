@@ -10,15 +10,16 @@ namespace SimTemplate.ViewModels
     {
         public class Error : MainWindowState
         {
-            public Error(MainWindowViewModel outer) : base(outer)
+            public Error(MainWindowViewModel outer) : base(outer, Activity.Fault)
             { }
+
+            #region Overriden Methods
 
             public override void OnEnteringState()
             {
                 base.OnEnteringState();
 
                 // Indicate we have errored
-                Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Error.png");
                 Outer.PromptText = "Fault";
 
                 // Clear UI
@@ -27,7 +28,8 @@ namespace SimTemplate.ViewModels
 
             public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
             {
-                throw IntegrityCheck.Fail("Not expected to have InitialisationComplete event when in error.");
+                throw IntegrityCheck.Fail(
+                    "Not expected to have DataController.InitialisationComplete event when in error.");
             }
 
             public override void EscapeAction()
@@ -49,6 +51,13 @@ namespace SimTemplate.ViewModels
             {
                 // Ignore.
             }
+
+            public override void Reinitialise()
+            {
+                TransitionTo(typeof(Initialising));
+            }
+
+            #endregion
         }
     }
 }

@@ -1,19 +1,6 @@
-﻿using log4net;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using SimTemplate.Utilities;
 using SimTemplate.StateMachine;
-using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.DataTypes.Enums;
 using SimTemplate.DataTypes;
 

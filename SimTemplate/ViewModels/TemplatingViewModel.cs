@@ -1,19 +1,11 @@
 ﻿using log4net;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using SimTemplate.Utilities;
-using SimTemplate.ViewModels;
 using SimTemplate.StateMachine;
-using SimTemplate.ViewModels.Commands;
-using SimTemplate.Model.DataControllers.EventArguments;
 using SimTemplate.DataTypes;
-using SimTemplate.Model.DataControllers;
 using SimTemplate.DataTypes.Enums;
 using SimTemplate.DataTypes.Collections;
+using SimTemplate.ViewModels.Interfaces;
 
 namespace SimTemplate.ViewModels
 {
@@ -150,11 +142,13 @@ namespace SimTemplate.ViewModels
 
         void ITemplatingViewModel.QuitTemplating()
         {
-            Capture = null;
+            // NOTE: Clearing minutae must happen before clearing the capture
+            // Minutae position is bound to capture image size!
             App.Current.Dispatcher.Invoke(new Action(() =>
             {
                 Minutae.Clear();
             }));
+            Capture = null;
         }
 
         public event EventHandler<UserActionRequiredEventArgs> UserActionRequired
