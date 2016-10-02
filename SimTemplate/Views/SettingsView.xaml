@@ -68,7 +68,7 @@
         <TextBlock Style="{StaticResource settingTitleStyle}">
             Root URL:
         </TextBlock>
-        <TextBox x:Name="rootUrlText"
+        <TextBox x:Name="rootUrlTextInput"
                  Text="{Binding Path=RootUrl, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
         <!--DIALOG BUTTONS-->
@@ -76,16 +76,7 @@
             <!--Update button-->
             <Button Width="60"
                     Margin="5"
-                    Command="{Binding Path=UpdateSettingsCommand}"
-                    IsEnabled="{Binding ElementName=apiKeyTextInput,
-                Path=(Validation.HasError),
-                Converter={StaticResource BooleanToOppositeBooleanConverter}}">
-                <!--Disable Update button if invalid data-->
-                <!--<Button.Triggers>
-                <DataTrigger Binding="{Binding ElementName=apiKeyTextInput, Path=(Validation.HasError)}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-            </Button.Triggers>-->
+                    Command="{Binding Path=UpdateSettingsCommand}">
                 Update
             </Button>
             <!--Cancel button-->

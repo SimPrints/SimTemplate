@@ -19,7 +19,7 @@ namespace SimTemplate.ViewModels
 
                 // Indicate we have errored
                 Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Error.png");
-                Outer.PromptText = "Fault";
+                Outer.PromptText = Outer.m_Exception.Message;
 
                 // Clear UI
                 Outer.m_TemplatingViewModel.QuitTemplating();

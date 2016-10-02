@@ -92,10 +92,17 @@ namespace SimTemplate.ViewModels
         {
             Log.Debug("UpdateSettings() called");
             // Update settings
-            m_SettingsManager.UpdateSetting(Setting.ApiKey, m_ApiKey);
-            m_SettingsManager.UpdateSetting(Setting.RootUrl, m_RootUrl);
+            m_SettingsManager.UpdateSetting(Setting.ApiKey, m_ApiKey.QueryValue);
+            m_SettingsManager.UpdateSetting(Setting.RootUrl, m_RootUrl.QueryValue);
             m_SettingsManager.SaveSettings();
             Result = ViewModelStatus.Complete;
+        }
+
+        private bool UpdateCanExecute()
+        {
+           return m_SettingsManager.ValidateQuerySetting(Setting.ApiKey, m_ApiKey.QueryValue) &&
+                m_SettingsManager.ValidateQuerySetting(Setting.RootUrl, m_RootUrl.QueryValue) &&
+                (m_ApiKey.HasChanged || m_RootUrl.HasChanged);
         }
 
         #endregion
@@ -162,7 +169,7 @@ namespace SimTemplate.ViewModels
 
         private void InitialiseCommands()
         {
-            m_UpdateSettingsCommand = new RelayCommand(x => UpdateSettings());
+            m_UpdateSettingsCommand = new RelayCommand(x => UpdateSettings(), x => UpdateCanExecute());
         }
 
         #endregion
@@ -186,9 +193,12 @@ namespace SimTemplate.ViewModels
                 set { m_QueryValue = value; }
             }
 
-            public bool AreEqual()
+            public bool HasChanged
             {
-                return m_CurrentValue.Equals(m_QueryValue);
+                get
+                {
+                    return !m_CurrentValue.Equals(m_QueryValue);
+                }
             }
         }
     }

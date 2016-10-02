@@ -25,8 +25,6 @@ namespace SimTemplate.ViewModels
 
             public override void OnEnteringState()
             {
-                base.OnEnteringState();
-
                 // Initialise properties.
                 Outer.FilteredScannerType = ScannerType.None;
 
@@ -38,10 +36,15 @@ namespace SimTemplate.ViewModels
                 Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Loading.png");
 
                 // Check that our current settings are valid
-                if(!Outer.m_SettingsManager.ValidateCurrentSettings())
+                if (!Outer.m_SettingsManager.ValidateCurrentSettings())
                 {
-                    // Prompt the user to update the settings
-                    Outer.OpenSettings();
+                    // If settings invalid then transition to error and prompt the user to update them
+                    OnErrorOccurred(new SimTemplateException("Invalid settings"));
+                }
+                else
+                {
+                    // As settings are definitely provided, perform the asynchronous authentication
+                    base.OnEnteringState();
                 }
             }
 
@@ -79,7 +82,7 @@ namespace SimTemplate.ViewModels
                 // Initialise the DataController so that we can fetch images.
                 DataControllerConfig config = new DataControllerConfig(
                     (string)Outer.m_SettingsManager.GetCurrentSetting(Setting.ApiKey),
-                    (String)Outer.m_SettingsManager.GetCurrentSetting(Setting.RootUrl));
+                    (string)Outer.m_SettingsManager.GetCurrentSetting(Setting.RootUrl));
                 return Outer.m_DataController.BeginInitialise(config);
             }
 
@@ -106,6 +109,7 @@ namespace SimTemplate.ViewModels
                 }
                 else
                 {
+                    // TODO: Add exception field to InitialisationComplete to get more info on failure.
                     OnErrorOccurred(new SimTemplateException("Failed to initialise DataController."));
                 }
             }

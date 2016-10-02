@@ -114,7 +114,7 @@ namespace SimTemplate.ViewModels
             }
         }
 
-        private void OpenSettings()
+        private void OpenSettings(bool isReinitialiseOnUpdate = true)
         {
             Log.Debug("OpenSettings() called.");
 
@@ -124,7 +124,7 @@ namespace SimTemplate.ViewModels
             // Present opportunity to change settings
             m_WindowService.ShowDialog(m_SettingsViewModel);
 
-            if (m_SettingsViewModel.Result == ViewModelStatus.Complete)
+            if (isReinitialiseOnUpdate && m_SettingsViewModel.Result == ViewModelStatus.Complete)
             {
                 // Settings were updated, we must re-initialise the DataController
                 lock (m_StateLock)
