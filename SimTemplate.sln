@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{F7AC053B-910B-4FB1-AB53-792FBF98BA14}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SimTemplateInstaller", "SetupProject1\SimTemplateInstaller.wixproj", "{4A58A8A5-F1F0-4F37-B3A9-2EB1D3DB9110}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SimTemplateInstaller", "SimTemplateInstaller\SimTemplateInstaller.wixproj", "{4A58A8A5-F1F0-4F37-B3A9-2EB1D3DB9110}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimTemplate", "SimTemplate\SimTemplate.csproj", "{C783AB69-29C6-4730-A34C-C765A40BB0E2}"
 EndProject
