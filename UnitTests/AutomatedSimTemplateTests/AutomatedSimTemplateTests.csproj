@@ -154,8 +154,8 @@
     <Compile Include="Other\Misc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Other\SqlTests.cs" />
-    <Compile Include="ViewModel\MainWindow\TemplateBuilderViewModelTest.cs" />
-    <Compile Include="Helpers\TemplateHelperTest.cs" />
+    <Compile Include="ViewModels\TemplateBuilderViewModelTest.cs" />
+    <Compile Include="Utilities\IsoTemplateHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
