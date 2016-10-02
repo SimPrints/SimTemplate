@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{F7AC053B-910B-4FB1-AB53-792FBF98BA14}"
 EndProject
@@ -10,10 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimTemplate", "SimTemplate\SimTemplate.csproj", "{C783AB69-29C6-4730-A34C-C765A40BB0E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomatedSimTemplateTests", "UnitTests\AutomatedSimTemplateTests\AutomatedSimTemplateTests.csproj", "{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonSimTemplateTest", "UnitTests\CommonSimTemplateTest\CommonSimTemplateTest.csproj", "{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemiAutomatedSimTemplateTests", "UnitTests\SemiAutomatedSimTemplateTests\SemiAutomatedSimTemplateTests.csproj", "{98641A90-9761-439C-94E0-9000C36FBEEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,37 +55,11 @@ Global
 		{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC}.TempApi|Any CPU.Build.0 = TempApi|Any CPU
 		{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC}.TempApi|x86.ActiveCfg = TempApi|Any CPU
 		{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC}.TempApi|x86.Build.0 = TempApi|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Debug|x86.Build.0 = Debug|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Release|x86.ActiveCfg = Release|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.Release|x86.Build.0 = Release|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.TempApi|Any CPU.ActiveCfg = TempApi|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.TempApi|Any CPU.Build.0 = TempApi|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.TempApi|x86.ActiveCfg = TempApi|Any CPU
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}.TempApi|x86.Build.0 = TempApi|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.Debug|x86.Build.0 = Debug|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.Release|x86.ActiveCfg = Release|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.Release|x86.Build.0 = Release|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.TempApi|Any CPU.ActiveCfg = TempApi|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.TempApi|Any CPU.Build.0 = TempApi|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.TempApi|x86.ActiveCfg = TempApi|Any CPU
-		{98641A90-9761-439C-94E0-9000C36FBEEF}.TempApi|x86.Build.0 = TempApi|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC} = {F7AC053B-910B-4FB1-AB53-792FBF98BA14}
-		{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC} = {F7AC053B-910B-4FB1-AB53-792FBF98BA14}
-		{98641A90-9761-439C-94E0-9000C36FBEEF} = {F7AC053B-910B-4FB1-AB53-792FBF98BA14}
 	EndGlobalSection
 EndGlobal
