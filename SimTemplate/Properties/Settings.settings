@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="RootUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://datastoreapi.azurewebsites.net</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ApiKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)">af987398-30c1-43b7-8d66-1854f45b38bc</Value>
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

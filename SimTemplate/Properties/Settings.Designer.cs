@@ -25,7 +25,7 @@ namespace SimTemplate.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://datastoreapi.azurewebsites.net")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string RootUrl {
             get {
                 return ((string)(this["RootUrl"]));
@@ -37,7 +37,7 @@ namespace SimTemplate.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("af987398-30c1-43b7-8d66-1854f45b38bc")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ApiKey {
             get {
                 return ((string)(this["ApiKey"]));
