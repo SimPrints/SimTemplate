@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="ProductDir">
+            <Directory Id="dirFFC8AED6FDB24A878BE49B90B8EEEB52" Name="de" />
+            <Directory Id="dirBB08109A61EFAFDD5CCBC37F569742DF" Name="en" />
+            <Directory Id="dir8C4727C6857DDA72E9049940C4FAA941" Name="es" />
+            <Directory Id="dirBB3A45053788597750295D06BE8E6377" Name="fr" />
+            <Directory Id="dirE95A6FD5EA85E584E7E4B5A675D15B26" Name="it" />
+            <Directory Id="dirA6A220535271557F7C5B88DCEC2D7DE1" Name="ja" />
+            <Directory Id="dirA07C9E8143D5B851194382CE945D98EB" Name="ko" />
+            <Directory Id="dir89825719E146C74A52168E75982477EF" Name="ru" />
+            <Directory Id="dir74CC85832AC4822AC8613419C9A55EBB" Name="x64" />
+            <Directory Id="dirB241BD039F91717E431EA2CA5835C09C" Name="x86" />
+            <Directory Id="dir5DBF2C58790C7A9B5C25B3391A69FF75" Name="zh-Hans" />
+            <Directory Id="dirCA8A37E312AECB61FE2BBEC8C82BAD25" Name="zh-Hant" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ProductComponents">
+            <Component Id="cmp07B6FB3FDEB1CC2B8CBDCBA9EEF7932C" Directory="ProductDir" Guid="03475029-1473-4483-9663-61C7008947F5">
+                <File Id="fil47C0C70FA9E3C815AA8DF3EF48E33B77" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\EntityFramework.dll" />
+            </Component>
+            <Component Id="cmp3387D78B8F871FF9184D4EBE0A2B40E2" Directory="ProductDir" Guid="1676D1D8-404C-4278-8F30-D56683E49A88">
+                <File Id="filBF95DAC4BC83B88396956823805F26D5" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\EntityFramework.SqlServer.dll" />
+            </Component>
+            <Component Id="cmp6D80D6FA86509429947FC9B334275D93" Directory="ProductDir" Guid="D17551AA-6952-4D91-98AB-43DEA2296FEC">
+                <File Id="fil0E21C38A5524B78FA04AF296AC93D28F" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\EntityFramework.SqlServer.xml" />
+            </Component>
+            <Component Id="cmpB0D00B82D2000E98EF65A92BC79FF231" Directory="ProductDir" Guid="0F3B8B17-7EB0-452B-9390-71CCE993E1BF">
+                <File Id="fil0599E1AED3EB88FC47AB6E55C40B329D" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\EntityFramework.xml" />
+            </Component>
+            <Component Id="cmpAA565FDD77ABF3A006C88CEF1A2C1C6C" Directory="ProductDir" Guid="62332EDE-D1F3-46DE-9865-F6C31B0FBE08">
+                <File Id="fil6C4433275C4ACE50985E96EB580291C8" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\log4net.dll" />
+            </Component>
+            <Component Id="cmp28966C8FF9E63CA25CA0AAB9FB203B90" Directory="ProductDir" Guid="4742102F-D031-4E0A-9ADE-94A15CAAC7B5">
+                <File Id="fil74E0E11D7FA61086D0E0198B5C6C5629" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\log4net.xml" />
+            </Component>
+            <Component Id="cmp0F9837F0001A9A90CAFA73BC2C0CFB85" Directory="ProductDir" Guid="219C8FE7-BD6B-45A9-AA7A-EE91025F3FD9">
+                <File Id="fil3EDDBE7BBC2DBB1EB74E57090E84ECA0" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\Newtonsoft.Json.dll" />
+            </Component>
+            <Component Id="cmpD3450A8A9E0C1E1A0C24D931233B4C99" Directory="ProductDir" Guid="1847E5B1-3346-4B1C-80A1-B27AC6E62013">
+                <File Id="filDA577F0246A1D0855A34F72E7F5DAAD8" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\Newtonsoft.Json.xml" />
+            </Component>
+            <Component Id="cmpD0179E1138C9806011355A51C3CF19FF" Directory="ProductDir" Guid="B1BDBE28-7058-4627-BB5B-83B500634D9F">
+                <File Id="fil0032DCBDF440AE10F5B99EFF3EC3A4ED" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\RestSharp.dll" />
+            </Component>
+            <Component Id="cmp81356BD87EDA72DBA4AA0F17E26813A3" Directory="ProductDir" Guid="4A6D36C6-A2D8-4DBA-9581-35A77D9239ED">
+                <File Id="filC6BFBA5D1CCCD80B9258DF51F2E8BB7C" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\RestSharp.xml" />
+            </Component>
+            <Component Id="cmp9815B4C52743D0816C87957285F9A68C" Directory="ProductDir" Guid="68D5A96E-D33D-48FB-801A-10E33BAFBB5F">
+                <File Id="fil2BEBBCE3960950A15BDD29F3E2BB4836" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\SimTemplate.exe" />
+            </Component>
+            <Component Id="cmp4056CCF91C784880DC346AF81DD9335E" Directory="ProductDir" Guid="D8F582D8-7FE8-49A3-A433-D88717E8DAE7">
+                <File Id="fil5C35BB9549B64082AC85D3D81B0E166E" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\SimTemplate.exe.config" />
+            </Component>
+            <Component Id="cmp55F75235B05DCF96AAA8BB117C566B9C" Directory="ProductDir" Guid="03CCDE49-310C-4BF2-A4CC-3A0C5DAC1631">
+                <File Id="fil45C18A5858D0A925F763A21A0E0ECC21" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\SimTemplate.pdb" />
+            </Component>
+            <Component Id="cmp94514B36B60215C95DF4D916ADD1B18B" Directory="ProductDir" Guid="A1C937E4-6F53-491A-86A7-C75B6D700A79">
+                <File Id="filEC1C9ED2F023AFE32B83C1AAA2DD80A8" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\SimTemplate.vshost.exe" />
+            </Component>
+            <Component Id="cmp1A00664F36BE1D0C6CC843CB7C505165" Directory="ProductDir" Guid="8942BAB6-3883-44A7-A0A0-806E46643432">
+                <File Id="fil825994D07AAE95E08CB43EFC19874EB3" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\SimTemplate.vshost.exe.config" />
+            </Component>
+            <Component Id="cmpC188FBEE1C6AC3BD75963682E4733F19" Directory="ProductDir" Guid="CC27EA05-8D97-443E-B5EC-664026A38ED5">
+                <File Id="fil6B7F222798C6ABF760BEC39572131F75" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\System.Data.SQLite.dll" />
+            </Component>
+            <Component Id="cmpC37DABC49E32A57696C531FCDC16D645" Directory="ProductDir" Guid="DC48F1D0-25C8-462C-A169-D01785659B5B">
+                <File Id="fil37E2622C6C43E58CC3B04E5D6FFC6599" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\System.Data.SQLite.EF6.dll" />
+            </Component>
+            <Component Id="cmp55174A879821D00400AFE064735B083E" Directory="ProductDir" Guid="06C24288-527D-42B8-8C8E-E8BBACC7D167">
+                <File Id="fil7ADF89444DB5B44A48B50DC6DAC1534C" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\System.Data.SQLite.Linq.dll" />
+            </Component>
+            <Component Id="cmp3CF1679DCAFF6E905717187DCC1822EA" Directory="ProductDir" Guid="869A4907-15CB-4BDC-BB28-2B1BF38802AA">
+                <File Id="filA8BD77B9D5979E18E294E1088166A454" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\System.Data.SQLite.xml" />
+            </Component>
+            <Component Id="cmp0AA19C7569BEC9CA35018F69733AE475" Directory="ProductDir" Guid="76205134-F1F2-4912-A1B8-E63976617653">
+                <File Id="fil9A64A9C441134DDAFD5FD4456BCF289F" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\System.Net.Http.Extensions.dll" />
+            </Component>
+            <Component Id="cmp5EFD043E9E87D41F41D32AE888445031" Directory="ProductDir" Guid="0C0BD1CE-6B0F-467D-86F1-419C9E2A7DAC">
+                <File Id="fil13216856ACE690BF577AC1C25D4D9103" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\System.Net.Http.Extensions.xml" />
+            </Component>
+            <Component Id="cmp732166426980CCBB215DD2378933EADF" Directory="ProductDir" Guid="2F32D4D1-92A2-4CD0-9C6E-DA29A894F6F5">
+                <File Id="filF58450BE67F243C67DFAE086D7EE7A3B" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\System.Net.Http.Primitives.dll" />
+            </Component>
+            <Component Id="cmpE30665CAE8408B67B8535C2F09C127D0" Directory="ProductDir" Guid="FD687F1B-8FBA-44AF-82D2-FAF759F3BD6E">
+                <File Id="fil2FE67273C88D8060DEF13E14DFECAD7B" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\System.Net.Http.Primitives.xml" />
+            </Component>
+            <Component Id="cmp46D3DCC745EE36D3680A7AAC529C1476" Directory="ProductDir" Guid="89DDAAE6-D000-4233-900F-8A65E7336EB2">
+                <File Id="filBFD9AE7AAA61970C564BA3F7B28D08F6" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\System.Windows.Interactivity.dll" />
+            </Component>
+            <Component Id="cmp4CA8F64E9BF813ABD986FA5E439DFC5E" Directory="dirFFC8AED6FDB24A878BE49B90B8EEEB52" Guid="8CC56434-D2C4-4766-95A8-2AC59F2CF1B8">
+                <File Id="filD4C47BD8862A02A4CAF32DB74E1DB7FA" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\de\System.Windows.Interactivity.resources.dll" />
+            </Component>
+            <Component Id="cmp811CA4AD3C4E3D6CD1B3791DC3AC9E15" Directory="dirBB08109A61EFAFDD5CCBC37F569742DF" Guid="AEFFAC05-DED6-468B-987C-0AF0F2E761D1">
+                <File Id="filE4DD6802B95A146F0CD9DD736BD61349" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\en\System.Windows.Interactivity.resources.dll" />
+            </Component>
+            <Component Id="cmp30C9A3DE8360FCB59D40993780126373" Directory="dir8C4727C6857DDA72E9049940C4FAA941" Guid="48F979A8-9D85-4859-8C98-77ECC46B3E64">
+                <File Id="filA04EFAC3628F6B1730C96DBF700CB703" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\es\System.Windows.Interactivity.resources.dll" />
+            </Component>
+            <Component Id="cmp34B629752E811F04B5F8C629D69C9667" Directory="dirBB3A45053788597750295D06BE8E6377" Guid="6516E5CA-B8F0-4BB7-8FD8-25B707BC34D0">
+                <File Id="fil8E329B377C1169A78AEFB7B28CB3D527" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\fr\System.Windows.Interactivity.resources.dll" />
+            </Component>
+            <Component Id="cmpFC5D1C621D6E18E4ECBDA41EE5F77FD5" Directory="dirE95A6FD5EA85E584E7E4B5A675D15B26" Guid="5018B824-8CAD-4A1D-8718-D60712024506">
+                <File Id="fil86CAB7490C9FD611E46A3C21F4FAA6A6" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\it\System.Windows.Interactivity.resources.dll" />
+            </Component>
+            <Component Id="cmp7999A0C77B6DBAD0E325880C20AAD4B3" Directory="dirA6A220535271557F7C5B88DCEC2D7DE1" Guid="422B5F1C-6619-49AC-AA8B-867F2D213E37">
+                <File Id="fil03B846875E8B84C0D18058B8CB096CE0" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\ja\System.Windows.Interactivity.resources.dll" />
+            </Component>
+            <Component Id="cmp67080594CB5E6115B07552A3DF11C78F" Directory="dirA07C9E8143D5B851194382CE945D98EB" Guid="E1851108-A10D-4C90-9ECB-4D4F5044E31A">
+                <File Id="filBEAB651F3D82B3F1CE08CBAC22AC2FA6" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\ko\System.Windows.Interactivity.resources.dll" />
+            </Component>
+            <Component Id="cmp7098028BC18B7B507666411ECB4B335C" Directory="dir89825719E146C74A52168E75982477EF" Guid="F44CA925-1A52-420A-8263-C175DAA91C61">
+                <File Id="filC7B1162CBB09F0EE8A23732364DC5151" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\ru\System.Windows.Interactivity.resources.dll" />
+            </Component>
+            <Component Id="cmpEC50F7361B01B9C7F2BCB2ADD8BDBE0C" Directory="dir74CC85832AC4822AC8613419C9A55EBB" Guid="A2C22E93-FCE9-4481-A4E2-CD46BE973BA1">
+                <File Id="filAFBD1E1C7A717EF239111A4F5E90FBAC" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\x64\SQLite.Interop.dll" />
+            </Component>
+            <Component Id="cmp6495C61A2EFF81071E2A0B412F9555A1" Directory="dirB241BD039F91717E431EA2CA5835C09C" Guid="BADD9AD1-DFD0-4A19-85FC-3D7BAD1193BC">
+                <File Id="fil9175AA7D551CA450C01E981C06F9BB35" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\x86\SQLite.Interop.dll" />
+            </Component>
+            <Component Id="cmpC22DF537CE1E2C881B594AE24C0871DD" Directory="dir5DBF2C58790C7A9B5C25B3391A69FF75" Guid="572170EA-6C39-452E-95AD-CF491667C260">
+                <File Id="fil60D88A2948FA525158E02B33B80D0EED" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\zh-Hans\System.Windows.Interactivity.resources.dll" />
+            </Component>
+            <Component Id="cmp6BD3CFDB7D585B1D55AEEC644453F550" Directory="dirCA8A37E312AECB61FE2BBEC8C82BAD25" Guid="E89A4ABF-1AA4-4989-8504-CE2B6D37B257">
+                <File Id="fil6DE513059A2E81BA5F639859913F7C70" KeyPath="yes" Source="$(var.SimTemplate.TargetDir)\zh-Hant\System.Windows.Interactivity.resources.dll" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

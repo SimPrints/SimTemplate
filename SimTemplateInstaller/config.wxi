@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <?define Manufacturer = "SimPrints" ?>
+  <?define ProductName = "SimTemplate" ?>
+  <?define Version = "1.0.0.0" ?>
+  <?define UpgradeCode = "94180c61-b350-4f94-95da-da58d0c145bb" ?>
+</Include>
