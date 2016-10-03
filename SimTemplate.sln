@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimTemplate", "SimTemplate\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomatedSimTemplateTests", "UnitTests\AutomatedSimTemplateTests\AutomatedSimTemplateTests.csproj", "{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "SimTemplateDocs", "SimTemplateDocs\SimTemplateDocs.shfbproj", "{981D79B7-3326-4605-B228-E4EA66F81C8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,18 @@ Global
 		{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC}.TempApi|Any CPU.Build.0 = TempApi|Any CPU
 		{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC}.TempApi|x86.ActiveCfg = TempApi|Any CPU
 		{ADB73B6E-A9AF-4B52-84E7-8A940C9268FC}.TempApi|x86.Build.0 = TempApi|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.Debug|x86.Build.0 = Debug|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.Release|x86.ActiveCfg = Release|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.Release|x86.Build.0 = Release|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.TempApi|Any CPU.ActiveCfg = Release|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.TempApi|Any CPU.Build.0 = Release|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.TempApi|x86.ActiveCfg = Release|Any CPU
+		{981D79B7-3326-4605-B228-E4EA66F81C8D}.TempApi|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
