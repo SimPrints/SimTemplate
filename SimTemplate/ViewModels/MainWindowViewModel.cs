@@ -1,4 +1,4 @@
-﻿using SimTemplate.DataTypes.Enums;
+using SimTemplate.DataTypes.Enums;
 using SimTemplate.Utilities;
 using SimTemplate.Model.DataControllers;
 using SimTemplate.Model.DataControllers.EventArguments;
@@ -100,6 +100,37 @@ namespace SimTemplate.ViewModels
                 m_StateMgr.State.BeginInitialise();
             }
         }
+
+        private void EscapeAction()
+        {
+            Log.Debug("EscapeAction() called.");
+            lock (m_StateLock)
+            {
+                m_StateMgr.State.EscapeAction();
+            }
+        }
+
+        private void OpenSettings(bool isReinitialiseOnUpdate = true)
+        {
+            Log.Debug("OpenSettings() called.");
+
+            // Refresh the view model with latest settings
+            // TODO: Create a new SettingsViewModel (using a factory) rather than refresh
+            m_SettingsViewModel.Refresh();
+            // Present opportunity to change settings
+            m_WindowService.ShowDialog(m_SettingsViewModel);
+
+            if (isReinitialiseOnUpdate && m_SettingsViewModel.Result == ViewModelStatus.Complete)
+            {
+                // Settings were updated, we must re-initialise the DataController
+                lock (m_StateLock)
+                {
+                    m_StateMgr.TransitionTo(typeof(Initialising));
+                }
+            }
+        }
+
+        #endregion
 
         #region Directly Bound Properties
 

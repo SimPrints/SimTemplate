@@ -133,18 +133,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonSimTemplateTest\CommonSimTemplateTest.csproj">
-      <Project>{8CF9718F-7C59-4C66-98DD-3AC6E22CB3EC}</Project>
-      <Name>CommonSimTemplateTest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SimTemplate\SimTemplate.csproj">
       <Project>{C783AB69-29C6-4730-A34C-C765A40BB0E2}</Project>
       <Name>SimTemplate</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\GoogleApis\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

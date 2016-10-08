@@ -1,4 +1,20 @@
-﻿using System;
+﻿// Copyright 2016 Sam Briggs
+//
+// This file is part of SimTemplate.
+//
+// SimTemplate is free software: you can redistribute it and/or modify it under the
+// terms of the GNU General Public License as published by the Free Software 
+// Foundation, either version 3 of the License, or (at your option) any later
+// version.
+//
+// SimTemplate is distributed in the hope that it will be useful, but WITHOUT ANY 
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+// A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with
+// SimTemplate. If not, see http://www.gnu.org/licenses/.
+//
+using System;
 using System.Windows.Input;
 using SimTemplate.ViewModels.Commands;
 using System.ComponentModel;
@@ -93,10 +109,17 @@ namespace SimTemplate.ViewModels
         {
             Log.Debug("UpdateSettings() called");
             // Update settings
-            m_SettingsManager.UpdateSetting(Setting.ApiKey, m_ApiKey);
-            m_SettingsManager.UpdateSetting(Setting.RootUrl, m_RootUrl);
+            m_SettingsManager.UpdateSetting(Setting.ApiKey, m_ApiKey.QueryValue);
+            m_SettingsManager.UpdateSetting(Setting.RootUrl, m_RootUrl.QueryValue);
             m_SettingsManager.SaveSettings();
             Result = ViewModelStatus.Complete;
+        }
+
+        private bool UpdateCanExecute()
+        {
+           return m_SettingsManager.ValidateQuerySetting(Setting.ApiKey, m_ApiKey.QueryValue) &&
+                m_SettingsManager.ValidateQuerySetting(Setting.RootUrl, m_RootUrl.QueryValue) &&
+                (m_ApiKey.HasChanged || m_RootUrl.HasChanged);
         }
 
         #endregion
@@ -163,7 +186,7 @@ namespace SimTemplate.ViewModels
 
         private void InitialiseCommands()
         {
-            m_UpdateSettingsCommand = new RelayCommand(x => UpdateSettings());
+            m_UpdateSettingsCommand = new RelayCommand(x => UpdateSettings(), x => UpdateCanExecute());
         }
 
         #endregion
@@ -187,9 +210,12 @@ namespace SimTemplate.ViewModels
                 set { m_QueryValue = value; }
             }
 
-            public bool AreEqual()
+            public bool HasChanged
             {
-                return m_CurrentValue.Equals(m_QueryValue);
+                get
+                {
+                    return !m_CurrentValue.Equals(m_QueryValue);
+                }
             }
         }
     }
