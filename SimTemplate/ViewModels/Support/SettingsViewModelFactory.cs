@@ -15,6 +15,7 @@
 // SimTemplate. If not, see http://www.gnu.org/licenses/.
 //
 using SimTemplate.Utilities;
+using SimTemplate.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

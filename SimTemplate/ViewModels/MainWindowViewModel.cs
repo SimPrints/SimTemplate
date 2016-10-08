@@ -130,6 +130,13 @@ namespace SimTemplate.ViewModels
             }
         }
 
+        event EventHandler<ActivityChangedEventArgs> IMainWindowViewModel.ActivityChanged
+        {
+            add { m_ActivityChanged += value; }
+            remove { m_ActivityChanged -= value; }
+        }
+
+
         #endregion
 
         #region Directly Bound Properties
@@ -250,14 +257,6 @@ namespace SimTemplate.ViewModels
 
         #endregion
 
-        event EventHandler<ActivityChangedEventArgs> IMainWindowViewModel.ActivityChanged
-        {
-            add { m_ActivityChanged += value; }
-            remove { m_ActivityChanged -= value; }
-        }
-
-        #endregion
-
         #region Private Methods
 
         private void InitialiseCommands()
@@ -296,15 +295,6 @@ namespace SimTemplate.ViewModels
             lock (m_StateLock)
             {
                 m_StateMgr.State.SaveTemplate();
-            }
-        }
-
-        private void EscapeAction()
-        {
-            Log.Debug("EscapeAction() called.");
-            lock (m_StateLock)
-            {
-                m_StateMgr.State.EscapeAction();
             }
         }
 

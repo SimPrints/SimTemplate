@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License along with
 // SimTemplate. If not, see http://www.gnu.org/licenses/.
 //
+using SimTemplate.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

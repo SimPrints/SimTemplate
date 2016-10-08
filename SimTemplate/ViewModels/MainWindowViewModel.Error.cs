@@ -36,7 +36,6 @@ namespace SimTemplate.ViewModels
                 base.OnEnteringState();
 
                 // Indicate we have errored
-                Outer.StatusImage = new Uri("pack://application:,,,/Resources/StatusImages/Error.png");
                 Outer.PromptText = Outer.m_Exception.Message;
 
                 // Clear UI

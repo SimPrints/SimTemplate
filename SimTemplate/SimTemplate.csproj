@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -127,10 +127,8 @@
     <Compile Include="ViewModels\Interfaces\IDialogViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMainWindowViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\UserActionRequiredEventArgs.cs" />
-    <Compile Include="ViewModels\IDialogViewModel.cs" />
     <Compile Include="ViewModels\Support\ISettingsViewModelFactory.cs" />
     <Compile Include="ViewModels\Support\SettingsViewModelFactory.cs" />
-    <Compile Include="Views\Converters\BooleanToBorderColour.cs" />
     <Compile Include="Utilities\DialogCloser.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\IWindowService.cs" />
