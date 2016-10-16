@@ -27,6 +27,9 @@ using SimTemplate.DataTypes.Enums;
 
 namespace SimTemplate.Model.DataControllers
 {
+    /// <summary>
+    /// A class responsible for extracting any required data from the database
+    /// </summary>
     public abstract class DataController : LoggingClass, IDataController
     {
         private DataControllerConfig m_Config;
@@ -43,6 +46,7 @@ namespace SimTemplate.Model.DataControllers
             m_TokenSourceLookup = new Dictionary<Guid, CancellationTokenSource>();
         }
 
+        // TODO: Note that there is a contract here, InitialisedComplete SHALL follow, in a timely manner
         Guid IDataController.BeginInitialise(DataControllerConfig config)
         {
             Log.Debug("BeginInitialise(...) called.");
@@ -57,6 +61,7 @@ namespace SimTemplate.Model.DataControllers
                 StartInitialiseTask(config, guid, token));
         }
 
+        // TODO: Note that there is a contract here, CaptureComplete SHALL follow, in a timely manner
         Guid IDataController.BeginGetCapture(ScannerType scannerType)
         {
             Log.DebugFormat("BeginGetCapture(scannterType={0}) called",
@@ -67,6 +72,7 @@ namespace SimTemplate.Model.DataControllers
                 StartCaptureTask(scannerType, guid, token));
         }
 
+        // TODO: Note that there is a contract here, TemplateSaved SHALL follow, in a timely manner
         Guid IDataController.BeginSaveTemplate(long dbId, byte[] template)
         {
             Log.DebugFormat("BeginGetCapture(dbId={0}, template={1}) called",
