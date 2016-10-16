@@ -70,7 +70,6 @@ SimTemplate. If not, see http://www.gnu.org/licenses/.
         <Style x:Key="toolsSectionStyle" BasedOn="{StaticResource baseStyle}">
             <Setter Property="TextBlock.TextAlignment" Value="Center" />
         </Style>
-        
 
         <!-- Data Templates -->
         <DataTemplate x:Key="headerTemplate">
@@ -189,17 +188,6 @@ SimTemplate. If not, see http://www.gnu.org/licenses/.
                        FontSize="30"
                        Foreground="{StaticResource simPrintsBlueBrush}"
                        Style="{StaticResource baseStyle}"/>
-
-            <!-- MAIN CONTENT -->
-            <Grid Margin="20">
-                <!--Status image sometimes shown-->
-                <Image x:Name="statusImage"
-                       Stretch="Uniform"
-                       Panel.ZIndex="2" />
-                
-                <!--Templating content (if applicable)-->
-                <ContentControl x:Name="content" Content="{Binding TemplatingViewModel}" />
-            </Grid>
             <!--Reinitialise button (if applicable)-->
             <Button DockPanel.Dock="Bottom"
                     Command="{Binding ReinitialiseCommand}"
@@ -208,6 +196,16 @@ SimTemplate. If not, see http://www.gnu.org/licenses/.
                 ConverterParameter={x:Static enums:Activity.Fault}}">
                 Re-Initialise
             </Button>
+            <!-- MAIN CONTENT -->
+            <Grid Margin="20">
+                <!--Status image sometimes shown-->
+                <Image x:Name="statusImage"
+                       Stretch="Uniform"
+                       Panel.ZIndex="2" />
+
+                <!--Templating content (if applicable)-->
+                <ContentControl x:Name="content" Content="{Binding TemplatingViewModel}" />
+            </Grid>
         </DockPanel>
     </DockPanel>
 </Window>
