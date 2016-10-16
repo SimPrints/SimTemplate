@@ -16,8 +16,11 @@
 //
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomatedTests
+namespace SimTemplate.Test
 {
+    /// <summary>
+    /// Helper class that initialises the log4net loggers using the app.config configuration.
+    /// </summary>
     [TestClass]
     public static class AssemblyInitializer
     {

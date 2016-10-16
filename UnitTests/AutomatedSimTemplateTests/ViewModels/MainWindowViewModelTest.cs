@@ -28,7 +28,7 @@ using SimTemplate.Model.DataControllers.EventArguments;
 using System;
 using System.Collections.Generic;
 
-namespace AutomatedSimTemplateTests.ViewModel.MainWindow
+namespace SimTemplate.ViewModel.Test
 {
     /// <summary>
     /// Test class for testing the MainWindowViewModel. This consists primarily of testing the state machine.

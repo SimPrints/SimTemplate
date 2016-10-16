@@ -23,7 +23,7 @@ using SimTemplate.Utilities;
 using SimTemplate.DataTypes;
 using SimTemplate.DataTypes.Enums;
 
-namespace AutomatedSimTemplateTests.Helpers
+namespace SimTemplate.Helpers.Test
 {
     [TestClass]
     public class IsoTemplateHelperTest
@@ -49,13 +49,13 @@ namespace AutomatedSimTemplateTests.Helpers
         };
 
         [TestMethod]
-        public void TestTemplate1()
+        public void TestConvertToIsoTemplate1()
         {
             TestToIsoTemplate(TEMPLATE_1_MINUTAE, TEMPLATE_1_HEX);
         }
 
         [TestMethod]
-        public void TestTemplate2()
+        public void TestConvertToIsoTemplate2()
         {
             TestToIsoTemplate(TEMPLATE_2_MINUTAE, TEMPLATE_2_HEX);
         }
