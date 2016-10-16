@@ -33,8 +33,10 @@ namespace SimTemplate.ViewModels
     {
         public class Initialising : TransitioningAsync<InitialisationCompleteEventArgs>
         {
+            private const string INITIALISING_TEXT = "Initialising...";
+
             public Initialising(MainWindowViewModel outer)
-                : base(outer, Activity.Transitioning)
+                : base(outer, Activity.Transitioning, INITIALISING_TEXT)
             { }
 
             #region Overriden Public Methods
@@ -44,12 +46,6 @@ namespace SimTemplate.ViewModels
                 // Initialise properties.
                 Outer.FilteredScannerType = ScannerType.None;
 
-                // Initialise the TemplatingViewModel so that we can process images.
-                Outer.m_TemplatingViewModel.BeginInitialise();
-
-                // Indicate that we are initialising
-                Outer.PromptText = "Initialising...";
-
                 // Check that our current settings are valid
                 if (!Outer.m_SettingsManager.ValidateCurrentSettings())
                 {
@@ -58,7 +54,7 @@ namespace SimTemplate.ViewModels
                 }
                 else
                 {
-                    // As settings are definitely provided, perform the asynchronous authentication
+                    // As valid settings are definitely provided, perform the asynchronous authentication
                     base.OnEnteringState();
                 }
             }

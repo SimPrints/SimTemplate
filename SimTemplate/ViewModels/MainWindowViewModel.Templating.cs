@@ -30,23 +30,31 @@ namespace SimTemplate.ViewModels
 
             #endregion
 
+            public override void OnEnteringState()
+            {
+                base.OnEnteringState();
+
+                // Initialise the TemplatingViewModel so that we can process images.
+                Outer.m_TemplatingViewModel.BeginInitialise();
+            }
+
+            public override void OnLeavingState()
+            {
+                base.OnLeavingState();
+
+                // Clear the TemplatingViewModel of any leftover information
+                Outer.TemplatingViewModel.QuitTemplating();
+            }
+
             public override void LoadFile()
             {
-                Outer.m_TemplatingViewModel.QuitTemplating();
-
                 TransitionTo(typeof(Loading));
             }
 
             public override void SaveTemplate()
             {
-                if (Outer.m_TemplatingViewModel.IsSaveTemplatePermitted)
-                {
-                    TransitionTo(typeof(Saving));
-                }
-                else
-                {
-                    Log.Warn("SaveTemplate() called when IsSaveTemplatePermitted. Improper usage!");
-                }
+                IntegrityCheck.IsFalse(Outer.m_TemplatingViewModel.IsSaveTemplatePermitted);
+                TransitionTo(typeof(Saving));
             }
 
             public override void SetScannerType(ScannerType type)
@@ -60,8 +68,8 @@ namespace SimTemplate.ViewModels
 
             public override void EscapeAction()
             {
-                // TODO: Pass escape handling to TemplatingViewModel
-                // Outer.CurrentContentViewModel.EscapeAction();
+                // Pass escape handling to TemplatingViewModel
+                Outer.m_TemplatingViewModel.EscapeAction();
             }
         }
     }

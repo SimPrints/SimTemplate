@@ -32,20 +32,11 @@ namespace SimTemplate.ViewModels
     {
         private class Saving : TransitioningAsync<SaveTemplateEventArgs>
         {
-            public Saving(MainWindowViewModel outer) : base(outer, Activity.Transitioning)
+            private const string SAVING_TEXT = "Saving template...";
+
+            public Saving(MainWindowViewModel outer)
+                : base(outer, Activity.Transitioning, SAVING_TEXT)
             { }
-
-            #region Overridden Public Methods
-
-            public override void OnEnteringState()
-            {
-                base.OnEnteringState();
-
-                // Indicate that we are saving
-                Outer.PromptText = "Saving template...";
-            }
-
-            #endregion
 
             #region TransitioningAsync Methods
 

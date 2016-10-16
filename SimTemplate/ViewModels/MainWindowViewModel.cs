@@ -46,7 +46,7 @@ namespace SimTemplate.ViewModels
         private ICommand m_BifuricationButtonPressCommand;
         private ICommand m_EscapePressCommand;
         private ICommand m_ToggleSettingsCommand;
-        private ICommand m_ReinitialiseCommand;
+        private ICommand m_InitialiseCommand;
 
         private event EventHandler<ActivityChangedEventArgs> m_ActivityChanged;
 
@@ -74,8 +74,8 @@ namespace SimTemplate.ViewModels
             m_WindowService = windowService;
 
             // Initialise the state machine
-            m_StateMgr = new StateManager<MainWindowState>(this, typeof(Uninitialised));
             m_StateLock = new object();
+            m_StateMgr = new StateManager<MainWindowState>(this, typeof(Uninitialised));
 
             // Configure commands/event handlers
             InitialiseCommands();
@@ -93,41 +93,7 @@ namespace SimTemplate.ViewModels
 
         void IMainWindowViewModel.BeginInitialise()
         {
-            Log.Debug("BeginInitialise() called.");
-            lock (m_StateLock)
-            {
-
-                m_StateMgr.State.BeginInitialise();
-            }
-        }
-
-        private void EscapeAction()
-        {
-            Log.Debug("EscapeAction() called.");
-            lock (m_StateLock)
-            {
-                m_StateMgr.State.EscapeAction();
-            }
-        }
-
-        private void OpenSettings(bool isReinitialiseOnUpdate = true)
-        {
-            Log.Debug("OpenSettings() called.");
-
-            // Refresh the view model with latest settings
-            // TODO: Create a new SettingsViewModel (using a factory) rather than refresh
-            m_SettingsViewModel.Refresh();
-            // Present opportunity to change settings
-            m_WindowService.ShowDialog(m_SettingsViewModel);
-
-            if (isReinitialiseOnUpdate && m_SettingsViewModel.Result == ViewModelStatus.Complete)
-            {
-                // Settings were updated, we must re-initialise the DataController
-                lock (m_StateLock)
-                {
-                    m_StateMgr.TransitionTo(typeof(Initialising));
-                }
-            }
+            BeginInitialise();
         }
 
         event EventHandler<ActivityChangedEventArgs> IMainWindowViewModel.ActivityChanged
@@ -135,7 +101,6 @@ namespace SimTemplate.ViewModels
             add { m_ActivityChanged += value; }
             remove { m_ActivityChanged -= value; }
         }
-
 
         #endregion
 
@@ -253,7 +218,7 @@ namespace SimTemplate.ViewModels
 
         public ICommand ToggleSettingsCommand { get { return m_ToggleSettingsCommand; } }
 
-        public ICommand ReinitialiseCommand { get { return m_ReinitialiseCommand; } }
+        public ICommand ReinitialiseCommand { get { return m_InitialiseCommand; } }
 
         #endregion
 
@@ -275,10 +240,20 @@ namespace SimTemplate.ViewModels
             m_EscapePressCommand = new RelayCommand(
                 x => EscapeAction());
             m_ToggleSettingsCommand = new RelayCommand(x => OpenSettings());
-            m_ReinitialiseCommand = new RelayCommand(x => Reinitialise());
+            m_InitialiseCommand = new RelayCommand(x => BeginInitialise());
         }
 
         #region Command Callbacks
+
+        private void BeginInitialise()
+        {
+            Log.Debug("BeginInitialise() called.");
+            lock (m_StateLock)
+            {
+
+                m_StateMgr.State.BeginInitialise();
+            }
+        }
 
         private void LoadFile()
         {
@@ -297,6 +272,14 @@ namespace SimTemplate.ViewModels
                 m_StateMgr.State.SaveTemplate();
             }
         }
+        private void EscapeAction()
+        {
+            Log.Debug("EscapeAction() called.");
+            lock (m_StateLock)
+            {
+                m_StateMgr.State.EscapeAction();
+            }
+        }
 
         private void OpenSettings()
         {
@@ -310,22 +293,16 @@ namespace SimTemplate.ViewModels
 
             if (m_SettingsViewModel.Result == ViewModelStatus.Complete)
             {
+                Log.Debug("Settings were updated, re-initialising...");
                 // Settings were updated, we must re-initialise the DataController
-                Log.Debug("Settings updated");
                 lock (m_StateLock)
                 {
-                    m_StateMgr.State.SettingsUpdated();
+                    m_StateMgr.TransitionTo(typeof(Initialising));
                 }
             }
-        }
-
-        private void Reinitialise()
-        {
-            Log.Debug("Reinitialise() called.");
-
-            lock (m_StateLock)
+            else
             {
-                m_StateMgr.State.Reinitialise();
+                Log.Debug("Settings were not updated");
             }
         }
 

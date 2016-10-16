@@ -35,19 +35,13 @@ namespace SimTemplate.ViewModels
     {
         public class Loading : TransitioningAsync<GetCaptureCompleteEventArgs>
         {
-            public Loading(MainWindowViewModel outer) : base(outer, Activity.Loading)
+            private const string LOADING_TEXT = "Loading capture...";
+
+            public Loading(MainWindowViewModel outer)
+                : base(outer, Activity.Loading, LOADING_TEXT)
             { }
 
             #region Overriden Public Methods
-
-            public override void OnEnteringState()
-            {
-                base.OnEnteringState();
-
-                // Indicate that we are loading
-                Outer.PromptText = "Loading capture...";
-                //Outer.LoadIconOverride = Properties.Resources.Load;
-            }
 
             public override void LoadFile()
             {

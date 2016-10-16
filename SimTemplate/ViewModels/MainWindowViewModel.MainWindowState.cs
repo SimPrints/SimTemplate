@@ -68,8 +68,6 @@ namespace SimTemplate.ViewModels
                 TransitionTo(typeof(Initialising));
             }
 
-            public virtual void Reinitialise() { MethodNotImplemented(); }
-
             #endregion
 
             #region Event Handlers

@@ -29,10 +29,16 @@ namespace SimTemplate.ViewModels
         public abstract class TransitioningAsync<T> : MainWindowState where T : EventArgs
         {
             private object m_Identifier;
+            private readonly string m_PromptText;
 
-            public TransitioningAsync(MainWindowViewModel outer, Activity stateActivity) :
+            public TransitioningAsync(
+                MainWindowViewModel outer,
+                Activity stateActivity,
+                string promptText) :
                 base(outer, stateActivity)
-            { }
+            {
+                m_PromptText = promptText;
+            }
 
             #region Overriden Public Methods
 
@@ -40,8 +46,17 @@ namespace SimTemplate.ViewModels
             {
                 base.OnEnteringState();
 
+                Outer.PromptText = m_PromptText;
+
                 m_Identifier = StartAsyncOperation();
                 IntegrityCheck.IsNotNull(m_Identifier);
+            }
+
+            public override void OnLeavingState()
+            {
+                base.OnLeavingState();
+
+                Outer.PromptText = String.Empty;
             }
 
             #endregion

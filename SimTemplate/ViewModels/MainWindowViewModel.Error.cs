@@ -37,9 +37,19 @@ namespace SimTemplate.ViewModels
 
                 // Indicate we have errored
                 Outer.PromptText = Outer.m_Exception.Message;
+            }
 
-                // Clear UI
-                Outer.m_TemplatingViewModel.QuitTemplating();
+            public override void OnLeavingState()
+            {
+                base.OnLeavingState();
+
+                // Clear the exception on leaving the state
+                Outer.m_Exception = null;
+            }
+
+            public override void BeginInitialise()
+            {
+                TransitionTo(typeof(Initialising));
             }
 
             public override void DataController_InitialisationComplete(InitialisationCompleteEventArgs e)
@@ -66,11 +76,6 @@ namespace SimTemplate.ViewModels
             public override void SetScannerType(ScannerType type)
             {
                 // Ignore.
-            }
-
-            public override void Reinitialise()
-            {
-                TransitionTo(typeof(Initialising));
             }
 
             #endregion
