@@ -1,5 +1,5 @@
 # SimTemplate
-A WPF application to facilitate manual construction of templates for captures in the SimPrints DatastoreAPI database.
+A WPF application to facilitate manual construction of templates for captures in the SimPrints [DatastoreAPI](https://github.com/SimPrints/DataStoreAPI) database.
 
 ## Setup
 ### Installer
@@ -28,7 +28,7 @@ MSBuild.exe SimTemplateDocs.shfbproj
 The [Building Projects Outside the GUI](http://ewsoftware.github.io/SHFB/html/8ffc0d37-0215-4609-b6f8-dba53a6c5063.htm) help topic can provide further information on building the documentation without needing to install SHFB.
 
 ### Logging
-The application logs using the log4net library to both a static file and over UDP.
+The application (and tests) logs using the log4net library to both a static file and over UDP.
 
 The static file can be found at:
 ``
@@ -40,3 +40,6 @@ The UDP logs are configured to be sent to:
 * **Port:** 7071
 
 Tools such as the excellet [Log4View](http://www.log4view.com/log4view/) can be used to visualise the UDP logs in real-time.
+
+### Testing
+Automated tests can be found in the UnitTests/**AutomatedSimTemplateTests** project. Code coverage analysis can be run using UnitTests/RunCodeCoverage.bat and the resulting (including a [summary for Github](http://htmlpreview.github.com/?https://github.com/SimPrints/SimTemplate/blob/master/UnitTests/GeneratedReports/ReportGenerator%20Output/summary.htm)) can be found at UnitTests/GeneratedReports.
