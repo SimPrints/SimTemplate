@@ -33,7 +33,7 @@ namespace SimTemplate.Utilities
             return new SimTemplateException(message);
         }
 
-        public static SimTemplateException Fail(string format, params string[] args)
+        public static SimTemplateException Fail(string format, params object[] args)
         {
             return new SimTemplateException(String.Format(format, args));
         }

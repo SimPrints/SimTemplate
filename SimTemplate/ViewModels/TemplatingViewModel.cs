@@ -22,6 +22,7 @@ using SimTemplate.DataTypes;
 using SimTemplate.DataTypes.Enums;
 using SimTemplate.DataTypes.Collections;
 using SimTemplate.ViewModels.Interfaces;
+using SimTemplate.Utilities;
 
 namespace SimTemplate.ViewModels
 {
@@ -35,6 +36,10 @@ namespace SimTemplate.ViewModels
 
         private static readonly ILog m_Log = LogManager.GetLogger(typeof(TemplatingViewModel));
 
+        // Dependencies
+        private readonly IDispatcherHelper m_DispatcherHelper;
+
+        // State machine variables
         private StateManager<TemplatingState> m_StateMgr;
         private object m_StateLock;
 
@@ -51,8 +56,12 @@ namespace SimTemplate.ViewModels
 
         #region Constructor
 
-        public TemplatingViewModel()
+        public TemplatingViewModel(IDispatcherHelper dispatcherHelper)
         {
+            IntegrityCheck.IsNotNull(dispatcherHelper);
+
+            m_DispatcherHelper = dispatcherHelper;
+
             m_StateLock = new object();
             Minutae = new TrulyObservableCollection<MinutiaRecord>();
             m_StateMgr = new StateManager<TemplatingState>(this, typeof(Uninitialised));
@@ -128,7 +137,8 @@ namespace SimTemplate.ViewModels
         {
             get
             {
-                return (m_StateMgr.State.GetType() == typeof(WaitLocation)) && (Minutae.Count > 0);
+                return (m_StateMgr.State.GetType() == typeof(WaitLocation)) &&
+                    (Minutae.Count > 0);
             }
         }
 
@@ -152,19 +162,16 @@ namespace SimTemplate.ViewModels
         {
             lock (m_StateLock)
             {
-                return m_StateMgr.State.FinaliseTemplate();
+                return m_StateMgr.State.GetTemplate();
             }
         }
 
         void ITemplatingViewModel.QuitTemplating()
         {
-            // NOTE: Clearing minutae must happen before clearing the capture
-            // Minutae position is bound to capture image size!
-            App.Current.Dispatcher.Invoke(new Action(() =>
+            lock (m_StateLock)
             {
-                Minutae.Clear();
-            }));
-            Capture = null;
+                m_StateMgr.State.QuitTemplating();
+            }
         }
 
         public event EventHandler<UserActionRequiredEventArgs> UserActionRequired

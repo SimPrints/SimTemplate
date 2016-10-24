@@ -26,6 +26,7 @@ namespace SimTemplate.ViewModels
         private readonly IDataController m_DataController;
         private readonly ISettingsManager m_SettingsManager;
         private readonly IWindowService m_WindowService;
+        private readonly IDispatcherHelper m_DispatcherHelper;
 
         // Child ViewModels
         private readonly ITemplatingViewModel m_TemplatingViewModel;
@@ -51,20 +52,22 @@ namespace SimTemplate.ViewModels
         private event EventHandler<ActivityChangedEventArgs> m_ActivityChanged;
 
         #region Constructor
-
+        // TODO: Swap TemplatingViewModel for a TemplatingViewModelFactory
         // TODO: Swap SettingsViewModel for a SettingsViewModelFactory
         public MainWindowViewModel(
             IDataController dataController,
             ITemplatingViewModel templatingViewModel,
             ISettingsViewModel settingsViewModel,
             ISettingsManager settingsManager,
-            IWindowService windowService)
+            IWindowService windowService,
+            IDispatcherHelper dispatcherHelper)
         {
             IntegrityCheck.IsNotNull(dataController);
             IntegrityCheck.IsNotNull(templatingViewModel);
             IntegrityCheck.IsNotNull(settingsViewModel);
             IntegrityCheck.IsNotNull(settingsManager);
             IntegrityCheck.IsNotNull(windowService);
+            IntegrityCheck.IsNotNull(dispatcherHelper);
 
             // Save arguments
             m_DataController = dataController;
@@ -72,6 +75,7 @@ namespace SimTemplate.ViewModels
             m_SettingsViewModel = settingsViewModel;
             m_SettingsManager = settingsManager;
             m_WindowService = windowService;
+            m_DispatcherHelper = dispatcherHelper;
 
             // Initialise the state machine
             m_StateLock = new object();
@@ -87,7 +91,21 @@ namespace SimTemplate.ViewModels
 
         #endregion
 
+        /// <summary>
+        /// Gets the exception that may have occurred.
+        /// </summary>
+        /// <value>
+        /// The exception. null if there is no exception.
+        /// </value>
         public SimTemplateException Exception { get { return m_Exception; } }
+
+        /// <summary>
+        /// Gets the dispatcher helper to update UI elements.
+        /// </summary>
+        /// <value>
+        /// The dispatcher helper.
+        /// </value>
+        public IDispatcherHelper DispatcherHelper { get { return m_DispatcherHelper; } }
 
         #region IMainWindowViewModel
 

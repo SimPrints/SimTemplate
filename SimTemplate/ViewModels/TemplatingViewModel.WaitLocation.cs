@@ -33,6 +33,9 @@ namespace SimTemplate.ViewModels
     {
         public class WaitLocation : Initialised
         {
+            // TODO: put string resources in a resource manager
+            private const string PLACE_MINUTIA_PROMPT = "Please place minutia";
+
             #region Constructor
 
             public WaitLocation(TemplatingViewModel outer) : base(outer)
@@ -46,7 +49,7 @@ namespace SimTemplate.ViewModels
             {
                 base.OnEnteringState();
 
-                Outer.OnUserActionRequired(new UserActionRequiredEventArgs("Please place minutia"));
+                Outer.OnUserActionRequired(new UserActionRequiredEventArgs(PLACE_MINUTIA_PROMPT));
             }
 
             #region View Methods
@@ -100,12 +103,9 @@ namespace SimTemplate.ViewModels
                 TransitionTo(typeof(MovingMinutia));
             }
 
-            public override byte[] FinaliseTemplate()
+            public override byte[] GetTemplate()
             {
-                // We should only be saving if there is information to save
-                IntegrityCheck.AreNotEqual(0, Outer.Minutae.Count());
-
-                // Return in ISO template format.
+                // Return template in ISO template format.
                 return IsoTemplateHelper.ToIsoTemplate(Outer.Minutae);
             }
 

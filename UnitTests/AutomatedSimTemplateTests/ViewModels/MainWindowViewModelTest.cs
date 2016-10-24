@@ -20,7 +20,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using SimTemplate.Model.DataControllers;
 using SimTemplate.DataTypes.Enums;
-using SimTemplate.ViewModels;
 using SimTemplate.DataTypes;
 using SimTemplate.Utilities;
 using SimTemplate.ViewModels.Interfaces;
@@ -28,7 +27,7 @@ using SimTemplate.Model.DataControllers.EventArguments;
 using System;
 using System.Collections.Generic;
 
-namespace SimTemplate.ViewModel.Test
+namespace SimTemplate.ViewModels.Test
 {
     /// <summary>
     /// Test class for testing the MainWindowViewModel. This consists primarily of testing the state machine.
@@ -46,6 +45,7 @@ namespace SimTemplate.ViewModel.Test
         private const string IDLE_PROMPT_TEXT = "Ready";
         private const string LOADING_PROMPT_TEXT = "Loading capture...";
         private const string SAVING_PROMPT_TEXT = "Saving template...";
+        private const string ABORTED_PROMPT_TEXT = "Aborted";
 
         #endregion
 
@@ -56,8 +56,10 @@ namespace SimTemplate.ViewModel.Test
         ISettingsViewModel m_SettingsViewModel;
         ISettingsManager m_SettingsManager;
         IWindowService m_WindowService;
+        IDispatcherHelper m_DispatcherHelper;
 
         MainWindowViewModel m_ViewModel;
+        IMainWindowViewModel m_IViewModel;
 
         [TestInitialize]
         public void TestSetup()
@@ -67,14 +69,19 @@ namespace SimTemplate.ViewModel.Test
             m_SettingsViewModel = A.Fake<ISettingsViewModel>();
             m_SettingsManager = A.Fake<ISettingsManager>();
             m_WindowService = A.Fake<IWindowService>();
+            m_DispatcherHelper = A.Fake<IDispatcherHelper>();
 
             m_ViewModel = new MainWindowViewModel(
                 m_DataController,
                 m_TemplatingViewModel,
                 m_SettingsViewModel,
                 m_SettingsManager,
-                m_WindowService);
+                m_WindowService,
+                m_DispatcherHelper);
+            m_IViewModel = (IMainWindowViewModel)m_ViewModel;
         }
+
+        // TODO: Test for integrity checks that matter
 
         [TestMethod]
         public void TestBeginInitialise_IgnoredConnection()
@@ -94,7 +101,7 @@ namespace SimTemplate.ViewModel.Test
             DoTestCrashedConnection();
 
             // Now test a successful connection
-            DoTestSucceedConnection();
+            DoTestSucceedInitialise();
         }
 
         [TestMethod]
@@ -116,19 +123,46 @@ namespace SimTemplate.ViewModel.Test
             Guid identifier;
 
             // First connect
-            DoTestSucceedConnection();
+            DoTestSucceedInitialise();
 
-            // Next, request a file
-            identifier = DoTestLoadFile();
-
-            // Next, indicate file is ready
-            DoTestLoadFileSuccess(identifier);
+            // Then load a capture
+            DoTestSucceedLoadCapture();
 
             // Next, save a template
             identifier = DoTestSaveTemplate();
 
             // Finally, indicate template was saved
             DoTestSaveTemplateSuccess(identifier);
+        }
+
+        // TODO: Test escape action
+
+        // TODO: Test changing minutia type
+
+        //[TestMethod]
+        //public void TestSetMinutiaType()
+        //{
+        //    // First Connect
+        //    DoTestSucceedInitialise();
+        //}
+
+        // TODO: Test failed load
+
+        // TODO: Test failed save
+
+        [TestMethod]
+        public void TestInitialise_Success_LoadFile_Abort()
+        {
+            Guid identifier;
+
+            // First connect
+            DoTestSucceedInitialise();
+
+            // Next, request a file
+            identifier = DoTestLoadFile();
+
+            // Next, indicate file is ready
+            DoTestLoadFileAbort(identifier);
         }
 
         #region Do Test Routine Methods
@@ -151,7 +185,7 @@ namespace SimTemplate.ViewModel.Test
             DoTestInitialisationFailed(identifier, DataRequestResult.TaskFailed);
         }
 
-        private void DoTestSucceedConnection()
+        private void DoTestSucceedInitialise()
         {
             // First test calling BeginInitialise (starting asynchronous operation)
             Guid identifier = DoTestBeginInitialise();
@@ -160,118 +194,149 @@ namespace SimTemplate.ViewModel.Test
             DoTestInitialisationSuccess(identifier);
         }
 
+        private void DoTestSucceedLoadCapture()
+        {
+            // Next, request a file
+            Guid identifier = DoTestLoadFile();
+
+            // Next, indicate file is ready
+            DoTestLoadFileSuccess(identifier);
+        }
+
         #region Initialisation
 
         private Guid DoTestBeginInitialise()
         {
-            Fake.CreateScope();
-            // PREPARE:
-            // Indicate that the settings are valid
-            A.CallTo(() => m_SettingsManager.ValidateCurrentSettings()).Returns(true);
-            A.CallTo(() => m_SettingsManager.GetCurrentSetting(Setting.ApiKey)).Returns("");
-            A.CallTo(() => m_SettingsManager.GetCurrentSetting(Setting.RootUrl)).Returns("");
-            // Return a valid identifier for asynchronous connection operation
-            Guid identifier = Guid.NewGuid();
-            A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._)).Returns(identifier);
+            using (Fake.CreateScope())
+            {
+                // PREPARE:
+                // Indicate that the settings are valid
+                A.CallTo(() => m_SettingsManager.ValidateCurrentSettings()).Returns(true);
+                A.CallTo(() => m_SettingsManager.GetCurrentSetting(Setting.ApiKey)).Returns("");
+                A.CallTo(() => m_SettingsManager.GetCurrentSetting(Setting.RootUrl)).Returns("");
+                // Return a valid identifier for asynchronous connection operation
+                Guid identifier = Guid.NewGuid();
+                A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._)).Returns(identifier);
 
-            // EXECUTE:
-            // First start the initialisation
-            ((IMainWindowViewModel)m_ViewModel).BeginInitialise();
+                // EXECUTE:
+                // First start the initialisation
+                ((IMainWindowViewModel)m_ViewModel).BeginInitialise();
 
-            // ASSERT:
-            // Assert public state of ViewModel
-            Assert.AreEqual(Activity.Transitioning, m_ViewModel.CurrentActivity);
-            Assert.IsFalse(m_ViewModel.IsTemplating);
-            Assert.IsNull(m_ViewModel.Exception);
-            Assert.AreEqual(INITIALISING_PROMPT_TEXT, m_ViewModel.PromptText);
+                // ASSERT:
+                // Assert public state of ViewModel
+                Assert.AreEqual(Activity.Transitioning, m_ViewModel.CurrentActivity);
+                Assert.IsFalse(m_ViewModel.IsTemplating);
+                Assert.IsNull(m_ViewModel.Exception);
+                Assert.AreEqual(INITIALISING_PROMPT_TEXT, m_ViewModel.PromptText);
 
-            // Assert IDataController interaction
-            // TODO: Check DataControllerConfig value
-            A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
-                .MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
-                .MustNotHaveHappened();
-            A.CallTo(() => m_DataController.AbortRequest(A<Guid>._))
-                .MustNotHaveHappened();
-            A.CallTo(() => m_DataController.BeginSaveTemplate(A<long>._, A<byte[]>._))
-                .MustNotHaveHappened();
+                // Assert IDataController interaction
+                // TODO: Check DataControllerConfig value
+                A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
+                    .MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.AbortRequest(A<Guid>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.BeginSaveTemplate(A<long>._, A<byte[]>._))
+                    .MustNotHaveHappened();
 
-            // Assert ISettingsValidator interaction
-            AssertSettingsChecked();
+                // Assert ITemplatingViewModel interaction
+                A.CallTo(() => m_TemplatingViewModel.BeginInitialise()).MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_TemplatingViewModel.BeginTemplating(A<CaptureInfo>._)).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.EscapeAction()).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate()).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.QuitTemplating()).MustNotHaveHappened();
+                A.CallTo(m_TemplatingViewModel)
+                    .Where(x => x.Method.Name.Equals("set_InputMinutiaType"))
+                    .WhenArgumentsMatch(x => x.Get<MinutiaType>(0).Equals(DEFAULT_MINUTIA_TYPE))
+                    .MustNotHaveHappened();
 
-            // Assert that view model made no calls to other fake objects
-            AssertNoCallsToSettingsViewModel();
-            AssertNoCallsToTemplatingViewModel();
-            AssertNoCallsToWindowService();
+                // Assert ISettingsValidator interaction
+                AssertSettingsChecked();
 
-            // Return the identifier so that the operation can be completed later
-            return identifier;
+                // Assert that view model made no calls to other fake objects
+                AssertNoCallsToSettingsViewModel();
+                AssertNoCallsToWindowService();
+                AssertNoCallsToDispatcherHelper();
+
+                // Return the identifier so that the operation can be completed later
+                return identifier;
+            }
         }
 
         private void DoTestInitialisationSuccess(Guid identifier)
         {
-            Fake.CreateScope();
-            // EXECUTE:
-            m_DataController.InitialisationComplete += Raise.With(
-                new InitialisationCompleteEventArgs(InitialisationResult.Initialised, identifier, DataRequestResult.Success));
+            using (Fake.CreateScope())
+            {
+                // EXECUTE:
+                m_DataController.InitialisationComplete += Raise.With(
+                    new InitialisationCompleteEventArgs(InitialisationResult.Initialised, identifier, DataRequestResult.Success));
 
-            // ASSERT:
-            // Assert public state of ViewModel
-            Assert.AreEqual(Activity.Idle, m_ViewModel.CurrentActivity);
-            Assert.IsFalse(m_ViewModel.IsTemplating);
-            Assert.IsNull(m_ViewModel.Exception);
-            Assert.AreEqual("Ready", m_ViewModel.PromptText);
+                // ASSERT:
+                // Assert public state of ViewModel
+                Assert.AreEqual(Activity.Idle, m_ViewModel.CurrentActivity);
+                Assert.IsFalse(m_ViewModel.IsTemplating);
+                Assert.IsNull(m_ViewModel.Exception);
+                Assert.AreEqual("Ready", m_ViewModel.PromptText);
 
-            // Assert that ViewModel made no calls to other fake objects
-            AssertNoCallsToDataController();
-            AssertNoCallsToSettingsValidator();
-            AssertNoCallsToSettingsViewModel();
-            AssertNoCallsToTemplatingViewModel();
-            AssertNoCallsToWindowService();
+                // Assert that ViewModel made no calls to other fake objects
+                AssertNoCallsToDataController();
+                AssertNoCallsToSettingsValidator();
+                AssertNoCallsToSettingsViewModel();
+                AssertNoCallsToTemplatingViewModel();
+                AssertNoCallsToWindowService();
+                AssertNoCallsToDispatcherHelper();
+            }
         }
 
         private void DoTestInitialisationFailed(Guid identifier, DataRequestResult result)
         {
-            Fake.CreateScope();
-            // EXECUTE:
-            m_DataController.InitialisationComplete += Raise.With(
-                new InitialisationCompleteEventArgs(InitialisationResult.Error, identifier, result));
+            using (Fake.CreateScope())
+            {
+                // EXECUTE:
+                m_DataController.InitialisationComplete += Raise.With(
+                    new InitialisationCompleteEventArgs(InitialisationResult.Error, identifier, result));
 
-            // ASSERT:
-            // Assert public state of ViewModel
-            Assert.AreEqual(Activity.Fault, m_ViewModel.CurrentActivity);
-            Assert.IsFalse(m_ViewModel.IsTemplating);
-            Assert.IsNotNull(m_ViewModel.Exception);
-            Assert.AreEqual(m_ViewModel.Exception.Message, m_ViewModel.PromptText);
+                // ASSERT:
+                // Assert public state of ViewModel
+                Assert.AreEqual(Activity.Fault, m_ViewModel.CurrentActivity);
+                Assert.IsFalse(m_ViewModel.IsTemplating);
+                Assert.IsNotNull(m_ViewModel.Exception);
+                Assert.AreEqual(m_ViewModel.Exception.Message, m_ViewModel.PromptText);
 
-            // Assert that ViewModel made no calls to other fake objects
-            AssertNoCallsToDataController();
-            AssertNoCallsToSettingsValidator();
-            AssertNoCallsToSettingsViewModel();
-            AssertNoCallsToTemplatingViewModel();
-            AssertNoCallsToWindowService();
+                // Assert that ViewModel made no calls to other fake objects
+                AssertNoCallsToDataController();
+                AssertNoCallsToSettingsValidator();
+                AssertNoCallsToSettingsViewModel();
+                AssertNoCallsToTemplatingViewModel();
+                AssertNoCallsToWindowService();
+                AssertNoCallsToDispatcherHelper();
+            }
         }
 
         private void DoTestInitialisationIgnored()
         {
-            Fake.CreateScope();
-            // EXECUTE
-            m_DataController.InitialisationComplete += Raise.With(
-                new InitialisationCompleteEventArgs(InitialisationResult.Error, Guid.NewGuid(), DataRequestResult.Failed));
+            using (Fake.CreateScope())
+            {
+                // EXECUTE
+                m_DataController.InitialisationComplete += Raise.With(
+                    new InitialisationCompleteEventArgs(InitialisationResult.Error, Guid.NewGuid(), DataRequestResult.Failed));
 
-            // ASSERT:
-            // Assert public state of ViewModel
-            Assert.AreEqual(Activity.Transitioning, m_ViewModel.CurrentActivity);
-            Assert.IsFalse(m_ViewModel.IsTemplating);
-            Assert.IsNull(m_ViewModel.Exception);
-            Assert.AreEqual(INITIALISING_PROMPT_TEXT, m_ViewModel.PromptText);
+                // ASSERT:
+                // Assert public state of ViewModel
+                Assert.AreEqual(Activity.Transitioning, m_ViewModel.CurrentActivity);
+                Assert.IsFalse(m_ViewModel.IsTemplating);
+                Assert.IsNull(m_ViewModel.Exception);
+                Assert.AreEqual(INITIALISING_PROMPT_TEXT, m_ViewModel.PromptText);
 
-            // Assert that ViewModel made no calls to other fake objects
-            AssertNoCallsToDataController();
-            AssertNoCallsToSettingsValidator();
-            AssertNoCallsToSettingsViewModel();
-            AssertNoCallsToTemplatingViewModel();
-            AssertNoCallsToWindowService();
+                // Assert that ViewModel made no calls to other fake objects
+                AssertNoCallsToDataController();
+                AssertNoCallsToSettingsValidator();
+                AssertNoCallsToSettingsViewModel();
+                AssertNoCallsToTemplatingViewModel();
+                AssertNoCallsToWindowService();
+                AssertNoCallsToDispatcherHelper();
+            }
         }
 
         #endregion
@@ -280,53 +345,56 @@ namespace SimTemplate.ViewModel.Test
 
         private Guid DoTestUpdateSettings()
         {
-            Fake.CreateScope();
-            // PREPARE:
-            // Indicate that settings are updated
-            A.CallTo(() => m_WindowService.ShowDialog(m_SettingsViewModel)).Returns(true);
-            A.CallTo(() => m_SettingsViewModel.Result).Returns(ViewModelStatus.Complete);
-            // Indicate that the settings are valid
-            A.CallTo(() => m_SettingsManager.ValidateCurrentSettings()).Returns(true);
-            A.CallTo(() => m_SettingsManager.GetCurrentSetting(Setting.ApiKey)).Returns("");
-            A.CallTo(() => m_SettingsManager.GetCurrentSetting(Setting.RootUrl)).Returns("");
-            // Return a GUID for the subsequent initialisation operation
-            Guid identifier = Guid.NewGuid();
-            A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._)).Returns(identifier);
+            using (Fake.CreateScope())
+            {
+                // PREPARE:
+                // Indicate that settings are updated
+                A.CallTo(() => m_WindowService.ShowDialog(m_SettingsViewModel)).Returns(true);
+                A.CallTo(() => m_SettingsViewModel.Result).Returns(ViewModelStatus.Complete);
+                // Indicate that the settings are valid
+                A.CallTo(() => m_SettingsManager.ValidateCurrentSettings()).Returns(true);
+                A.CallTo(() => m_SettingsManager.GetCurrentSetting(Setting.ApiKey)).Returns("");
+                A.CallTo(() => m_SettingsManager.GetCurrentSetting(Setting.RootUrl)).Returns("");
+                // Return a GUID for the subsequent initialisation operation
+                Guid identifier = Guid.NewGuid();
+                A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._)).Returns(identifier);
 
-            // EXECUTE:
-            // Open the settings dialog to update settings
-            m_ViewModel.ToggleSettingsCommand.Execute(null);
+                // EXECUTE:
+                // Open the settings dialog to update settings
+                m_ViewModel.ToggleSettingsCommand.Execute(null);
 
-            // Assert public state of view model
-            Assert.AreEqual(Activity.Transitioning, m_ViewModel.CurrentActivity);
-            Assert.IsFalse(m_ViewModel.IsTemplating);
-            Assert.IsNull(m_ViewModel.Exception);
-            Assert.AreEqual(INITIALISING_PROMPT_TEXT, m_ViewModel.PromptText);
+                // Assert public state of view model
+                Assert.AreEqual(Activity.Transitioning, m_ViewModel.CurrentActivity);
+                Assert.IsFalse(m_ViewModel.IsTemplating);
+                Assert.IsNull(m_ViewModel.Exception);
+                Assert.AreEqual(INITIALISING_PROMPT_TEXT, m_ViewModel.PromptText);
 
-            // Assert IWindowService interaction
-            A.CallTo(() => m_WindowService.ShowDialog(m_SettingsViewModel))
-                .MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_WindowService.Show(m_SettingsViewModel))
-                .MustNotHaveHappened();
+                // Assert IWindowService interaction
+                A.CallTo(() => m_WindowService.ShowDialog(m_SettingsViewModel))
+                    .MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_WindowService.Show(m_SettingsViewModel))
+                    .MustNotHaveHappened();
 
-            // Assert ISettingsViewModel interaction
-            A.CallTo(() => m_SettingsViewModel.Refresh()).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_SettingsViewModel.Result).MustHaveHappened(Repeated.Exactly.Once);
+                // Assert ISettingsViewModel interaction
+                A.CallTo(() => m_SettingsViewModel.Refresh()).MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_SettingsViewModel.Result).MustHaveHappened(Repeated.Exactly.Once);
 
-            // Assert IDataController interaction
-            A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
-                .MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
-                .MustNotHaveHappened();
-            A.CallTo(() => m_DataController.AbortRequest(A<Guid>._))
-                .MustNotHaveHappened();
-            A.CallTo(() => m_DataController.BeginSaveTemplate(A<long>._, A<byte[]>._))
-                .MustNotHaveHappened();
+                // Assert IDataController interaction
+                A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
+                    .MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.AbortRequest(A<Guid>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.BeginSaveTemplate(A<long>._, A<byte[]>._))
+                    .MustNotHaveHappened();
 
-            // Assert that ViewModel made no calls to other fakes
-            AssertNoCallsToTemplatingViewModel();
+                // Assert that ViewModel made no calls to other fakes
+                AssertNoCallsToTemplatingViewModel();
+                AssertNoCallsToDispatcherHelper();
 
-            return identifier;
+                return identifier;
+            }
         }
 
         private void DoTestInvalidSettings()
@@ -360,6 +428,7 @@ namespace SimTemplate.ViewModel.Test
             AssertNoCallsToSettingsViewModel();
             AssertNoCallsToTemplatingViewModel();
             AssertNoCallsToWindowService();
+            AssertNoCallsToDispatcherHelper();
         }
 
         #endregion
@@ -368,70 +437,112 @@ namespace SimTemplate.ViewModel.Test
 
         private Guid DoTestLoadFile()
         {
-            Fake.CreateScope();
+            using (Fake.CreateScope())
+            {
 
-            // PREPARE:
-            // Return a valid identifier for asynchronous load file operation
-            Guid identifier = Guid.NewGuid();
-            A.CallTo(() => m_DataController.BeginGetCapture(DEFAULT_SCANNER_TYPE)).Returns(identifier);
+                // PREPARE:
+                // Return a valid identifier for asynchronous load file operation
+                Guid identifier = Guid.NewGuid();
+                A.CallTo(() => m_DataController.BeginGetCapture(DEFAULT_SCANNER_TYPE)).Returns(identifier);
 
-            // EXECUTE:
-            m_ViewModel.LoadFileCommand.Execute(null);
+                // EXECUTE:
+                m_ViewModel.LoadFileCommand.Execute(null);
 
-            // ASSERT:
-            // Assert that ViewModel made only one request to IDataController
-            A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
-                .MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
-                .MustNotHaveHappened();
-            A.CallTo(() => m_DataController.AbortRequest(A<Guid>._))
-                .MustNotHaveHappened();
-            A.CallTo(() => m_DataController.BeginSaveTemplate(A<long>._, A<byte[]>._))
-                .MustNotHaveHappened();
+                // ASSERT:
+                // Assert that ViewModel made only one request to IDataController
+                A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
+                    .MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.AbortRequest(A<Guid>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.BeginSaveTemplate(A<long>._, A<byte[]>._))
+                    .MustNotHaveHappened();
 
-            // Assert public state of ViewModel
-            Assert.AreEqual(Activity.Loading, m_ViewModel.CurrentActivity);
-            Assert.IsFalse(m_ViewModel.IsTemplating);
-            Assert.IsNull(m_ViewModel.Exception);
-            Assert.AreEqual(LOADING_PROMPT_TEXT, m_ViewModel.PromptText);
+                // Assert public state of ViewModel
+                Assert.AreEqual(Activity.Loading, m_ViewModel.CurrentActivity);
+                Assert.IsFalse(m_ViewModel.IsTemplating);
+                Assert.IsNull(m_ViewModel.Exception);
+                Assert.AreEqual(LOADING_PROMPT_TEXT, m_ViewModel.PromptText);
 
-            // Assert that ViewModel made no calls to ITemplatingViewModel or ISettingsViewModel
-            AssertNoCallsToSettingsValidator();
-            AssertNoCallsToSettingsViewModel();
-            AssertNoCallsToTemplatingViewModel();
+                // Assert that ViewModel made no calls to ITemplatingViewModel or ISettingsViewModel
+                AssertNoCallsToSettingsValidator();
+                AssertNoCallsToSettingsViewModel();
+                AssertNoCallsToTemplatingViewModel();
+                AssertNoCallsToDispatcherHelper();
 
-            // Return identifier so that test may continue
-            return identifier;
+                // Return identifier so that test may continue
+                return identifier;
+            }
         }
 
         private void DoTestLoadFileSuccess(Guid identifier)
         {
-            Fake.CreateScope();
-            // EXECUTE:
-            m_DataController.GetCaptureComplete += Raise.With(
-                new GetCaptureCompleteEventArgs(EXAMPLE_CAPTURE, identifier, DataRequestResult.Success));
+            using (Fake.CreateScope())
+            {
+                // EXECUTE:
+                m_DataController.GetCaptureComplete += Raise.With(
+                    new GetCaptureCompleteEventArgs(EXAMPLE_CAPTURE, identifier, DataRequestResult.Success));
 
-            // ASSERT:
-            // Assert public state of ViewModel
-            Assert.AreEqual(Activity.Templating, m_ViewModel.CurrentActivity);
-            Assert.IsTrue(m_ViewModel.IsTemplating);
-            Assert.IsNull(m_ViewModel.Exception);
-            Assert.AreEqual(String.Empty, m_ViewModel.PromptText);
+                // ASSERT:
+                // Assert public state of ViewModel
+                Assert.AreEqual(Activity.Templating, m_ViewModel.CurrentActivity);
+                Assert.IsTrue(m_ViewModel.IsTemplating);
+                Assert.IsNull(m_ViewModel.Exception);
+                Assert.AreEqual(String.Empty, m_ViewModel.PromptText);
 
-            // Assert TemplatingViewModel
-            A.CallTo(() => m_TemplatingViewModel.BeginTemplating(EXAMPLE_CAPTURE)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_TemplatingViewModel.BeginTemplating(A<CaptureInfo>._)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_TemplatingViewModel.EscapeAction()).MustNotHaveHappened();
-            A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate()).MustNotHaveHappened();
-            A.CallTo(() => m_TemplatingViewModel.QuitTemplating()).MustNotHaveHappened();
-            A.CallTo(m_TemplatingViewModel)
-                .Where(x => x.Method.Name.Equals("set_InputMinutiaType"))
-                .WhenArgumentsMatch(x => x.Get<MinutiaType>(0).Equals(DEFAULT_MINUTIA_TYPE));
+                // Assert TemplatingViewModel
+                A.CallTo(() => m_TemplatingViewModel.BeginTemplating(EXAMPLE_CAPTURE)).MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_TemplatingViewModel.BeginTemplating(A<CaptureInfo>._)).MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_TemplatingViewModel.EscapeAction()).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate()).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.QuitTemplating()).MustNotHaveHappened();
+                A.CallTo(m_TemplatingViewModel)
+                    .Where(x => x.Method.Name.Equals("set_InputMinutiaType"))
+                    .WhenArgumentsMatch(x => x.Get<MinutiaType>(0).Equals(DEFAULT_MINUTIA_TYPE))
+                    .MustNotHaveHappened();
 
+                // Assert that there were no calls to other fakes
+                AssertNoCallsToDataController();
+                AssertNoCallsToSettingsValidator();
+                AssertNoCallsToWindowService();
+                AssertNoCallsToDispatcherHelper();
+            }
+        }
 
-            // Assert that there were no calls to other fakes
-            AssertNoCallsToDataController();
-            AssertNoCallsToSettingsValidator();
+        private void DoTestLoadFileAbort(Guid identifier)
+        {
+            using (Fake.CreateScope())
+            {
+                // EXECUTE:
+                m_ViewModel.LoadFileCommand.Execute(null);
+                m_DataController.GetCaptureComplete += Raise.With(
+                    new GetCaptureCompleteEventArgs(EXAMPLE_CAPTURE, identifier, DataRequestResult.Success));
+
+                // ASSERT:
+                // Assert public state of ViewModel
+                Assert.AreEqual(Activity.Idle, m_ViewModel.CurrentActivity);
+                Assert.IsFalse(m_ViewModel.IsTemplating);
+                Assert.IsNull(m_ViewModel.Exception);
+                Assert.AreEqual(IDLE_PROMPT_TEXT, m_ViewModel.PromptText);
+
+                // Assert IDataController interaction
+                A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.AbortRequest(A<Guid>._))
+                    .MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_DataController.BeginSaveTemplate(A<long>._, A<byte[]>._))
+                    .MustNotHaveHappened();
+
+                // Assert that there were no calls to other fakes
+                AssertNoCallsToSettingsValidator();
+                AssertNoCallsToSettingsViewModel();
+                AssertNoCallsToWindowService();
+                AssertNoCallsToTemplatingViewModel();
+                AssertNoCallsToDispatcherHelper();
+            }
         }
 
         #endregion
@@ -440,79 +551,97 @@ namespace SimTemplate.ViewModel.Test
 
         private Guid DoTestSaveTemplate()
         {
-            Fake.CreateScope();
+            using (Fake.CreateScope())
+            {
 
-            // PREPARE:
-            // Return a valid template for saving
-            byte[] template = new byte[] { 0, 1, 2 };
-            A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate()).Returns(template);
-            // Return the capture that was being templated
-            A.CallTo(() => m_TemplatingViewModel.Capture).Returns(EXAMPLE_CAPTURE);
-            // Return a valid identifier for asynchronous load file operation
-            Guid identifier = Guid.NewGuid();
-            A.CallTo(() => m_DataController.BeginSaveTemplate(EXAMPLE_CAPTURE.DbId, template)).Returns(identifier);
+                // PREPARE:
+                // Return a valid template for saving
+                byte[] template = new byte[] { 0, 1, 2 };
+                A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate()).Returns(template);
+                A.CallTo(() => m_TemplatingViewModel.IsSaveTemplatePermitted).Returns(true);
+                // Return the capture that was being templated
+                A.CallTo(() => m_TemplatingViewModel.Capture).Returns(EXAMPLE_CAPTURE);
+                // Return a valid identifier for asynchronous load file operation
+                Guid identifier = Guid.NewGuid();
+                A.CallTo(() => m_DataController.BeginSaveTemplate(EXAMPLE_CAPTURE.DbId, template)).Returns(identifier);
 
-            // EXECUTE:
-            m_ViewModel.SaveTemplateCommand.Execute(null);
+                // EXECUTE:
+                m_ViewModel.SaveTemplateCommand.Execute(null);
 
-            // ASSERT:
-            // Assert public state of ViewModel
-            Assert.AreEqual(Activity.Transitioning, m_ViewModel.CurrentActivity);
-            Assert.IsFalse(m_ViewModel.IsTemplating);
-            Assert.IsNull(m_ViewModel.Exception);
-            Assert.AreEqual(SAVING_PROMPT_TEXT, m_ViewModel.PromptText);
+                // ASSERT:
+                // Assert public state of ViewModel
+                Assert.AreEqual(Activity.Transitioning, m_ViewModel.CurrentActivity);
+                Assert.IsFalse(m_ViewModel.IsTemplating);
+                Assert.IsNull(m_ViewModel.Exception);
+                Assert.AreEqual(SAVING_PROMPT_TEXT, m_ViewModel.PromptText);
 
-            // Assert interaction with IDataController
-            A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
-                .MustNotHaveHappened();
-            A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
-                .MustNotHaveHappened();
-            A.CallTo(() => m_DataController.AbortRequest(A<Guid>._))
-                .MustNotHaveHappened();
-            A.CallTo(() => m_DataController.BeginSaveTemplate(A<long>._, A<byte[]>._))
-                .MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_DataController.BeginSaveTemplate(EXAMPLE_CAPTURE.DbId, template))
-                .MustHaveHappened(Repeated.Exactly.Once);
+                // Assert interaction with IDataController
+                A.CallTo(() => m_DataController.BeginGetCapture(A<ScannerType>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.BeginInitialise(A<DataControllerConfig>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.AbortRequest(A<Guid>._))
+                    .MustNotHaveHappened();
+                A.CallTo(() => m_DataController.BeginSaveTemplate(A<long>._, A<byte[]>._))
+                    .MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_DataController.BeginSaveTemplate(EXAMPLE_CAPTURE.DbId, template))
+                    .MustHaveHappened(Repeated.Exactly.Once);
 
-            // Assert interaction with ITemplatingViewModel
-            A.CallTo(() => m_TemplatingViewModel.IsSaveTemplatePermitted).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate()).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => m_TemplatingViewModel.BeginTemplating(A<CaptureInfo>._)).MustNotHaveHappened();
-            A.CallTo(() => m_TemplatingViewModel.EscapeAction()).MustNotHaveHappened();
-            A.CallTo(() => m_TemplatingViewModel.QuitTemplating()).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(m_TemplatingViewModel)
-                .Where(x => x.Method.Name.Equals("set_InputMinutiaType"))
-                .MustNotHaveHappened();
+                // Assert interaction with ITemplatingViewModel
+                A.CallTo(() => m_TemplatingViewModel.IsSaveTemplatePermitted).MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate()).MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_TemplatingViewModel.BeginTemplating(A<CaptureInfo>._)).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.EscapeAction()).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.QuitTemplating()).MustNotHaveHappened();
+                A.CallTo(m_TemplatingViewModel)
+                    .Where(x => x.Method.Name.Equals("set_InputMinutiaType"))
+                    .MustNotHaveHappened();
 
-            // Assert that ViewModel made no calls to ITemplatingViewModel or ISettingsViewModel
-            AssertNoCallsToSettingsValidator();
-            AssertNoCallsToSettingsViewModel();
+                // Assert that ViewModel made no calls to ITemplatingViewModel or ISettingsViewModel
+                AssertNoCallsToSettingsValidator();
+                AssertNoCallsToSettingsViewModel();
+                AssertNoCallsToDispatcherHelper();
 
-            // Return identifier so that test may continue
-            return identifier;
+                // Return identifier so that test may continue
+                return identifier;
+            }
         }
 
         private void DoTestSaveTemplateSuccess(Guid identifier)
         {
-            Fake.CreateScope();
+            using (Fake.CreateScope())
+            {
 
-            // EXECUTE:
-            m_DataController.SaveTemplateComplete += Raise.With(
-                new SaveTemplateEventArgs(identifier, DataRequestResult.Success));
+                // EXECUTE:
+                m_DataController.SaveTemplateComplete += Raise.With(
+                    new SaveTemplateEventArgs(identifier, DataRequestResult.Success));
 
-            // ASSERT:
-            // Assert public state of ViewModel
-            Assert.AreEqual(Activity.Idle, m_ViewModel.CurrentActivity);
-            Assert.IsFalse(m_ViewModel.IsTemplating);
-            Assert.IsNull(m_ViewModel.Exception);
-            Assert.AreEqual(IDLE_PROMPT_TEXT, m_ViewModel.PromptText);
+                // ASSERT:
+                // Assert public state of ViewModel
+                Assert.AreEqual(Activity.Idle, m_ViewModel.CurrentActivity);
+                Assert.IsFalse(m_ViewModel.IsTemplating);
+                Assert.IsNull(m_ViewModel.Exception);
+                Assert.AreEqual(IDLE_PROMPT_TEXT, m_ViewModel.PromptText);
 
-            // Assert that there were no calls to other fakes
-            AssertNoCallsToTemplatingViewModel();
-            AssertNoCallsToDataController();
-            AssertNoCallsToSettingsValidator();
-            AssertNoCallsToTemplatingViewModel();
-            AssertNoCallsToWindowService();
+                // Assert TemplatingViewModel interaction
+                A.CallTo(() => m_TemplatingViewModel.BeginTemplating(A<CaptureInfo>._)).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.EscapeAction()).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.Capture).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.QuitTemplating()).MustHaveHappened(Repeated.Exactly.Once);
+                A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate()).MustNotHaveHappened();
+                A.CallTo(() => m_TemplatingViewModel.IsSaveTemplatePermitted).MustNotHaveHappened();
+                A.CallTo(m_TemplatingViewModel)
+                    .Where(x => x.Method.Name.Equals("set_InputMinutiaType"))
+                    .WhenArgumentsMatch(x => x.Get<MinutiaType>(0).Equals(DEFAULT_MINUTIA_TYPE))
+                    .MustNotHaveHappened();
+
+                // Assert that there were no calls to other fakes
+                AssertNoCallsToDataController();
+                AssertNoCallsToSettingsValidator();
+                AssertNoCallsToWindowService();
+                AssertNoCallsToDispatcherHelper();
+                AssertNoCallsToSettingsViewModel();
+            }
         }
 
         #endregion
@@ -560,8 +689,11 @@ namespace SimTemplate.ViewModel.Test
             A.CallTo(() => m_TemplatingViewModel.QuitTemplating()).MustNotHaveHappened();
             A.CallTo(() => m_TemplatingViewModel.Capture).MustNotHaveHappened();
             A.CallTo(() => m_TemplatingViewModel.FinaliseTemplate()).MustNotHaveHappened();
-            // TODO: Add sets for InputMinutiaType and StatusImage
             A.CallTo(() => m_TemplatingViewModel.IsSaveTemplatePermitted).MustNotHaveHappened();
+            A.CallTo(m_TemplatingViewModel)
+                .Where(x => x.Method.Name.Equals("set_InputMinutiaType"))
+                .WhenArgumentsMatch(x => x.Get<MinutiaType>(0).Equals(DEFAULT_MINUTIA_TYPE))
+                .MustNotHaveHappened();
         }
 
         private void AssertNoCallsToWindowService()
@@ -578,6 +710,11 @@ namespace SimTemplate.ViewModel.Test
             A.CallTo(() => m_SettingsManager.ValidateCurrentSettings()).MustNotHaveHappened();
             A.CallTo(() => m_SettingsManager.ValidateQuerySetting(A<Setting>._, A<object>._)).MustNotHaveHappened();
             A.CallTo(() => m_SettingsManager.ValidationHelpText(A<Setting>._)).MustNotHaveHappened();
+        }
+
+        private void AssertNoCallsToDispatcherHelper()
+        {
+            A.CallTo(() => m_DispatcherHelper.Invoke(A<Action>._)).MustNotHaveHappened();
         }
 
         #endregion

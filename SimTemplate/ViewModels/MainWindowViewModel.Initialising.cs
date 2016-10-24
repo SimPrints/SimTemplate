@@ -46,6 +46,9 @@ namespace SimTemplate.ViewModels
                 // Initialise properties.
                 Outer.FilteredScannerType = ScannerType.None;
 
+                // Initialise TemplatingViewModel
+                Outer.m_TemplatingViewModel.BeginInitialise();
+
                 // Check that our current settings are valid
                 if (!Outer.m_SettingsManager.ValidateCurrentSettings())
                 {

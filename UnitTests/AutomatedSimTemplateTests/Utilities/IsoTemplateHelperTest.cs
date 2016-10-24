@@ -60,6 +60,23 @@ namespace SimTemplate.Helpers.Test
             TestToIsoTemplate(TEMPLATE_2_MINUTAE, TEMPLATE_2_HEX);
         }
 
+        [TestMethod]
+        public void TestConvertNullToIsoTemplate()
+        {
+            SimTemplateException m_Exception = null;
+            try
+            {
+                byte[] template = IsoTemplateHelper.ToIsoTemplate(null);
+            }
+            catch (SimTemplateException ex)
+            {
+                m_Exception = ex;
+            }
+            Assert.IsNotNull(m_Exception);
+        }
+
+        #region Helper Methods
+
         private void TestToIsoTemplate(IEnumerable<MinutiaRecord> minutae, string isoTemplateHex)
         {
             // Get the IsoTemplate
@@ -87,5 +104,7 @@ namespace SimTemplate.Helpers.Test
                 Assert.IsTrue(real_minutia.Angle - converted_minutia.Angle < 1.0 / (256 / 360));
             }
         }
+
+        #endregion
     }
 }

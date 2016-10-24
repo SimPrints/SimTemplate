@@ -36,20 +36,13 @@ namespace SimTemplate.ViewModels
 
             #region Overriden Methods
 
-            public override void OnEnteringState()
+            public override void BeginInitialise()
             {
                 // Set initial values
                 Outer.m_InputMinutiaType = MinutiaType.Termination;
-            }
-
-            #region ViewModel Methods
-
-            public override void BeginInitialise()
-            {
+                // Transition to idle now we are setup
                 TransitionTo(typeof(Idle));
             }
-
-            #endregion
 
             #endregion
 

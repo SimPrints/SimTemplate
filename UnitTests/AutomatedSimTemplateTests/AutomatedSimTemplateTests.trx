@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="f19c0553-b45c-452b-a402-939c270c799f" name="sambriggs@SAMBRIGGSC5E7 2016-10-16 00:42:40" runUser="SAMBRIGGSC5E7\sambriggs" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Default Test Settings" id="e4fe2756-57cc-42a5-af4a-7b22c37c56bb">
+    <Deployment userDeploymentRoot="Z:\Code\SimPrint\SimTemplateApp\SimTemplate\UnitTests\AutomatedSimTemplateTests" useDefaultDeploymentRoot="false" runDeploymentRoot="sambriggs_SAMBRIGGSC5E7 2016-10-16 00_42_40" />
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+    <Properties />
+  </TestSettings>
+  <Times creation="2016-10-16T00:42:40.5341708+01:00" queuing="2016-10-16T00:42:42.9380552+01:00" start="2016-10-16T00:42:43.1460642+01:00" finish="2016-10-16T00:42:45.3680627+01:00" />
+  <ResultSummary outcome="Failed">
+    <Counters total="8" executed="8" passed="6" error="0" failed="2" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="TestConnectToDatabase" storage="z:\code\simprint\simtemplateapp\simtemplate\unittests\automatedsimtemplatetests\bin\debug\automatedsimtemplatetests.dll" id="063dabb1-d4ed-ef38-4b92-6123746a6fa7">
+      <Execution id="b1994675-e470-4859-af75-7a22da30d3be" />
+      <TestMethod codeBase="Z:/Code/SimPrint/SimTemplateApp/SimTemplate/UnitTests/AutomatedSimTemplateTests/bin/Debug/AutomatedSimTemplateTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="AutomatedSimTemplateTests.OTher.SqlTests, AutomatedSimTemplateTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestConnectToDatabase" />
+    </UnitTest>
+    <UnitTest name="TestConvertToIsoTemplate1" storage="z:\code\simprint\simtemplateapp\simtemplate\unittests\automatedsimtemplatetests\bin\debug\automatedsimtemplatetests.dll" id="0c52c90b-7192-8ce3-2ae6-581c962ce8a0">
+      <Execution id="a68beb15-fda2-4461-a3e9-3503e3c6c25d" />
+      <TestMethod codeBase="Z:/Code/SimPrint/SimTemplateApp/SimTemplate/UnitTests/AutomatedSimTemplateTests/bin/Debug/AutomatedSimTemplateTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SimTemplate.Helpers.Test.IsoTemplateHelperTest, AutomatedSimTemplateTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestConvertToIsoTemplate1" />
+    </UnitTest>
+    <UnitTest name="TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess" storage="z:\code\simprint\simtemplateapp\simtemplate\unittests\automatedsimtemplatetests\bin\debug\automatedsimtemplatetests.dll" id="0e312410-0b37-3473-bc86-8c88041f6143">
+      <Execution id="ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110" />
+      <TestMethod codeBase="Z:/Code/SimPrint/SimTemplateApp/SimTemplate/UnitTests/AutomatedSimTemplateTests/bin/Debug/AutomatedSimTemplateTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SimTemplate.ViewModel.Test.MainWindowViewModelTest, AutomatedSimTemplateTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess" />
+    </UnitTest>
+    <UnitTest name="TestBeginInitialise_IgnoredConnection" storage="z:\code\simprint\simtemplateapp\simtemplate\unittests\automatedsimtemplatetests\bin\debug\automatedsimtemplatetests.dll" id="6e4a5c9d-681b-6c06-d060-37e17cd11c10">
+      <Execution id="0a0ac57b-bce2-473f-a892-54f0f45e3e46" />
+      <TestMethod codeBase="Z:/Code/SimPrint/SimTemplateApp/SimTemplate/UnitTests/AutomatedSimTemplateTests/bin/Debug/AutomatedSimTemplateTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SimTemplate.ViewModel.Test.MainWindowViewModelTest, AutomatedSimTemplateTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestBeginInitialise_IgnoredConnection" />
+    </UnitTest>
+    <UnitTest name="TestConvertToIsoTemplate2" storage="z:\code\simprint\simtemplateapp\simtemplate\unittests\automatedsimtemplatetests\bin\debug\automatedsimtemplatetests.dll" id="ed860201-eb4d-92d4-cffb-b643f48a70d3">
+      <Execution id="adc88cea-c2c5-4f9a-bcdb-87e588323070" />
+      <TestMethod codeBase="Z:/Code/SimPrint/SimTemplateApp/SimTemplate/UnitTests/AutomatedSimTemplateTests/bin/Debug/AutomatedSimTemplateTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SimTemplate.Helpers.Test.IsoTemplateHelperTest, AutomatedSimTemplateTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestConvertToIsoTemplate2" />
+    </UnitTest>
+    <UnitTest name="TestInitialise_Success_LoadFile_Success_SaveTemplate_Success" storage="z:\code\simprint\simtemplateapp\simtemplate\unittests\automatedsimtemplatetests\bin\debug\automatedsimtemplatetests.dll" id="ac915dc4-b114-2179-be28-292e6c6b77c6">
+      <Execution id="337794e6-ad55-41e6-8df4-964f34d2d58b" />
+      <TestMethod codeBase="Z:/Code/SimPrint/SimTemplateApp/SimTemplate/UnitTests/AutomatedSimTemplateTests/bin/Debug/AutomatedSimTemplateTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SimTemplate.ViewModel.Test.MainWindowViewModelTest, AutomatedSimTemplateTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestInitialise_Success_LoadFile_Success_SaveTemplate_Success" />
+    </UnitTest>
+    <UnitTest name="TestConnectToDataContext" storage="z:\code\simprint\simtemplateapp\simtemplate\unittests\automatedsimtemplatetests\bin\debug\automatedsimtemplatetests.dll" id="75a31d94-8810-2228-1ed7-740ca186c6ee">
+      <Execution id="b9fdb7cd-8036-49ef-b73c-563e788ed123" />
+      <TestMethod codeBase="Z:/Code/SimPrint/SimTemplateApp/SimTemplate/UnitTests/AutomatedSimTemplateTests/bin/Debug/AutomatedSimTemplateTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="AutomatedSimTemplateTests.OTher.SqlTests, AutomatedSimTemplateTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestConnectToDataContext" />
+    </UnitTest>
+    <UnitTest name="TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess" storage="z:\code\simprint\simtemplateapp\simtemplate\unittests\automatedsimtemplatetests\bin\debug\automatedsimtemplatetests.dll" id="7a695b7b-1e6c-9b60-8b86-3046bae210dd">
+      <Execution id="0d82abe9-a402-406c-b268-95e3aa1147e8" />
+      <TestMethod codeBase="Z:/Code/SimPrint/SimTemplateApp/SimTemplate/UnitTests/AutomatedSimTemplateTests/bin/Debug/AutomatedSimTemplateTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SimTemplate.ViewModel.Test.MainWindowViewModelTest, AutomatedSimTemplateTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="063dabb1-d4ed-ef38-4b92-6123746a6fa7" executionId="b1994675-e470-4859-af75-7a22da30d3be" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="75a31d94-8810-2228-1ed7-740ca186c6ee" executionId="b9fdb7cd-8036-49ef-b73c-563e788ed123" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c52c90b-7192-8ce3-2ae6-581c962ce8a0" executionId="a68beb15-fda2-4461-a3e9-3503e3c6c25d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ed860201-eb4d-92d4-cffb-b643f48a70d3" executionId="adc88cea-c2c5-4f9a-bcdb-87e588323070" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7a695b7b-1e6c-9b60-8b86-3046bae210dd" executionId="0d82abe9-a402-406c-b268-95e3aa1147e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e4a5c9d-681b-6c06-d060-37e17cd11c10" executionId="0a0ac57b-bce2-473f-a892-54f0f45e3e46" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0e312410-0b37-3473-bc86-8c88041f6143" executionId="ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ac915dc4-b114-2179-be28-292e6c6b77c6" executionId="337794e6-ad55-41e6-8df4-964f34d2d58b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="b1994675-e470-4859-af75-7a22da30d3be" testId="063dabb1-d4ed-ef38-4b92-6123746a6fa7" testName="TestConnectToDatabase" computerName="SAMBRIGGSC5E7" duration="00:00:00.1323889" startTime="2016-10-16T00:42:43.2010562+01:00" endTime="2016-10-16T00:42:43.9110542+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b1994675-e470-4859-af75-7a22da30d3be">
+      <Output>
+        <ErrorInfo>
+          <Message>Test method AutomatedSimTemplateTests.OTher.SqlTests.TestConnectToDatabase threw exception: 
+System.DllNotFoundException: Unable to load DLL 'SQLite.Interop.dll': The specified module could not be found. (Exception from HRESULT: 0x8007007E)</Message>
+          <StackTrace>    at System.Data.SQLite.UnsafeNativeMethods.sqlite3_config_none(SQLiteConfigOpsEnum op)
+   at System.Data.SQLite.SQLite3.StaticIsInitialized()
+   at System.Data.SQLite.SQLiteLog.Initialize()
+   at System.Data.SQLite.SQLiteConnection..ctor(String connectionString, Boolean parseViaFramework)
+   at System.Data.SQLite.SQLiteConnection..ctor(String connectionString)
+   at AutomatedSimTemplateTests.OTher.SqlTests.TestConnectToDatabase() in \\Mac\Home\Code\SimPrint\SimTemplateApp\SimTemplate\UnitTests\AutomatedSimTemplateTests\Other\SqlTests.cs:line 62
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b9fdb7cd-8036-49ef-b73c-563e788ed123" testId="75a31d94-8810-2228-1ed7-740ca186c6ee" testName="TestConnectToDataContext" computerName="SAMBRIGGSC5E7" duration="00:00:00.0259489" startTime="2016-10-16T00:42:43.9400543+01:00" endTime="2016-10-16T00:42:43.9800573+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9fdb7cd-8036-49ef-b73c-563e788ed123">
+      <Output>
+        <ErrorInfo>
+          <Message>Test method AutomatedSimTemplateTests.OTher.SqlTests.TestConnectToDataContext threw exception: 
+System.DllNotFoundException: Unable to load DLL 'SQLite.Interop.dll': The specified module could not be found. (Exception from HRESULT: 0x8007007E)</Message>
+          <StackTrace>    at System.Data.SQLite.UnsafeNativeMethods.sqlite3_config_none(SQLiteConfigOpsEnum op)
+   at System.Data.SQLite.SQLite3.StaticIsInitialized()
+   at System.Data.SQLite.SQLiteLog.Initialize()
+   at System.Data.SQLite.SQLiteConnection..ctor(String connectionString, Boolean parseViaFramework)
+   at System.Data.SQLite.SQLiteConnection..ctor(String connectionString)
+   at AutomatedSimTemplateTests.OTher.SqlTests.TestConnectToDataContext() in \\Mac\Home\Code\SimPrint\SimTemplateApp\SimTemplate\UnitTests\AutomatedSimTemplateTests\Other\SqlTests.cs:line 37
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a68beb15-fda2-4461-a3e9-3503e3c6c25d" testId="0c52c90b-7192-8ce3-2ae6-581c962ce8a0" testName="TestConvertToIsoTemplate1" computerName="SAMBRIGGSC5E7" duration="00:00:00.0602600" startTime="2016-10-16T00:42:43.9900569+01:00" endTime="2016-10-16T00:42:44.0550695+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a68beb15-fda2-4461-a3e9-3503e3c6c25d">
+    </UnitTestResult>
+    <UnitTestResult executionId="adc88cea-c2c5-4f9a-bcdb-87e588323070" testId="ed860201-eb4d-92d4-cffb-b643f48a70d3" testName="TestConvertToIsoTemplate2" computerName="SAMBRIGGSC5E7" duration="00:00:00.0013454" startTime="2016-10-16T00:42:44.0570554+01:00" endTime="2016-10-16T00:42:44.0630538+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="adc88cea-c2c5-4f9a-bcdb-87e588323070">
+    </UnitTestResult>
+    <UnitTestResult executionId="0d82abe9-a402-406c-b268-95e3aa1147e8" testId="7a695b7b-1e6c-9b60-8b86-3046bae210dd" testName="TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess" computerName="SAMBRIGGSC5E7" duration="00:00:00.6750460" startTime="2016-10-16T00:42:44.0670586+01:00" endTime="2016-10-16T00:42:44.7450551+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d82abe9-a402-406c-b268-95e3aa1147e8">
+      <Output>
+        <StdOut>2016-10-16 00:42:44,429 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: [null]-&gt;Uninitialised
+2016-10-16 00:42:44,579 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - BeginInitialise() called.
+2016-10-16 00:42:44,582 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Uninitialised-&gt;Initialising
+2016-10-16 00:42:44,676 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - DataController_InitialisationComplete(Result=Error) called.
+2016-10-16 00:42:44,682 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] ERROR SimTemplate.ViewModels.MainWindowViewModel+Initialising (null) - Error occurred: Failed to initialise DataController.
+2016-10-16 00:42:44,683 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Initialising-&gt;Error
+2016-10-16 00:42:44,697 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - BeginInitialise() called.
+2016-10-16 00:42:44,699 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Error-&gt;Initialising
+2016-10-16 00:42:44,709 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - DataController_InitialisationComplete(Result=Error) called.
+2016-10-16 00:42:44,710 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] ERROR SimTemplate.ViewModels.MainWindowViewModel+Initialising (null) - Error occurred: Failed to initialise DataController.
+2016-10-16 00:42:44,711 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Initialising-&gt;Error
+2016-10-16 00:42:44,722 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - BeginInitialise() called.
+2016-10-16 00:42:44,723 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Error-&gt;Initialising
+2016-10-16 00:42:44,734 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - DataController_InitialisationComplete(Result=Initialised) called.
+2016-10-16 00:42:44,735 [Agent: adapter run thread for test 'TestBeginInitialise_ConnectionFailed_Reinitialise_ConnectionSuccess' with id '0d82abe9-a402-406c-b268-95e3aa1147e8'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Initialising-&gt;Idle</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0a0ac57b-bce2-473f-a892-54f0f45e3e46" testId="6e4a5c9d-681b-6c06-d060-37e17cd11c10" testName="TestBeginInitialise_IgnoredConnection" computerName="SAMBRIGGSC5E7" duration="00:00:00.0291681" startTime="2016-10-16T00:42:44.8101675+01:00" endTime="2016-10-16T00:42:44.8432021+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a0ac57b-bce2-473f-a892-54f0f45e3e46">
+      <Output>
+        <StdOut>2016-10-16 00:42:44,814 [Agent: adapter run thread for test 'TestBeginInitialise_IgnoredConnection' with id '0a0ac57b-bce2-473f-a892-54f0f45e3e46'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: [null]-&gt;Uninitialised
+2016-10-16 00:42:44,819 [Agent: adapter run thread for test 'TestBeginInitialise_IgnoredConnection' with id '0a0ac57b-bce2-473f-a892-54f0f45e3e46'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - BeginInitialise() called.
+2016-10-16 00:42:44,819 [Agent: adapter run thread for test 'TestBeginInitialise_IgnoredConnection' with id '0a0ac57b-bce2-473f-a892-54f0f45e3e46'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Uninitialised-&gt;Initialising
+2016-10-16 00:42:44,832 [Agent: adapter run thread for test 'TestBeginInitialise_IgnoredConnection' with id '0a0ac57b-bce2-473f-a892-54f0f45e3e46'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - DataController_InitialisationComplete(Result=Error) called.
+2016-10-16 00:42:44,833 [Agent: adapter run thread for test 'TestBeginInitialise_IgnoredConnection' with id '0a0ac57b-bce2-473f-a892-54f0f45e3e46'] WARN  SimTemplate.ViewModels.MainWindowViewModel+Initialising (null) - Completed operation did not match identifier. Ignoring</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110" testId="0e312410-0b37-3473-bc86-8c88041f6143" testName="TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess" computerName="SAMBRIGGSC5E7" duration="00:00:00.0581856" startTime="2016-10-16T00:42:44.8541709+01:00" endTime="2016-10-16T00:42:44.9170567+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110">
+      <Output>
+        <StdOut>2016-10-16 00:42:44,859 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: [null]-&gt;Uninitialised
+2016-10-16 00:42:44,864 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - BeginInitialise() called.
+2016-10-16 00:42:44,865 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Uninitialised-&gt;Initialising
+2016-10-16 00:42:44,865 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] ERROR SimTemplate.ViewModels.MainWindowViewModel+Initialising (null) - Error occurred: Invalid settings
+2016-10-16 00:42:44,866 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Initialising-&gt;Error
+2016-10-16 00:42:44,885 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - OpenSettings() called.
+2016-10-16 00:42:44,897 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - Settings were updated, re-initialising...
+2016-10-16 00:42:44,898 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Error-&gt;Initialising
+2016-10-16 00:42:44,906 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - DataController_InitialisationComplete(Result=Initialised) called.
+2016-10-16 00:42:44,907 [Agent: adapter run thread for test 'TestBeginInitialise_InvalidSettings_Updated_ConnectionSuccess' with id 'ae9e2696-f6ea-4efe-a8c2-46b2a0cfc110'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Initialising-&gt;Idle</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="337794e6-ad55-41e6-8df4-964f34d2d58b" testId="ac915dc4-b114-2179-be28-292e6c6b77c6" testName="TestInitialise_Success_LoadFile_Success_SaveTemplate_Success" computerName="SAMBRIGGSC5E7" duration="00:00:00.2172892" startTime="2016-10-16T00:42:44.9291037+01:00" endTime="2016-10-16T00:42:45.1500562+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="337794e6-ad55-41e6-8df4-964f34d2d58b">
+      <Output>
+        <StdOut>2016-10-16 00:42:44,932 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: [null]-&gt;Uninitialised
+2016-10-16 00:42:44,936 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - BeginInitialise() called.
+2016-10-16 00:42:44,937 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Uninitialised-&gt;Initialising
+2016-10-16 00:42:44,977 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - DataController_InitialisationComplete(Result=Initialised) called.
+2016-10-16 00:42:44,979 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Initialising-&gt;Idle
+2016-10-16 00:42:45,038 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - LoadFile() called.
+2016-10-16 00:42:45,041 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Idle-&gt;Loading
+2016-10-16 00:42:45,066 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - DataController_GetCaptureComplete(Capture=SimTemplate.DataTypes.CaptureInfo) called.
+2016-10-16 00:42:45,070 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Loading-&gt;Templating
+2016-10-16 00:42:45,088 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - SaveTemplate() called.
+2016-10-16 00:42:45,093 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Templating-&gt;Saving
+2016-10-16 00:42:45,109 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] DEBUG SimTemplate.ViewModels.MainWindowViewModel (null) - DataController_SaveTemplateComplete(Result=Success) called.
+2016-10-16 00:42:45,114 [Agent: adapter run thread for test 'TestInitialise_Success_LoadFile_Success_SaveTemplate_Success' with id '337794e6-ad55-41e6-8df4-964f34d2d58b'] INFO  SimTemplate.StateMachine.StateManager`1[[SimTemplate.ViewModels.MainWindowViewModel+MainWindowState, SimTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] (null) - State transition: Saving-&gt;Idle</StdOut>
+      </Output>
+    </UnitTestResult>
+  </Results>
+</TestRun>

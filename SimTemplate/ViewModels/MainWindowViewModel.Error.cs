@@ -24,6 +24,10 @@ namespace SimTemplate.ViewModels
 {
     public partial class MainWindowViewModel
     {
+        /// <summary>
+        /// State that is entered upon detection of a fault.
+        /// </summary>
+        /// <seealso cref="SimTemplate.ViewModels.MainWindowViewModel.MainWindowState" />
         public class Error : MainWindowState
         {
             public Error(MainWindowViewModel outer) : base(outer, Activity.Fault)

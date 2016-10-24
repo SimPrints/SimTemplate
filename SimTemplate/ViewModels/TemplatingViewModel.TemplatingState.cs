@@ -60,7 +60,9 @@ namespace SimTemplate.ViewModels
 
             public virtual void SetMinutiaType(MinutiaType type) { MethodNotImplemented(); }
 
-            public virtual byte[] FinaliseTemplate() { MethodNotImplemented(); return null; }
+            public virtual byte[] GetTemplate() { MethodNotImplemented(); return null; }
+
+            public virtual void QuitTemplating() { MethodNotImplemented(); }
 
             #endregion
 

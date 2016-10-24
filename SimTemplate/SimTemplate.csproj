@@ -121,7 +121,10 @@
     <Compile Include="DataTypes\Enums\Activity.cs" />
     <Compile Include="DataTypes\Enums\Setting.cs" />
     <Compile Include="DataTypes\Enums\ViewModelStatus.cs" />
+    <Compile Include="Utilities\DispatcherHelper.cs" />
+    <Compile Include="Utilities\IDispatcherHelper.cs" />
     <Compile Include="Utilities\ISettingsManager.cs" />
+    <Compile Include="Utilities\MathsHelper.cs" />
     <Compile Include="Utilities\SettingsManager.cs" />
     <Compile Include="ViewModels\Interfaces\ActivityChangedEventArgs.cs" />
     <Compile Include="ViewModels\Interfaces\IDialogViewModel.cs" />
@@ -256,7 +259,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="log4net.config" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Save.ico" />

@@ -23,6 +23,7 @@ using System.Windows;
 
 namespace SimTemplate.Utilities
 {
+    // TODO: Delete?
     public static class DialogCloser
     {
         public static readonly DependencyProperty DialogResultProperty =

@@ -22,7 +22,13 @@ namespace SimTemplate.ViewModels.Interfaces
 	{
 		private readonly string m_PromptText;
 
-		public string PromptText { get { return m_PromptText; } }
+        /// <summary>
+        /// Gets the text to promt the user to perform the action.
+        /// </summary>
+        /// <value>
+        /// The prompt text.
+        /// </value>
+        public string PromptText { get { return m_PromptText; } }
 
 		public UserActionRequiredEventArgs(string promptText)
 		{

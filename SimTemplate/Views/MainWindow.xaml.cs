@@ -48,16 +48,18 @@ namespace SimTemplate.Views.MainWindow
             m_Log.Debug("Logging initialised.");
 
             ISettingsManager settingsMgr = new SettingsManager();
+            IDispatcherHelper dispatcherHelper = new DispatcherHelper();
             m_ViewModel = new MainWindowViewModel(
 #if DEBUG
                 new LocalDataController(),
 #else
                 new TempApiDataController(),
 #endif
-                new TemplatingViewModel(),
+                new TemplatingViewModel(dispatcherHelper),
                 new SettingsViewModel(settingsMgr),
                 settingsMgr,
-                new WindowService());
+                new WindowService(),
+                dispatcherHelper);
 
             InitializeComponent();
             DataContext = m_ViewModel;
@@ -112,8 +114,8 @@ namespace SimTemplate.Views.MainWindow
                 loadFileIcon = (ImageSource)mainWindow.Resources["loadIcon"];
             }
 
-            // Update UI on UI thread
-            App.Current.Dispatcher.Invoke(new Action(() =>
+            // Update UI element on application thread
+            m_ViewModel.DispatcherHelper.Invoke(new Action(() =>
             {
                 statusImage.Source = statusImageSource;
                 ((System.Windows.Controls.Image)loadFile.Content).Source = loadFileIcon;

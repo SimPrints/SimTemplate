@@ -24,6 +24,7 @@ using System.Windows.Media;
 
 namespace SimTemplate.Utilities
 {
+    // TODO: delete?
     public class UIHelper
     {
         /// <summary>

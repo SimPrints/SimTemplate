@@ -1,4 +1,5 @@
 ﻿using SimTemplate.DataTypes.Enums;
+using SimTemplate.Utilities;
 using SimTemplate.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace SimTemplate.ViewModels.Interfaces
         #endregion
 
         #region Bound Properties
-        
+
         string PromptText { get; }
 
         IEnumerable<ScannerType> ScannerTypes { get; }
@@ -42,6 +43,8 @@ namespace SimTemplate.ViewModels.Interfaces
         ITemplatingViewModel TemplatingViewModel { get; }
 
         #endregion
+
+        IDispatcherHelper DispatcherHelper { get; }
 
         event EventHandler<ActivityChangedEventArgs> ActivityChanged;
     }

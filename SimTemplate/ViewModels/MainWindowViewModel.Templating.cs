@@ -30,22 +30,6 @@ namespace SimTemplate.ViewModels
 
             #endregion
 
-            public override void OnEnteringState()
-            {
-                base.OnEnteringState();
-
-                // Initialise the TemplatingViewModel so that we can process images.
-                Outer.m_TemplatingViewModel.BeginInitialise();
-            }
-
-            public override void OnLeavingState()
-            {
-                base.OnLeavingState();
-
-                // Clear the TemplatingViewModel of any leftover information
-                Outer.TemplatingViewModel.QuitTemplating();
-            }
-
             public override void LoadFile()
             {
                 TransitionTo(typeof(Loading));
@@ -53,7 +37,7 @@ namespace SimTemplate.ViewModels
 
             public override void SaveTemplate()
             {
-                IntegrityCheck.IsFalse(Outer.m_TemplatingViewModel.IsSaveTemplatePermitted);
+                IntegrityCheck.IsTrue(Outer.m_TemplatingViewModel.IsSaveTemplatePermitted);
                 TransitionTo(typeof(Saving));
             }
 

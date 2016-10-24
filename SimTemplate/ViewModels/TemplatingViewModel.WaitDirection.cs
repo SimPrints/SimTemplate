@@ -34,6 +34,8 @@ namespace SimTemplate.ViewModels
     {
         public class WaitDirection : Initialised
         {
+            private const string SET_ANGLE_PROMPT = "Please set minutia angle";
+
             private MinutiaRecord m_Record;
 
             public WaitDirection(TemplatingViewModel outer) : base(outer)
@@ -45,7 +47,7 @@ namespace SimTemplate.ViewModels
             {
                 base.OnEnteringState();
 
-                Outer.OnUserActionRequired(new UserActionRequiredEventArgs("Please set minutia angle"));
+                Outer.OnUserActionRequired(new UserActionRequiredEventArgs(SET_ANGLE_PROMPT));
 
                 // Get the minutia that was placed in the previous step
                 IntegrityCheck.AreNotEqual(0, Outer.Minutae.Count());
@@ -94,7 +96,7 @@ namespace SimTemplate.ViewModels
                 Vector direction = p - m_Record.Position;
 
                 // Calculate the angle (in degrees)
-                double angle = IsoTemplateHelper.RadianToDegree(Math.Atan2(direction.Y, direction.X));
+                double angle = MathsHelper.RadianToDegree(Math.Atan2(direction.Y, direction.X));
                 
                 // Save the new direction
                 m_Record.Angle = angle;

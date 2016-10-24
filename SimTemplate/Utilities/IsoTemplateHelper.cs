@@ -51,6 +51,7 @@ namespace SimTemplate.Utilities
         /// <returns></returns>
         public static byte[] ToIsoTemplate(IEnumerable<MinutiaRecord> minutae)
         {
+            IntegrityCheck.IsNotNull(minutae);
             // TODO: Better understand what bytes in IsoTemplate are (Header).
             // ISO 19794-2?
 
@@ -145,16 +146,6 @@ namespace SimTemplate.Utilities
         //{
         //    return BitConverter.ToString(data);
         //}
-
-        public static double RadianToDegree(double rads)
-        {
-            double degs = rads * (180.0 / Math.PI);
-            while (degs < 0)
-            {
-                degs += 360;
-            }
-            return degs;
-        }
 
         #region Minutia Count
 

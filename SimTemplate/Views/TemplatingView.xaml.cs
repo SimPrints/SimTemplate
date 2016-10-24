@@ -135,7 +135,6 @@ namespace SimTemplate.Views
 
         #endregion
 
-
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;

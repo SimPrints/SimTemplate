@@ -46,12 +46,14 @@ namespace SimTemplate.ViewModels
 
             public override void BeginTemplating(CaptureInfo capture)
             {
-                // Prepare to start templating.
-                App.Current.Dispatcher.Invoke(new Action(() =>
+                // Prepare to start templating a new capture
+                // Clear the UI of any previous work
+                Outer.m_DispatcherHelper.Invoke(new Action(() =>
                 {
                     Outer.Minutae.Clear();
                 }));
 
+                // Record the new capture
                 Outer.Capture = capture;
                 if (Outer.Capture.TemplateData != null)
                 {
@@ -68,6 +70,19 @@ namespace SimTemplate.ViewModels
                     }
                 }
                 TransitionTo(typeof(WaitLocation));
+            }
+
+            public override void QuitTemplating()
+            {
+                // NOTE: Clearing minutae must happen before clearing the capture
+                // Minutae position is bound to capture image size!
+                Outer.m_DispatcherHelper.Invoke(new Action(() =>
+                {
+                    Outer.Minutae.Clear();
+                }));
+                Outer.Capture = null;
+
+                TransitionTo(typeof(Idle));
             }
 
             #endregion

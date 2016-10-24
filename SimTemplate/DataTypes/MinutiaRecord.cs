@@ -29,8 +29,17 @@ namespace SimTemplate.DataTypes
         private double m_Angle;
         private MinutiaType m_Type;
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Gets or sets the position of the minutia on the image.
+        /// </summary>
+        /// <value>
+        /// The position.
+        /// </value>
         public Point Position
         {
             get { return m_Position; }
@@ -60,6 +69,12 @@ namespace SimTemplate.DataTypes
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the minutia.
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
         public MinutiaType Type
         {
             get { return m_Type; }
@@ -70,14 +85,72 @@ namespace SimTemplate.DataTypes
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MinutiaRecord"/> class.
+        /// </summary>
         public MinutiaRecord() { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MinutiaRecord"/> class.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <param name="angle">The angle.</param>
+        /// <param name="type">The type.</param>
         public MinutiaRecord(Point position, double angle, MinutiaType type)
         {
             m_Position = position;
             m_Angle = angle;
             m_Type = type;
         }
+
+        #region Equals
+
+        public override bool Equals(object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            MinutiaRecord p = obj as MinutiaRecord;
+            if ((System.Object)p == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return Equals(p);
+        }
+
+        public bool Equals(MinutiaRecord record)
+        {
+            // First check if positions are equal (least likely)
+            bool isEqual = record.Position == m_Position;
+            if (isEqual)
+            {
+                // Next check if angles are equal
+                isEqual = (record.Angle == m_Angle);
+                if (isEqual)
+                {
+                    // Finally test if the types are the same
+                    isEqual = record.Type == m_Type;
+                }
+            }
+            return isEqual;
+        }
+        public override int GetHashCode()
+        {
+            return (int)m_Position.X ^
+                (int)m_Position.Y ^
+                (int)m_Angle ^
+                (int)m_Type;
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged
 
         // This method is called by the Set accessor of each property.
         // The CallerMemberName attribute that is applied to the optional propertyName
@@ -89,5 +162,7 @@ namespace SimTemplate.DataTypes
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        #endregion
     }
 }

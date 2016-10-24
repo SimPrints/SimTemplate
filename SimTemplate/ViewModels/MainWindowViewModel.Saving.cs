@@ -71,22 +71,28 @@ namespace SimTemplate.ViewModels
                 {
                     case DataRequestResult.Success:
                         Outer.PromptText = "Saved successfully";
+                        // Save operation complete
+                        // Clear the TemplatingViewModel of any leftover information
+                        Outer.TemplatingViewModel.QuitTemplating();
+                        // Now transition to Idle
+                        TransitionTo(typeof(Idle));
                         break;
 
                     case DataRequestResult.Failed:
                         Outer.PromptText = "Server failed to save";
+                        // Save operation failed due to connection. Wait
+                        TransitionTo(typeof(Templating));
                         break;
 
                     case DataRequestResult.TaskFailed:
                         Outer.PromptText = "Application failed to save";
+                        // Save operation failed due to bug. Transition to Fault
+                        TransitionTo(typeof(Error));
                         break;
 
                     default:
                         throw IntegrityCheck.FailUnexpectedDefault(e.Result);
                 }
-
-                // Save operation complete. Transition to Idle
-                TransitionTo(typeof(Idle));
             }
 
             #endregion

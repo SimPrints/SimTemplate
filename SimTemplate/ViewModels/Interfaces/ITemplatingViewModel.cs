@@ -26,6 +26,10 @@ namespace SimTemplate.ViewModels.Interfaces
 {
     public interface ITemplatingViewModel
     {
+        // TODO: This should be 'Initialise' as it is synchronous!
+        /// <summary>
+        /// Initialises the view model.
+        /// </summary>
         void BeginInitialise();
 
         /// <summary>
@@ -49,6 +53,7 @@ namespace SimTemplate.ViewModels.Interfaces
         /// </summary>
         void EscapeAction();
 
+        // TODO: This should be just 'Template' as it is synchronous!
         /// <summary>
         /// Begins templating with the provided capture.
         /// </summary>
@@ -74,6 +79,9 @@ namespace SimTemplate.ViewModels.Interfaces
         /// </summary>
         void QuitTemplating();
 
+        /// <summary>
+        /// Occurs when user action required to proceed with templating.
+        /// </summary>
         event EventHandler<UserActionRequiredEventArgs> UserActionRequired;
     }
 }

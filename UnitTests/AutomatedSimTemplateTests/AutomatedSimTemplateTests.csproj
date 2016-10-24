@@ -98,10 +98,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AssemblyInitialiser.cs" />
+    <Compile Include="EventMonitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Other\SqlTests.cs" />
     <Compile Include="ViewModels\MainWindowViewModelTest.cs" />
     <Compile Include="Utilities\IsoTemplateHelperTest.cs" />
+    <Compile Include="ViewModels\TemplatingViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
